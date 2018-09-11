@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.MemberListDao">
+    <insert id="insertMemberList" parameterType="com.example.model.MemberList">
+    	insert into memberList (m_num,email_num,m_nick,m_pwd) 
+    	values(0,#{email_num},#{m_nick},sha(#{m_pwd}));
+  	</insert>
+    <update id="updateMemberList">
+  	</update>
+    <delete id="deleteMemberList">
+    </delete>
+    
+    <!--  소연 : parameterType int 추가 -->
+    <select id="selectOneMemberList" parameterType="int" resultType="com.example.model.MemberList">
+      select * from memberlist where email_num = #{email_num}
+  	</select>
+  	
+  	<select id="selectAllMemberList" resultType="com.example.model.MemberList">
+  	</select>
+  	<select id="selectOneMemberListByNum" resultType="com.example.model.MemberList">
+      select * from memberlist where email_num = #{email_num}
+  	</select>
+  	
+  	<!-- 소연 추가  -->
+  	<select id="selectOneMemberListByPwd" parameterType="com.example.model.MemberList" resultType="com.example.model.MemberList">
+  		select * from memberlist where email_num = #{email_num} and m_pwd = sha(#{m_pwd});
+  	</select>
+  	
+  	<!-- /*=============용화=============*/ -->
+  	<select id="selectOne" parameterType="int" resultType="memberlist">
+			select * from memberlist where m_num=#{m_num}
+		</select>
+		<select id="OthersSelect" parameterType="int" resultType="hashMap">
+			SELECT m.*, sum(e.e_like) as 'like', sum(e.e_mark) as 'mark', (select count(r.rev_num) from review r where r.m_num=m.m_num) as 'review' FROM memberlist m, evaluation e where m.m_num=e.m_num and m.m_num=#{m_num}
+		</select>
+  </mapper>

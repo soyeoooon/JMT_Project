@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.PhotoDecoDao">
+    <insert id="insertPhotoDeco">
+      insert into photodeco values(#{p_lat},#{p_lon},#{p_imgname},#{p_foodname},#{p_price},#{p_emo},#{p_comment})
+  	</insert>
+    <update id="updatePhotoDeco">
+      update photodeco set p_foodname = #{p_foodname}, p_price = #{p_price}, p_emo = #{p_emo}, p_comment = #{p_comment} where p_lat = #{p_lat} and p_lon = #{p_lon} and p_imgname = #{p_imgname} 
+  	</update>
+    <delete id="deletePhotoDeco">
+    </delete>
+    <delete id="deleteAllPhotoDeco">
+      delete from photodeco where p_imgname = #{p_imgname}
+    </delete>
+  	<select id="selectAllPhotoDeco" resultType="com.example.model.PhotoDeco">
+    select * from photodeco where p_imgname = #{p_imgname}
+  	</select>
+  	<select id="selectOneDeco" resultType="com.example.model.PhotoDeco">
+    select * from photodeco where p_imgname = #{p_imgname} and p_lon = #{p_lon} and p_lat = #{p_lat}
+  	</select>
+  </mapper>

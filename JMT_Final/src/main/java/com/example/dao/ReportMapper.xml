@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.ReportDao">
+	<!-- <insert id="insertReport">
+	</insert>
+	<update id="updateReport">
+	</update> 
+	<delete id="deleteReport">
+	</delete> -->
+	<select id="selectAllReport"
+		resultType="com.example.model.Report">
+	</select>
+
+
+
+	<!-- /*=============용화=============*/ -->
+	<insert id="insert" parameterType="report">
+		insert into report
+		values(#{rep_num},#{rm_num},#{m_mail1},#{m_mail2},#{replist_num},#{replist_status},#{rep_date1},#{rep_date2})
+	</insert>
+	<select id="selectRestaurant" parameterType="int"
+		resultType="report">
+		select * from report where replist_status=1 and rm_num=#{rm_num}
+	</select>
+
+
+	<!-- /*=============소연=============*/ -->
+	<select id="selectAll" resultType="com.example.model.Report">
+		select * from report
+	</select>
+
+	<select id="selectBoardPage"
+		resultType="com.example.model.Report"
+		parameterType="java.util.HashMap">
+		select * from report order by rep_num desc limit #{offset},#{boardsPerPage}
+	</select>
+
+	<select id="getCount" resultType="int">
+		select count(*) from report
+	</select>
+	
+	<select id="selectReportList" parameterType="java.util.HashMap"
+		resultType="com.example.model.adminReport">
+		select rep_num,restaurant.r_name,rm_num,e1.email as 'req',e2.email as 'resp',replist_content,
+		represult_content, rep_date1,rep_date2
+		from report,email e1, email e2,replist, represult,restaurant
+		where report.m_mail1 =e1.email_num and report.m_mail2 =e2.email_num
+		and replist_status=represult.represult_num and
+		report.replist_num=replist.replist_num and rm_num = restaurant.r_num
+		order by rep_num desc
+		 limit #{offset},#{boardsPerPage};
+	</select>
+	
+	<select id="updateReport">
+		update report set replist_status = 2, rep_date2=now() where rep_num=#{rep_num};
+	</select>
+	
+
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

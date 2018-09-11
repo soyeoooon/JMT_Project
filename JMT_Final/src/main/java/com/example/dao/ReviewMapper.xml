@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.ReviewDao">
+ <insert id="insertReview">
+  	</insert>
+    <update id="updateReview">
+  	</update>
+    <delete id="deleteReview">
+    </delete>
+  	<select id="selectAllReview" resultType="com.example.model.Review">
+  	</select>
+  	
+  	<!-- /*=============용화=============*/ -->
+  	<select id="ReviewSelect" parameterType="int" resultType="hashMap">
+			SELECT m.m_photo,m.m_nick, m.m_level ,r.* FROM review r, memberlist m where r.m_num=m.m_num and r.r_num=#{r_num};
+		</select>
+  </mapper>

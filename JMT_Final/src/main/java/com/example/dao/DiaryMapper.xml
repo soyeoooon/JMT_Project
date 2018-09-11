@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.DiaryDao">
+    <insert id="insertDiary">
+      insert into diary values(0,#{r_num},#{m_mail},#{diary_title},#{diary_content},#{diary_date},#{diary_path},#{diary_weather},#{diary_friends})
+  	</insert>
+    <update id="updateDiary">
+  	</update>
+    <delete id="deleteDiary">
+      delete from diary where diary_num = #{diary_num}
+    </delete>
+  	<select id="selectAllDiary" resultType="com.example.model.Diary">
+  	</select>
+    <select id="selectAllDiaryByEmail" resultType="java.util.HashMap">
+      select * from diary d, restaurant r where d.r_num = r.r_num and m_mail = #{m_mail} order by diary_date desc limit #{rowNum},10
+  	</select>
+    <select id="selectAllDiaryByEmailandDate" resultType="java.util.HashMap">
+      select * from diary d,restaurant r where d.r_num = r.r_num and m_mail = #{m_mail} and diary_date = #{diary_date} order by diary_num desc
+  	</select>
+    <select id="selectOneDiary" resultType="java.util.HashMap">
+      select * from diary d,restaurant r where d.r_num = r.r_num and d.diary_num = #{diary_num}
+  	</select>
+    <select id="getNextAI" resultType="java.util.HashMap">
+      show table status like 'diary';
+  	</select>
+    <select id="countAllDiary" resultType="int">
+      select count(*) from diary where m_mail = #{m_mail}
+  	</select>
+  </mapper>

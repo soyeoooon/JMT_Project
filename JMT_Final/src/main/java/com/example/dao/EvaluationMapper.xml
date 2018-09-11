@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.EvaluationDao">
+	<insert id="insertEvaluation">
+		insert into evaluation values(#{r_num},#{m_num},#{e_grade},0,0);
+	</insert>
+	<update id="updateEvaluation">
+		update evaluation set e_grade = #{e_grade} where r_num = #{r_num} and m_num
+		= #{m_num}
+	</update>
+	<delete id="deleteEvaluation">
+	</delete>
+	<select id="getCountEforRByEmail" resultType="int">
+		select count(*) from evaluation where r_num = #{r_num} and m_num = #{m_num}
+	</select>
+	<select id="selectOneEvaluation" resultType="double">
+		select e_grade from evaluation where r_num = #{r_num} and m_num = #{m_num}
+	</select>
+	<select id="selectAllEvaluationByEmail"
+		resultType="com.example.model.Evaluation">
+		select * from evaluation where m_num = #{m_num}
+	</select>
+	<select id="countEvaluationLikeByEmail" resultType="int">
+		select count(e_like) from evaluation where m_num = #{m_num}
+	</select>
+	<select id="countEvaluationMarkByEmail" resultType="int">
+		select count(e_mark) from evaluation where m_num = #{m_num}
+	</select>
+	
+	
+	<!--/*==================용화=======================*/ -->
+	<select id="restaurantSelect" parameterType="int"
+		resultType="hashMap">
+		SELECT sum(e_like) as 'like', sum(e_mark) as 'mark', round(avg(e_grade),1)
+		as 'grade' FROM evaluation where r_num=#{r_num}
+	</select>
+
+	<select id="memberSelect" parameterType="hashMap"
+		resultType="evaluation">
+		select * from evaluation where r_num=#{r_num} and m_num=#{m_num}
+	</select>
+
+	<insert id="insert" parameterType="evaluation">
+		insert into evaluation
+		values(#{r_num},#{m_num},#{e_grade},#{e_like},#{e_mark})
+	</insert>
+
+	<update id="likeUpdate" parameterType="hashMap">
+		update evaluation set e_like=#{e_like} where r_num=#{r_num} and
+		m_num=#{m_num}
+	</update>
+
+	<update id="markUpdate" parameterType="hashMap">
+		update evaluation set e_mark=#{e_mark} where r_num=#{r_num} and
+		m_num=#{m_num}
+	</update>
+
+	<update id="gradeUpdate" parameterType="hashMap">
+		update evaluation set e_grade=#{e_grade} where r_num=#{r_num} and
+		m_num=#{m_num}
+	</update>
+
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.EmailDao">
+ 	<insert id="insertEmail" parameterType="String">
+ 		insert into email values(0,#{email});
+  	</insert>
+  	
+    <update id="updateEmail">
+  	</update>
+    <delete id="deleteEmail">
+    </delete>
+  	<select id="selectAllEmail" resultType="com.example.model.Email">
+  	</select>
+  	<select id="getEmailNum" resultType="int">
+      select email_num from email where email = #{email}
+  	</select>
+  	
+  	<!-- 소연추가 -->
+  	<select id="selectEmail" parameterType="String" resultType="com.example.model.Email">
+  		select * from email where email=#{email}
+  	</select>
+  </mapper>

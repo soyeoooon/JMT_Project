@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.RestaurantDao">
+    <insert id="insertRestaurant">
+      insert into restaurant values(0,#{r_name},#{r_phone},#{r_address},#{r_lat},#{r_lon},#{r_category1},#{r_category2},null,null,null,null,null,null,null)
+  	</insert>
+    <update id="updateRestaurant">
+  	</update>
+    <delete id="deleteRestaurant">
+      delete from restaurant where r_num = #{r_num}
+    </delete>
+  	<!-- <select id="selectAllRestaurant" resultType="com.example.model.Restaurant">
+  	</select> -->
+  	<select id="selectOneRestaurantNum" resultType="int">
+      select r_num from restaurant where r_name = #{r_name} and r_address = #{r_address}
+  	</select>
+    <select id="countRestaurantNum" resultType="int">
+      select count(*) from restaurant where r_name = #{r_name} and r_address = #{r_address}
+  	</select>
+  	
+  	<!-- /*=============소연=============*/ -->
+  	<select id="selectOneRestaurantName" parameterType="String" resultType="com.example.model.Restaurant">
+  		select * from restaurant where r_name = #{r_name} and r_address=#{r_address};
+  	</select>
+  	
+  	<select id="selectAllRestaurant" resultType="com.example.model.Restaurant">
+  		select * from restaurant;
+  	</select>
+  	
+  	
+  	
+  	<update id="updateRestaurantByReport" parameterType="com.example.model.RestModify">
+  		update restaurant set r_price=#{rm_price}, r_enjoy=#{rm_enjoy}, r_rundate=#{rm_rundate}, r_runtime=#{rm_runtime},
+  		r_intro=#{rm_intro},r_menu=#{rm_menu} where r_num=#{r_num};
+  	</update>
+  	
+  	<select id="selectBoardPage" parameterType="java.util.HashMap" resultType="com.example.model.Restaurant">
+  		select * from restaurant  limit #{offset},#{boardsPerPage}
+  	</select>
+  	
+  	<select id="getCount" resultType="int">
+		select count(*) from restaurant;
+	</select>
+	
+	<!-- 관리자 페이지 음식점 검색 -->
+	<select id="selectBoardPagebyKeyword" parameterType="java.util.HashMap" resultType="com.example.model.Restaurant">
+  		select * from restaurant  where r_name like '%${keyword}%' limit #{offset},#{boardsPerPage}
+  	</select>
+	
+	
+  	
+  	
+  	<!-- /*=============용화=============*/ -->
+  	<select id="selectOne" parameterType="int" resultType="com.example.model.Restaurant">
+			select * from restaurant where r_num=#{r_num}
+		</select>    
+		<update id="updateInfo" parameterType="com.example.model.RestModify">
+			update restaurant set r_phone=#{rm_phone},r_runtime=#{rm_runtime},r_rundate=#{rm_rundate},r_menu=#{rm_menu},r_intro=#{rm_intro},r_enjoy=#{rm_enjoy} where r_num=#{r_num}	
+		</update>	
+  </mapper>

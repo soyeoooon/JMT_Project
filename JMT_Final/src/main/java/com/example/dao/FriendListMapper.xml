@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.FriendListDao">
+	<insert id="insertFriendList">
+	</insert>
+	<update id="updateFriendList">
+	</update>
+	<delete id="deleteFriendList">
+	</delete>
+	<select id="selectAllFriendList"
+		resultType="com.example.model.FriendList">
+	</select>
+	<select id="selectAllFriendListByEmail"
+		resultType="com.example.model.FriendList">
+		select * from friendlist where req_mail = #{email_num} or resp_mail =
+		#{email_num}
+	</select>
+	<select id="selectApplyFriendListByEmailreq" resultType="int">
+		select resp_mail from friendlist where req_mail = #{email_num} and f_status
+		= 1
+	</select>
+	<select id="selectApplyFriendListByEmailresp" resultType="int">
+		select req_mail from friendlist where resp_mail = #{email_num} and f_status
+		= 1
+	</select>
+
+	<!--/*=============용화=============*/ -->
+	<insert id="insert" parameterType="friendList">
+		insert into friendlist values(#{req_mail},#{resp_mail},#{f_status})
+	</insert>
+
+	<update id="update" parameterType="friendList">
+		update friendlist set f_status=#{f_status} where req_mail=#{resp_mail} and
+		resp_mail=#{req_mail}
+	</update>
+
+	<select id="connection" parameterType="hashMap"
+		resultType="string">
+		select f_status from friendlist where req_mail=#{req_mail} and
+		resp_mail=#{resp_mail}
+	</select>
+</mapper>
+
+
+
+

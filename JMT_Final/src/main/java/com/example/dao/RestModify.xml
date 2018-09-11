@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.example.dao.IRestModifyDao">
+		<insert id="insert" parameterType="restModify">
+			insert into restModify values(#{rm_num},#{rm_name},#{rm_phone},#{rm_address},#{rm_lat},#{rm_lon},#{rm_category1},
+			#{rm_category2},#{rm_price},#{rm_enjoy},#{rm_rundate},#{rm_runtime},#{rm_intro},#{rm_menu},#{rm_photo},#{rm_date},
+			#{r_num},#{m_num})
+		</insert>
+		<select id="selectLast" parameterType="int" resultType="hashMap">
+			SELECT m.m_nick, rm.rm_num, rm.r_num, m.email_num, rm.rm_date FROM restmodify rm, memberlist m where rm.m_num=m.m_num and rm.rm_date in (select max(rm_date) from restmodify where r_num=rm.r_num) and rm.r_num=#{r_num}
+		</select>
+		
+		<!-- 소연 -->
+		<select id="selectModify" parameterType="String" resultType="com.example.model.RestModify">
+			select * from restmodify where rm_date in (select max(rm.rm_date) from restmodify rm where rm.rm_name=#{rm_name});
+		</select>
+		
+		<delete id="deleteModify" parameterType="int">
+			delete from restmodify where rm_num=#{rm_num};
+		</delete>
+    </mapper>
