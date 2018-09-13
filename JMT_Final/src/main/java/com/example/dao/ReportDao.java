@@ -25,6 +25,9 @@ public interface ReportDao {
 	public List<Report> selectBoardPage(HashMap<String,Object> params);
 	public int getCount();
 	
+	//신고 처리 안된 것만 갯수 가져오기
+	public int getCount2();
+	
 	//신고 테이블 조인해서 가져오는 것.
 	public List<adminReport> selectReportList(HashMap<String,Object> params);
 	

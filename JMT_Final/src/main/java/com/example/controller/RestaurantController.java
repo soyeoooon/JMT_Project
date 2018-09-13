@@ -2,6 +2,7 @@ package com.example.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +24,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.model.FriendList;
 import com.example.model.MemberList;
 import com.example.model.Restaurant;
+import com.example.service.DiaryService;
 import com.example.service.MemberListService;
+import com.example.service.PhotoDecoService;
 import com.example.service.RestaurantService;
 
 @Controller
@@ -34,12 +37,110 @@ public class RestaurantController {
 
 	@Autowired
 	private MemberListService memberListService;
+	
+	@Autowired
+	private DiaryService diaryService;
+
+	@Autowired
+	private PhotoDecoService photoDecoService;
+	//--------------------------------추가(v1)----------------------------------------
+		//파일업로드
+		@RequestMapping("/review_write")
+		public @ResponseBody int review_write(@RequestParam(value="files",required=false)List<MultipartFile> multi, @RequestParam(value="delfiles",required=false)List<String> delimg, @RequestParam(required=false)String rev_num, int r_num, int m_num, String textarea, double grade)
+				throws IOException {
+	        return restaurantService.Review_Write(multi, delimg, rev_num, r_num,m_num,textarea,grade);
+		}
+		
+		@RequestMapping("/review")
+		public String editor(Model model, int r_num, @RequestParam(required=false) String rev_num, HttpSession session) {
+			String email = (String) session.getAttribute("email");
+			MemberList ml = memberListService.getOneMember(email);
+			int m_num=ml.getM_num();
+			// m_num 로그인한 Session값
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("r_num", r_num + "");
+			map.put("m_num", m_num + "");
+			model.addAttribute("info", restaurantService.RestaurantSelect(map));
+			model.addAttribute("email", restaurantService.MemberInfo(m_num));
+			if(rev_num!=null) {
+				model.addAttribute("review", restaurantService.ReviewInfo(rev_num));
+			}
+			return "Review";
+		}
+		
+		public List<HashMap<String,Object>> getfoodNames(String r_name,String r_address){
+		      List<HashMap<String,Object>> foodNames = new ArrayList<HashMap<String,Object>>();
+		      for(int diary_num : diaryService.getDiaryNumBySearch(r_name, r_address)){
+		         for(String f_name : photoDecoService.getFoodNameByDiaryNum(diary_num)){
+		            int size = foodNames.size();
+		            if(size==0){
+		               HashMap<String,Object> map = new HashMap<String,Object>();
+		               map.put("f_name", f_name);
+		               map.put("count", 1);
+		               foodNames.add(map);
+		            }else{
+		               if(foodNames.get(size-1).get("f_name").equals(f_name)){
+		                  int newcount = (int)foodNames.get(size-1).get("count")+1;
+		                  foodNames.get(size-1).put("count", newcount);
+		               }else{
+		                  HashMap<String,Object> map = new HashMap<String,Object>();
+		                  map.put("f_name", f_name);
+		                  map.put("count", 1);
+		                  foodNames.add(map);
+		               }
+		            }
+		         }
+		      }
+		      return foodNames;
+		   }
+		   
+		   @RequestMapping("/getHashTag") // 3개만할거임
+		   public @ResponseBody List<String> getHashTag(@RequestParam String r_name, @RequestParam String r_address){
+		      int index = 3;
+		      List<HashMap<String,Object>> foodNames = getfoodNames(r_name, r_address);
+		      List<String> temp = new ArrayList<String>();
+		      List<String> hashTag = new ArrayList<String>();
+		      HashMap<String,Object> map = new HashMap<String,Object>();
+		      for(int i =0;i<foodNames.size();i=0){
+		         for(int j =i+1;j<foodNames.size();j++){
+		            i = (int)foodNames.get(i).get("count")>(int)foodNames.get(j).get("count")?i:j;
+		         }
+		         temp.add((String)foodNames.get(i).get("f_name"));
+		         foodNames.remove(i);
+		      }
+		      if(temp.size()>=index){
+		         for(int i =0;i<index;i++){
+		            hashTag.add(temp.get(i));
+		         }
+		      }
+		      return hashTag;
+		   }
+
+		
+		@RequestMapping("/select_save")
+		public @ResponseBody String select_save(@RequestParam HashMap<String, String> map, HttpSession session) {
+			System.out.println(map);
+			String email = (String) session.getAttribute("email");
+			MemberList ml = memberListService.getOneMember(email);
+			restaurantService.evaluation_all_save(map,ml.getM_num());
+			return null;
+		}
+		
+		@RequestMapping("/searchRes")
+		public @ResponseBody List<HashMap<String, Object>> searchRes(@RequestParam(required = false) String search, HttpSession session) {
+			String email = (String) session.getAttribute("email");
+			MemberList ml = memberListService.getOneMember(email);
+			return restaurantService.searchRestaurant(search,ml.getM_num());
+		}
+		//--------------------추가끝----------------------------
 
 	/*-------------------소연---------------------*/
 	@RequestMapping("/search")
 	public ModelAndView search(@RequestParam(required = false) String keyword, HttpSession session) {
+		String email = (String) session.getAttribute("email");
+		MemberList ml = memberListService.getOneMember(email);
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("searchList", restaurantService.searchRestaurant(keyword));
+		mav.addObject("searchList", restaurantService.searchRestaurant(keyword,ml.getM_num()));
 		mav.addObject("keyword", keyword);
 		mav.addObject("member", memberListService.getOneMember((String) session.getAttribute("email")));
 		mav.setViewName("search");
@@ -49,16 +150,17 @@ public class RestaurantController {
 
 	@RequestMapping("/getSearchList")
 	public @ResponseBody HashMap<String, Object> getSearchList(@RequestParam(required = false) String keyword,
-			@RequestParam(defaultValue = "1") int page) {
+			@RequestParam(defaultValue = "1") int page, HttpSession session) {
 		// return restaurantService.searchRestaurant(keyword);
-		return restaurantService.getBoardListPage(page, keyword);
+		String email = (String) session.getAttribute("email");
+		MemberList ml = memberListService.getOneMember(email);
+		return restaurantService.getBoardListPage(page, keyword,ml.getM_num());
 	}
 	
 
 	/*-------------------용화---------------------*/
 	@RequestMapping("/RestaurantView")
-	public String RastaurantView(Model model, @RequestParam(required = false) String r_name,
-			@RequestParam(required = false) String r_address, HttpSession session) {
+	public String RastaurantView(Model model,  @RequestParam(required = false) int r_num, HttpSession session) {
 		// m_num 로그인한 Session값
 
 		/* 소연 부분 수정 */
@@ -68,9 +170,6 @@ public class RestaurantController {
 		int m_num = ml.getM_num();
 		// int m_num=2;
 
-		int r_num = restaurantService.selectOneRestaurant(r_name, r_address).getR_num();
-
-		System.out.println(r_num);
 
 		/* 소연 부분 수정 끝 */
 
@@ -83,9 +182,6 @@ public class RestaurantController {
 		model.addAttribute("email", restaurantService.MemberInfo(m_num));
 		// email.m_num은 로그인 접속 정보
 
-		/* 소연 부분 수정 */
-		model.addAttribute("r_num", r_num);
-		/* 소연 부분 수정 끝 */
 		return "RestaurantView";
 	}
 
@@ -144,42 +240,7 @@ public class RestaurantController {
 		restaurantService.FriendAccept(friend);
 	}
 
-	@RequestMapping("/fileUpload")
-	public @ResponseBody List<String> fileUp(MultipartHttpServletRequest multi, int r_num, String r_photo)
-			throws IOException {
-		if (!r_photo.equals("img/No_Image.jpg")) {
-			String dpath = "C:/Users/USER/Desktop/Dropbox/project_work/demo-3/target/classes/static/" + r_photo;
-			File file = new File(dpath);
-			file.delete();
-		}
-
-		// 저장 경로 설정
-		String path = "C:/Users/USER/Desktop/Dropbox/project_work/demo-3/target/classes/static/img/" + r_num + "/top/";
-		String newFileName = ""; // 업로드 되는 파일명
-
-		File dir = new File(path);
-		if (!dir.isDirectory()) {
-			dir.mkdir();
-		}
-
-		Iterator<String> files = multi.getFileNames();
-		while (files.hasNext()) {
-			String uploadFile = files.next();
-
-			MultipartFile mFile = multi.getFile(uploadFile);
-			String fileName = mFile.getOriginalFilename();
-			newFileName = System.currentTimeMillis() + "." + fileName.substring(fileName.lastIndexOf(".") + 1);
-
-			try {
-				mFile.transferTo(new File(path + newFileName));
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		return restaurantService.ImgList(r_num);
-	}
+	
 
 	/*
 	 * @RequestMapping("/Login") public String Login() { return "Login"; }

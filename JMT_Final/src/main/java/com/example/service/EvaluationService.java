@@ -11,19 +11,26 @@ import com.example.model.Evaluation;
 
 @Service
 public class EvaluationService {
+	/*--------------------성록--------------------*/
 	@Autowired
 	EvaluationDao evaluationDao;
 
-	public List<Evaluation> selectAllEvaluationByEmail(int m_num) {
-		return evaluationDao.selectAllEvaluationByEmail(m_num);
+	public List<Evaluation> selectAllEvaluationByNum(int m_num) {
+		return evaluationDao.selectAllEvaluationByNum(m_num);
 	}
 
-	public int countEvaluationLikeByEmail(int m_num) {
-		return evaluationDao.countEvaluationLikeByEmail(m_num);
+	public int countEvaluationLikeByNum(int m_num) {
+		return evaluationDao.countEvaluationLikeByNum(m_num);
 	}
 
-	public int countEvaluationMarkByEmail(int m_num) {
-		return evaluationDao.countEvaluationMarkByEmail(m_num);
+	public int countEvaluationMarkByNum(int m_num) {
+		return evaluationDao.countEvaluationMarkByNum(m_num);
+	}
+	public double getGrade(int r_num){
+		return evaluationDao.getAllGradeForRestaurant(r_num)/evaluationDao.getCountGradeForRestaurant(r_num);
+	}
+	public List<HashMap<String,Object>> getRestaurantByEV(int m_num){
+		return evaluationDao.getRestaurantByEV(m_num);
 	}
 
 	public double getEvaluationRestaurantByEmail(int m_num, int r_num) {

@@ -13,8 +13,8 @@ public interface IRestModifyDao {
 	
 	
 	/*--------------------소연-------------------*/
-	//신고처리되면 해당 기록 삭제 위해 레코드 가져오기
-	public RestModify selectModify(String r_name);
+	//신고처리되면 해당 기록 삭제 위해 레코드 가져오기(rm_num은 신고테이블의 음식점번호)!!!!
+	public RestModify selectModify(int rm_num);
 	
 	//위에서 받은 번호를 가지고 신고된 상세정보 기록 삭제하기
 	public void deleteModify(int rm_num);

@@ -17,12 +17,12 @@
 
 <title></title>
 <style type="text/css">
- body {
-      position: relative; 
-  }
+body {
+	position: relative;
+}
 </style>
 </head>
-<body  data-spy="scroll" data-target="#map" data-offset="50">
+<body data-spy="scroll" data-target="#map" data-offset="50">
 
   <div class="container-fluid mt-5 pt-5">
     <img src="resources/front_image/settings.png">
@@ -50,8 +50,9 @@
 
   <script type="text/javascript">
 			$(document).ready(function() {
+				//-------------------------------용화수정(v1)--------------------------
 				var keyword = "${keyword}";
-				var result = "${fn:length(searchList)}";
+				var result = 0;
 				console.log("keyword: " + keyword)
 				//검색어를 입력하지 않았을 경우
 				if (keyword == '' || keyword == null || keyword == ' ') {
@@ -61,73 +62,74 @@
 				}
 				//검색어를 입력한 경우
 				else {
-					//검색어 입력했지만, 음식점 결과가 없는경우
-					if (result == "0") {
-						$('#cardList').text('검색결과없음');
-					}
-
-					//검색어 입력했고, 검색 결과 있는경우
-
 					var map = new naver.maps.Map('map'); // 네이버 API에서 맵을가져옴
 
 					$.get('/getSearchList?keyword=' + keyword + '&page=', function(data) {
-						var txt = '';
+						result = data['searchList'].length;
 
-						for (var i = 0; i < data['searchList'].length; i++) {
-							txt += '<div class="card">';
-							txt += '<img class="card-img-top" src="${pageContext.request.contextPath}/resources/front_image/food.jpg" alt="Card image cap">';
-							txt += '<div class="card-body">';
-							txt += '<h5 class="card-title"><a href="/RestaurantView?r_name=' + data['searchList'][i].r_name + '&r_address='+data['searchList'][i].r_address+'">' + data['searchList'][i].r_name + '</a></h5>';
-							txt += '<p class="card-text">' + data['searchList'][i].r_address + '</p>';
-							txt += '<p class="card-text"><small class="text-muted">' + data['searchList'][i].r_category1 + '</small></p>';
-							txt += '<p class="card-text"><small class="text-muted">' + data['searchList'][i].r_category2 + '</small></p>';
-							txt += '</div>';
-							txt += '</div>';
-							if ((i + 1) % 2 == 0) {
-								txt += '<div class="w-100 mb-3"></div>';
+						if (result == 0) {
+							$('#cardList').text('검색결과없음');
+						} else {
+
+							//-------------------------------용화수정끝--------------------------
+							var txt = '';
+
+							for (var i = 0; i < data['searchList'].length; i++) {
+								txt += '<div class="card">';
+								txt += '<img class="card-img-top" src="${pageContext.request.contextPath}/resources/front_image/food.jpg" alt="Card image cap">';
+								txt += '<div class="card-body">';
+								txt += '<h5 class="card-title"><a href="/RestaurantView?r_num=' + data['searchList'][i].r_num +'">' + data['searchList'][i].r_name + '</a></h5>';
+								txt += '<p class="card-text">' + data['searchList'][i].r_address + '</p>';
+								txt += '<p class="card-text"><small class="text-muted">' + data['searchList'][i].r_category1 + '</small></p>';
+								txt += '<p class="card-text"><small class="text-muted">' + data['searchList'][i].r_category2 + '</small></p>';
+								txt += '</div>';
+								txt += '</div>';
+								if ((i + 1) % 2 == 0) {
+									txt += '<div class="w-100 mb-3"></div>';
+								}
+								var r_address = data['searchList'][i].r_address;
+
+								naver.maps.Service.geocode({
+									address : r_address
+								}, function(status, response) { // 해당 주소로 네이버 맵 API 서비스 실행
+									if (status !== naver.maps.Service.Status.OK) { // 뭔지모름
+										return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
+									}
+									var result = response.result;
+									// 검색 결과 갯수: result.total
+									// 첫번째 결과 결과 주소: result.items[0].address
+									// 첫번째 검색 결과 좌표: result.items[0].point.y, result.items[0].point.x
+									var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y); // 네이버 맵에 x,y좌표 따옴
+									map.setCenter(myaddr); // 검색된 좌표로 지도 이동
+
+									// 마커 표시
+									var marker = new naver.maps.Marker({
+										position : myaddr,
+										map : map
+									});
+									var key = 0;
+									for (var j = 0; j < data['searchList'].length; j++) { // 인덱스값 빼는 이유가 모든애들 이름이 마지막 data 값으로 남아서
+										if (response.result.userquery == data['searchList'][j].r_address) { // response.result.userquery가 결과의 주소이름들
+											key = j;
+										}
+									}
+
+									// 마크 클릭시 인포윈도우 오픈
+									var infowindow = new naver.maps.InfoWindow({
+										content : data['searchList'][key].r_name
+									});
+
+									// 마커 클릭 이벤트 처리
+									naver.maps.Event.addListener(marker, "click", function(e) {
+										if (infowindow.getMap()) {
+											infowindow.close();
+										} else {
+											infowindow.open(map, marker);
+										}
+									});
+
+								});
 							}
-							var r_address = data['searchList'][i].r_address;
-
-							naver.maps.Service.geocode({
-								address : r_address
-							}, function(status, response) { // 해당 주소로 네이버 맵 API 서비스 실행
-								if (status !== naver.maps.Service.Status.OK) { // 뭔지모름
-									return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
-								}
-								var result = response.result;
-								// 검색 결과 갯수: result.total
-								// 첫번째 결과 결과 주소: result.items[0].address
-								// 첫번째 검색 결과 좌표: result.items[0].point.y, result.items[0].point.x
-								var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y); // 네이버 맵에 x,y좌표 따옴
-								map.setCenter(myaddr); // 검색된 좌표로 지도 이동
-
-								// 마커 표시
-								var marker = new naver.maps.Marker({
-									position : myaddr,
-									map : map
-								});
-								var key = 0;
-								for (var j = 0; j < data['searchList'].length; j++) { // 인덱스값 빼는 이유가 모든애들 이름이 마지막 data 값으로 남아서
-									if (response.result.userquery == data['searchList'][j].r_address) { // response.result.userquery가 결과의 주소이름들
-										key = j;
-									}
-								}
-
-								// 마크 클릭시 인포윈도우 오픈
-								var infowindow = new naver.maps.InfoWindow({
-									content : data['searchList'][key].r_name
-								});
-
-								// 마커 클릭 이벤트 처리
-								naver.maps.Event.addListener(marker, "click", function(e) {
-									if (infowindow.getMap()) {
-										infowindow.close();
-									} else {
-										infowindow.open(map, marker);
-									}
-								});
-
-							});
 						}
 
 						$("#card-deck").append(txt);
@@ -164,7 +166,7 @@
 					})
 
 					$(document).on('click', '.page-link', function() {
-					
+
 						var num = $(this).text();
 
 						if ($(this).text() == '처음') {
@@ -186,7 +188,7 @@
 								txt += '<div class="card">';
 								txt += '<img class="card-img-top" src="${pageContext.request.contextPath}/resources/front_image/food.jpg" alt="Card image cap">';
 								txt += '<div class="card-body">';
-								txt += '<h5 class="card-title"><a href="/RestaurantView?r_name=' + data['searchList'][i].r_name + '&r_address='+data['searchList'][i].r_address+'">' + data['searchList'][i].r_name + '</a></h5>';
+								txt += '<h5 class="card-title"><a href="/RestaurantView?r_num=' + data['searchList'][i].r_num +'">' + data['searchList'][i].r_name + '</a></h5>';
 								txt += '<p class="card-text">' + data['searchList'][i].r_address + '</p>';
 								txt += '<p class="card-text"><small class="text-muted">' + data['searchList'][i].r_category1 + '</small></p>';
 								txt += '<p class="card-text"><small class="text-muted">' + data['searchList'][i].r_category2 + '</small></p>';

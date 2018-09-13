@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.dao.DiaryDao">
-    <insert id="insertDiary">
+<!-- 수정(v1) -->
+	<select id="getDiaryNumBySearch" resultType="int">
+      select d.diary_num from diary d, restaurant r where d.r_num = r.r_num and r.r_name = #{r_name} and r.r_address = #{r_address}
+     </select>
+
+     <select id="getFoodNameByDiaryNum" resultType="String" parameterType="int">
+    select p_foodname from photodeco where substring_index(substring_index(p_imgname,'/',3),'/',-1)*1 = #{diary_num} order by p_foodname
+    <!-- substring_index에서 p_imgname의 값이 변경되면 숫자도 바꿔줘야됨 -->
+     </select>
+
+     <insert id="insertDiary">
       insert into diary values(0,#{r_num},#{m_mail},#{diary_title},#{diary_content},#{diary_date},#{diary_path},#{diary_weather},#{diary_friends})
   	</insert>
     <update id="updateDiary">

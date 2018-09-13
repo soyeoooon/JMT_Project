@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.dao.RestaurantDao">
+<!-- /*=============용화(v1)=============*/ -->
+    <insert id="insertRestaurant2" useGeneratedKeys="true" keyProperty="r_num">
+      insert into restaurant values(0,#{r_name},#{r_phone},#{r_address},#{r_lat},#{r_lon},#{r_category1},#{r_category2},null,null,null,null,null,null,null)
+  	</insert>
+  	
+  	
     <insert id="insertRestaurant">
       insert into restaurant values(0,#{r_name},#{r_phone},#{r_address},#{r_lat},#{r_lon},#{r_category1},#{r_category2},null,null,null,null,null,null,null)
   	</insert>
@@ -14,8 +20,20 @@
   	<select id="selectOneRestaurantNum" resultType="int">
       select r_num from restaurant where r_name = #{r_name} and r_address = #{r_address}
   	</select>
+  	
+    <!-- /*=============용화수정(v1)=============*/ -->
     <select id="countRestaurantNum" resultType="int">
-      select count(*) from restaurant where r_name = #{r_name} and r_address = #{r_address}
+      select r_num from restaurant where r_name = #{r_name} and r_address = #{r_address}
+  	</select>
+  	
+    <select id="selectRestaurantByLikeandMark" resultType="java.util.HashMap">
+      select * from restaurant r,evaluation e where (m_num = #{m_num} and r.r_num = e.r_num) and (e.e_like = 1 or e.e_mark = 1)
+  	</select>
+    <select id="selectRestaurantByLike" resultType="java.util.HashMap">
+      select * from restaurant r,evaluation e where (m_num = #{m_num} and r.r_num = e.r_num) and (e.e_like = 1)
+  	</select>
+    <select id="selectRestaurantByMark" resultType="java.util.HashMap">
+      select * from restaurant r,evaluation e where (m_num = #{m_num} and r.r_num = e.r_num) and (e.e_mark = 1)
   	</select>
   	
   	<!-- /*=============소연=============*/ -->
@@ -34,6 +52,9 @@
   		r_intro=#{rm_intro},r_menu=#{rm_menu} where r_num=#{r_num};
   	</update>
   	
+  	
+  	
+  	
   	<select id="selectBoardPage" parameterType="java.util.HashMap" resultType="com.example.model.Restaurant">
   		select * from restaurant  limit #{offset},#{boardsPerPage}
   	</select>
@@ -45,6 +66,10 @@
 	<!-- 관리자 페이지 음식점 검색 -->
 	<select id="selectBoardPagebyKeyword" parameterType="java.util.HashMap" resultType="com.example.model.Restaurant">
   		select * from restaurant  where r_name like '%${keyword}%' limit #{offset},#{boardsPerPage}
+  	</select>
+  	
+  	<select id="getCountKeyword" resultType="int" parameterType="java.util.HashMap">
+  		select count(*) from restaurant  where r_name like '%${keyword}%'
   	</select>
 	
 	

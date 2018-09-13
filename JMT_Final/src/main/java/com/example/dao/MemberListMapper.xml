@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.dao.MemberListDao">
+<!-- /*=============소연=============*/ -->
     <insert id="insertMemberList" parameterType="com.example.model.MemberList">
     	insert into memberList (m_num,email_num,m_nick,m_pwd) 
     	values(0,#{email_num},#{m_nick},sha(#{m_pwd}));
   	</insert>
+    <!-- /*=============성록=============*/ -->
     <update id="updateMemberList">
+        update memberlist set m_nick = #{m_nick}, m_pwd = sha(#{m_pwd}) where email_num = #{email_num}
+  	</update>
+    <update id="updateIntro">
+        update memberlist set m_intro = #{m_intro} where email_num = #{email_num}
   	</update>
     <delete id="deleteMemberList">
     </delete>
+   <!--  <select id="selectOneMemberList" resultType="com.example.model.MemberList">
+      select * from memberlist where email_num = #{email_num}
+  	</select> -->
+  	<!-- <select id="selectAllMemberList" resultType="com.example.model.MemberList">
+  	</select> -->
+  	<!-- <select id="selectOneMemberListByNum" resultType="com.example.model.MemberList">
+      select * from memberlist where email_num = #{email_num}
+  	</select> -->
+  	<select id="getM_NumByEmailNum" resultType="int">
+      select m_num from memberlist where email_num = #{email_num}
+  	</select>
+  	<select id="getAllByNick" resultType="com.example.model.MemberList" parameterType="String">
+      select * from memberlist where m_nick like CONCAT('%',#{search},'%')
+  	</select>
     
     <!--  소연 : parameterType int 추가 -->
     <select id="selectOneMemberList" parameterType="int" resultType="com.example.model.MemberList">
@@ -24,6 +44,10 @@
   	<!-- 소연 추가  -->
   	<select id="selectOneMemberListByPwd" parameterType="com.example.model.MemberList" resultType="com.example.model.MemberList">
   		select * from memberlist where email_num = #{email_num} and m_pwd = sha(#{m_pwd});
+  	</select>
+  	
+  	<select id="getCountMember" resultType="int">
+  		select count(*) from memberList;
   	</select>
   	
   	<!-- /*=============용화=============*/ -->

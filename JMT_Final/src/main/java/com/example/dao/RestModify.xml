@@ -13,8 +13,9 @@
 		</select>
 		
 		<!-- 소연 -->
-		<select id="selectModify" parameterType="String" resultType="com.example.model.RestModify">
-			select * from restmodify where rm_date in (select max(rm.rm_date) from restmodify rm where rm.rm_name=#{rm_name});
+		<!-- 가장 최근 기록 데이터 가져오기 -->
+		<select id="selectModify" parameterType="int" resultType="com.example.model.RestModify">
+			select * from restmodify where rm_date in (select max(rm.rm_date) from restmodify rm where rm.r_num=#{rm_num});
 		</select>
 		
 		<delete id="deleteModify" parameterType="int">

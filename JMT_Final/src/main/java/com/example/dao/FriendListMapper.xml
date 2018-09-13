@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.dao.FriendListDao">
+<!--/*=============성록=============*/ -->
 	<insert id="insertFriendList">
-	</insert>
-	<update id="updateFriendList">
-	</update>
-	<delete id="deleteFriendList">
-	</delete>
-	<select id="selectAllFriendList"
-		resultType="com.example.model.FriendList">
-	</select>
-	<select id="selectAllFriendListByEmail"
-		resultType="com.example.model.FriendList">
-		select * from friendlist where req_mail = #{email_num} or resp_mail =
-		#{email_num}
-	</select>
-	<select id="selectApplyFriendListByEmailreq" resultType="int">
-		select resp_mail from friendlist where req_mail = #{email_num} and f_status
-		= 1
-	</select>
-	<select id="selectApplyFriendListByEmailresp" resultType="int">
-		select req_mail from friendlist where resp_mail = #{email_num} and f_status
-		= 1
-	</select>
+     	insert into friendlist values(#{req_mail},#{resp_mail},0)
+  	</insert>
+    <update id="updateFriendList">
+      update friendlist set f_status = 1 where req_mail = #{req_mail} and resp_mail = #{resp_mail}
+  	</update>
+    <delete id="deleteFriendList">
+      delete from friendlist where (req_mail = #{req_mail} and resp_mail = #{resp_mail}) or (req_mail = #{resp_mail} and resp_mail = #{req_mail})
+    </delete>
+  	<select id="selectAllFriendList" resultType="com.example.model.FriendList">
+  	</select>
+    <select id="selectAllFriendListByEmail" resultType="com.example.model.FriendList">
+      select * from friendlist where req_mail = #{email_num} or resp_mail = #{email_num}
+  	</select>
+    <select id="selectApplyFriendListByEmailreq" resultType="int">
+      select resp_mail from friendlist where req_mail = #{email_num} and f_status = 1
+  	</select>
+    <select id="selectApplyFriendListByEmailresp" resultType="int">
+      select req_mail from friendlist where resp_mail = #{email_num} and f_status = 1
+  	</select>
+    <select id="selectReqFriendListByEmail" resultType="int">
+      select req_mail from friendlist where resp_mail = #{email_num} and f_status = 0
+  	</select>
+    <select id="isFriend" resultType="int">
+      select count(*) from friendlist where ((resp_mail = #{resp_mail} and req_mail = #{req_mail})or(resp_mail = #{req_mail} and req_mail = #{resp_mail})) and f_status = 1
+  	</select>
+    <select id="isFriend2" resultType="int">
+      select count(*) from friendlist where (resp_mail = #{resp_mail} and req_mail = #{req_mail}) and f_status = 0
+  	</select>
+  	<select id="isFriend3" resultType="int">
+      select count(*) from friendlist where (resp_mail = #{req_mail} and req_mail = #{resp_mail}) and f_status = 0
+  	</select>
 
 	<!--/*=============용화=============*/ -->
 	<insert id="insert" parameterType="friendList">

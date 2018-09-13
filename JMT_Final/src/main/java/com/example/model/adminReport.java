@@ -18,6 +18,7 @@ public class adminReport {
 	public void setRep_num(int rep_num) {
 		this.rep_num = rep_num;
 	}
+	
 	public String getR_name() {
 		return r_name;
 	}
@@ -72,6 +73,9 @@ public class adminReport {
 				+ ", resp=" + resp + ", replist_content=" + replist_content + ", represult_content=" + represult_content
 				+ ", rep_date1=" + rep_date1 + ", rep_date2=" + rep_date2 + "]";
 	}
+	
+	
+	
 	
 	
 

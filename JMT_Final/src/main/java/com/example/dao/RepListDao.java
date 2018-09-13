@@ -10,7 +10,7 @@ public interface RepListDao {
 	public void deleteRepList();
 	public List<RepList> selectAllRepList();
 	
-	/*--------------------이름--------------------*/
+	/*--------------------용화--------------------*/
 	//신고내용목록
 	public List<RepList> selectAll();
 }

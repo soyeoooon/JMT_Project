@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.dao.EvaluationDao">
-	<insert id="insertEvaluation">
-		insert into evaluation values(#{r_num},#{m_num},#{e_grade},0,0);
-	</insert>
-	<update id="updateEvaluation">
-		update evaluation set e_grade = #{e_grade} where r_num = #{r_num} and m_num
-		= #{m_num}
-	</update>
-	<delete id="deleteEvaluation">
-	</delete>
-	<select id="getCountEforRByEmail" resultType="int">
-		select count(*) from evaluation where r_num = #{r_num} and m_num = #{m_num}
-	</select>
-	<select id="selectOneEvaluation" resultType="double">
-		select e_grade from evaluation where r_num = #{r_num} and m_num = #{m_num}
-	</select>
-	<select id="selectAllEvaluationByEmail"
-		resultType="com.example.model.Evaluation">
-		select * from evaluation where m_num = #{m_num}
-	</select>
-	<select id="countEvaluationLikeByEmail" resultType="int">
-		select count(e_like) from evaluation where m_num = #{m_num}
-	</select>
-	<select id="countEvaluationMarkByEmail" resultType="int">
-		select count(e_mark) from evaluation where m_num = #{m_num}
-	</select>
+<!--/*==================성록=======================*/ -->
+	 <insert id="insertEvaluation">
+      insert into evaluation values(#{r_num},#{m_num},#{e_grade},0,0);
+  	</insert>
+    <update id="updateEvaluation">
+      update evaluation set e_grade = #{e_grade} where r_num = #{r_num} and m_num = #{m_num}
+  	</update>
+    <delete id="deleteEvaluation">
+    </delete>
+    <select id="getCountEforRByEmail" resultType="int">
+      select count(*) from evaluation where r_num = #{r_num} and m_num = #{m_num}
+  	</select>
+  	<select id="selectOneEvaluation" resultType="double">
+      select e_grade from evaluation where r_num = #{r_num} and m_num = #{m_num}
+  	</select>
+    <select id="selectAllEvaluationByNum" resultType="com.example.model.Evaluation">
+      select * from evaluation where m_num = #{m_num}  
+  	</select>
+    <select id="countEvaluationLikeByNum" resultType="int">
+      select count(*) from evaluation where m_num = #{m_num} and e_like = 1;
+  	</select>
+    <select id="countEvaluationMarkByNum" resultType="int">
+      select count(*) from evaluation where m_num = #{m_num} and e_mark = 1;
+  	</select>
+    <select id="getAllGradeForRestaurant" resultType="double">
+      select sum(e_grade) from evaluation where r_num = #{r_num}
+  	</select>
+    <select id="getCountGradeForRestaurant" resultType="int">
+      select count(*) from evaluation where r_num = #{r_num}
+  	</select>
+    <select id="getRestaurantByEV" resultType="java.util.HashMap">
+      select * from evaluation e,restaurant r where e.r_num = r.r_num and e.m_num = #{m_num}
+  	</select>
 	
 	
 	<!--/*==================용화=======================*/ -->

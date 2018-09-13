@@ -12,9 +12,17 @@ import com.example.model.Diary;
 
 @Service
 public class DiaryService {
-
+	/*--------------------성록--------------------*/
 	@Autowired
 	DiaryDao diaryDao;
+	
+//	<!-- 수정(v1) -->
+	public List<Integer> getDiaryNumBySearch(String r_name,String r_address){
+      HashMap<String,Object> map = new HashMap<String,Object>();
+      map.put("r_name", r_name);
+      map.put("r_address", r_address);
+      return diaryDao.getDiaryNumBySearch(map);
+   }
 
 	public List<Diary> selectAllDiaryByEmail(int m_mail, int readPage) {
 		HashMap<String,Object> map = new HashMap<String,Object>();

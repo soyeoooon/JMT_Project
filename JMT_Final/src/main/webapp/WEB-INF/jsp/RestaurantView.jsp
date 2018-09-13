@@ -107,17 +107,19 @@
 	display: inline-block;
 	vertical-align: top;
 	width: 70%;
+	text-align: left;
+	word-wrap: break-word;
+}
+
+.tool{
+	display: inline-block;
+	vertical-align: top;
 }
 
 .grade {
 	display: inline-block;
 	vertical-align: top;
 	font-size: 20pt;
-}
-
-.text {
-	text-align: left;
-	word-wrap: break-word;
 }
 
 .imgs {
@@ -286,11 +288,17 @@
 							</div>
 
 							<div id="tab-3" class="tab-content">
+								<hr>
 								<c:forEach var="review" items="${info.review}">
 									<div class="rev_div">
 										<div class="info">
 											<div>
-												<img src=${review.m_photo } width="150px"
+												<img 
+													src=
+													<c:if test="${review.m_photo==null}">"img/No_Image.jpg"</c:if>
+													<c:if test="${review.m_photo!=null}">"${review.m_photo }"</c:if>
+													
+													  width="150px"
 													data-toggle="modal" data-target="#UserModal"
 													id="${review.m_num}" class="u_img">
 											</div>
@@ -298,17 +306,21 @@
 											<div class="level">${review.m_level }</div>
 										</div>
 										<div class="content">
-											<div class="text">
-												<div>${review.rev_content }</div>
-												<div class="imgs">
-													<c:forEach var="img" items="${review.rev_path}">
-														<img src="${img}" width="100px">
-													</c:forEach>
-												</div>
+											<div>${review.rev_content }</div>
+											<div class="imgs">
+												<c:forEach var="img" items="${review.rev_path}">
+													<img src="${img}" width="100px">
+												</c:forEach>
 											</div>
 										</div>
-										<div class="grade">${review.rev_grade }</div>
+										<div class="tool">
+											<div class="grade">${review.rev_grade }</div>
+											<c:if test="${review.m_num==email.m_num}">
+												<div><button class="btn btn-success Review_Modify_Btn" value="${review.rev_num}">편집</button></div>										
+											</c:if>
+										</div>
 									</div>
+									<hr>
 								</c:forEach>
 							</div>
 						</div>
@@ -331,7 +343,7 @@
 				<!-- Modal body -->
 				<form name="modify_info">
 					<input type="hidden" name="r_num" value="${info.restaurant.r_num}">
-					<input type="hidden" name="m_num" value="${login}">
+					<input type="hidden" name="m_num" value="${email.m_num}">
 
 					<div class="modal-body">
 						<table width="100%" class="info">
@@ -586,7 +598,7 @@
 				
 				$.ajax({
 					url:'/like',
-					data:{'r_num': ${info.restaurant.r_num}, 'm_num': ${login}, 'e_like':val},
+					data:{'r_num': ${info.restaurant.r_num}, 'm_num': ${email.m_num}, 'e_like':val},
 					type : "post",
 		            success:function(data){
 		            	img.src=path;
@@ -615,7 +627,7 @@
 				
 				$.ajax({
 					url:'/mark',
-					data:{'r_num': ${info.restaurant.r_num}, 'm_num': ${login}, 'e_mark':val},
+					data:{'r_num': ${info.restaurant.r_num}, 'm_num': ${email.m_num}, 'e_mark':val},
 					type : "post",
 		            success:function(data){
 		            	img.src=path;
@@ -627,9 +639,41 @@
 				})
 			})
 			
+			//평점 기본정보
+			$(function(){
+				$('#'+${info.user.e_grade}*2).addClass('on').prevAll('span').addClass('on');
+			});
+			
+			//평점 버튼
+			$('.starRev span').click(function() {
+				var grade_val=0;
+				$(this).parent().children('span').removeClass('on');
+				$(this).addClass('on').prevAll('span').addClass('on');
+				grade_val = $('.starRev .on').length * 0.5;
+				
+				$.ajax({
+					url:'/grade',
+					data:{'r_num': ${info.restaurant.r_num}, 'm_num': ${email.m_num}, 'e_grade':grade_val},
+					type : "post",
+		            success:function(data){
+		            	$('#rv_h3').text(data.grade);
+		            },
+		            error : function(){
+						alert('error');
+					}
+				})
+			});
+			
 			//리뷰쓰기 버튼
 			$('#rv_review').click(function(){
 				//리뷰 페이지 연결
+				location.href='/review?r_num='+${info.restaurant.r_num};
+			})
+			
+			//리뷰편집 버튼
+			$('.Review_Modify_Btn').click(function(){
+				//리뷰 페이지 연결
+				location.href='/review?r_num='+${info.restaurant.r_num}+'&rev_num='+$(this).val();
 			})
 			
 			//편집모달 띄우기

@@ -191,8 +191,12 @@ input[type="submit"].login:focus {
         </div>
         <div class="form-item">
           <p class="formLabel">Password</p>
-          <input type="password" name="pwd" id="password" class="form-style" />
+          <input type="password" name="pwd" id="password1" class="form-style" />
           <!-- <div class="pw-view"><i class="fa fa-eye"></i></div> -->
+        </div>
+        <div class="form-item">
+          <p class="formLabel">Password</p>
+          <input type="password" name="pwd" id="password2" class="form-style" />
         </div>
         <div class="form-item">
           <input type="submit" class="login pull-right" value="Sign up">
@@ -228,6 +232,18 @@ input[type="submit"].login:focus {
 		$('p.formLabel').click(function(){
 			 $(this).parent().children('.form-style').focus();
 		});
+		$('#password1').on('input',function(){
+         if($('#password1').val()!=null){
+            $('#password2').on('input',function(){
+               if($('#password1').val()!=$('#password2').val()){
+                  $('#password2').css('border','1px solid red')
+               }
+               else{
+            	   $('#password2').css('border','')
+               }
+            })
+         }
+      })
 	});
   </script>
 

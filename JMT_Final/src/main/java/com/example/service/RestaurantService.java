@@ -17,13 +17,17 @@ import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import com.example.dao.BigCategoryDao;
 import com.example.dao.EvaluationDao;
 import com.example.dao.FriendListDao;
+import com.example.dao.IRestModifyDao;
 import com.example.dao.MemberListDao;
+import com.example.dao.MidCategoryDao;
 import com.example.dao.RepListDao;
 import com.example.dao.ReportDao;
 import com.example.dao.RestaurantDao;
@@ -34,7 +38,7 @@ import com.example.model.MemberList;
 import com.example.model.Report;
 import com.example.model.RestModify;
 import com.example.model.Restaurant;
-import com.example.dao.IRestModifyDao;
+import com.example.model.Review;
 
 @Service
 public class RestaurantService {
@@ -62,24 +66,146 @@ public class RestaurantService {
 	@Autowired
 	FriendListDao friendListDao;
 
-	public int searchResNum(String res_search) {
+	@Autowired
+	MidCategoryDao midCategoryDao;
+	
+	@Autowired
+	BigCategoryDao bigCategoryDao;
+	
+	//수정(v1)
+		private static final int RESULT_EXCEED_SIZE = -2;
+	    private static final int RESULT_UNACCEPTED_EXTENSION = -1;
+	    private static final int RESULT_SUCCESS = 1;
+	    private static final long LIMIT_SIZE = 10 * 1024 * 1024;
+		
+		//리뷰 쓰기
+		public int Review_Write(List<MultipartFile>  multi, List<String> delimg, String rev_num, int r_num, int m_num, String textarea, double grade) {
+			String root = System.getProperty("user.dir")+"/target/classes/static/";
+			if(delimg!=null) {
+				for(String src:delimg) {
+					File file=new File(root+src);
+					file.delete();
+				}			
+			}
+			
+			//검사
+			String path = root+"img/" + r_num + "/" + rev_num + "/";
+			if(multi!=null) {
+				long sizeSum = 0;
+				// 저장 경로 설정
+		        for(MultipartFile image : multi) {
+		            String originalName = image.getOriginalFilename();
+		            //확장자 검사
+		            if(!isValidExtension(originalName)){
+		                return RESULT_UNACCEPTED_EXTENSION;
+		            }
+		            
+		            //용량 검사
+		            sizeSum += image.getSize();
+		            if(sizeSum >= LIMIT_SIZE) {
+		                return RESULT_EXCEED_SIZE;
+		            }
+		        }
+			}
+			
+			//DB저장
+	        if(rev_num==null) {
+	        	Review r=new Review(0,r_num,m_num,textarea,grade,new Date(),"필요없음");
+	        	reviewDao.insert(r);
+	        	path = root+"img/" + r_num + "/" + r.getRev_num() + "/";
+	        	File folder=new File(path);
+	    		folder.mkdirs();
+	        }else {
+	        	reviewDao.update(new Review(Integer.parseInt(rev_num),r_num,m_num,textarea,grade,new Date(),"필요없음"));
+	        }
+	        
+	        //이미지 저장
+	        if(multi!=null) {
+	        	int i=0;
+	    		
+		        for(MultipartFile image : multi) {
+		        	String originalName = image.getOriginalFilename();
+		        	String safeFile = path + System.currentTimeMillis()+i+ "." + originalName.substring(originalName.lastIndexOf(".") + 1);
+		            try {
+		            	image.transferTo(new File(safeFile));
+		            	i++;
+		            } catch (Exception e) {
+		                e.printStackTrace();
+		            }
+		        }
+			}
+	        return RESULT_SUCCESS;
+		}
+		
+		//검사
+		private boolean isValidExtension(String originalName) {
+	        String originalNameExtension = originalName.substring(originalName.lastIndexOf(".") + 1);
+	        switch(originalNameExtension) {
+	        case "jpg":
+	        case "JPG":
+	        case "png":
+	        case "PNG":
+	        case "gif":
+	        case "GIF":
+	            return true;
+	        }
+	        return false;
+	    }
+		
+		//리뷰 정보
+		public HashMap<String, Object> ReviewInfo(String rev_num) {
+			HashMap<String, Object> review=new HashMap<String, Object>();
+			Review r=reviewDao.ReviewInfo(Integer.parseInt(rev_num));
+			review.put("info",r);
+			review.put("img",FolderList(r.getR_num()+"/"+r.getRev_num()+"/"));
+			return review;
+		}
+		
+		//-----------------------------용화수정(v1)----------------------
+		public String evaluation_all_save(HashMap<String, String> map, int m_num) {
+			for(String key:map.keySet()) {
+				HashMap<String, String> c=new HashMap<String, String>();
+				c.put("r_num", key);
+				c.put("m_num", m_num+"");
+				Evaluation e = evaluationDao.memberSelect(c);
+				if(e==null) {
+					e=new Evaluation(Integer.parseInt(key),m_num,Double.parseDouble(map.get(key)),false,false);
+					evaluationDao.insert(e);
+				}else {
+					c.put("e_grade", map.get(key)+"");
+					evaluationDao.gradeUpdate(c);
+				}
+			}
+			return null;
+		}
+	
+	public int searchResNum(String res_search){
 		String[] res_searchsplit = res_search.split(",.");
 		String r_name = res_searchsplit[0];
 		String r_address = res_searchsplit[1];
-		HashMap<String, Object> map = new HashMap<String, Object>();
-
+		HashMap<String,Object> map = new HashMap<String,Object>();
+		
 		map.put("r_name", r_name);
 		map.put("r_address", r_address);
-		if (restaurantDao.selectOneRestaurantNum(map).size() > 1) {
-			for (int i = 1; i < restaurantDao.selectOneRestaurantNum(map).size(); i++) {
+		if(restaurantDao.selectOneRestaurantNum(map).size()>1){
+			for(int i=1;i<restaurantDao.selectOneRestaurantNum(map).size();i++){
 				restaurantDao.deleteRestaurant(restaurantDao.selectOneRestaurantNum(map).get(i));
 			}
 		}
 		return restaurantDao.selectOneRestaurantNum(map).get(0);
 	}
-
-	public List<Restaurant> searchRestaurant(String search) {
-		List<Restaurant> restaurantList = null;
+	public List<HashMap<String,Object>> getRestaurantByLikeandMark(int m_num){
+		return restaurantDao.selectRestaurantByLikeandMark(m_num);
+	}
+	public List<HashMap<String,Object>> getRestaurantByLike(int m_num){
+		return restaurantDao.selectRestaurantByLike(m_num);
+	}
+	public List<HashMap<String,Object>> getRestaurantByMark(int m_num){
+		return restaurantDao.selectRestaurantByMark(m_num);
+	}
+	
+	public List<HashMap<String, Object>> searchRestaurant(String search, int m_num) {
+		List<HashMap<String, Object>> restaurantList = null;
 		if (search == null)
 			search = "";
 		try {
@@ -103,7 +229,7 @@ public class RestaurantService {
 
 			parser.setInput(new StringReader(data));
 			int eventType = parser.getEventType();
-			Restaurant restaurant = null;
+			HashMap<String, Object> restaurant_map = null;
 
 			while (eventType != XmlPullParser.END_DOCUMENT) {
 				switch (eventType) {
@@ -111,64 +237,71 @@ public class RestaurantService {
 				case XmlPullParser.END_DOCUMENT:
 					break;
 				case XmlPullParser.START_DOCUMENT:
-					restaurantList = new ArrayList<Restaurant>();
+					restaurantList = new ArrayList<HashMap<String, Object>>();
 					break;
 
 				case XmlPullParser.END_TAG:
 					String tag = parser.getName();
 
 					if (tag.equals("item")) {
-						restaurantList.add(restaurant);
-						restaurant = null;
+						restaurantList.add(restaurant_map);
+						restaurant_map = null;
 					}
 				case XmlPullParser.START_TAG:
 					String tag1 = parser.getName();
 					switch (tag1) {
 					case "item":
-						restaurant = new Restaurant();
+						restaurant_map = new HashMap<String, Object>();
 						break;
 					case "title":
-						if (restaurant != null) {
-							restaurant.setR_name(parser.nextText().replace("<b>", "").replace("</b>", ""));
+						if (restaurant_map != null) {
+							restaurant_map.put("r_name", parser.nextText().replace("<b>", "").replace("</b>", ""));
 						}
 						break;
 					case "category":
-						if (restaurant != null) {
+						if (restaurant_map != null) {
 							String cate = parser.nextText();
 							String[] cate2 = null;
 							if (cate.indexOf(">") > 0) {
 								cate2 = cate.split(">");
-								restaurant.setR_category1(cate2[0]);
-								restaurant.setR_category2(cate2[1]);
+								restaurant_map.put("r_category1", cate2[0]);
+								restaurant_map.put("r_category2", cate2[1]);
 							} else {
-								restaurant.setR_category1(cate);
+								restaurant_map.put("r_category1", cate);
 							}
 						}
 						break;
 					case "description":
-						if (restaurant != null)
-							restaurant.setR_intro(parser.nextText());
+						if (restaurant_map != null)
+							restaurant_map.put("r_intro", parser.nextText());
 						break;
 					case "telephone":
-						if (restaurant != null)
-							restaurant.setR_phone(parser.nextText());
+						if (restaurant_map != null)
+							restaurant_map.put("r_phone",parser.nextText());
 						break;
 					case "address":
-						if (restaurant != null)
-							restaurant.setR_address(parser.nextText());
+						if (restaurant_map != null)
+							restaurant_map.put("r_address",parser.nextText());
 						break;
 					case "mapx":
-						if (restaurant != null)
-							restaurant.setR_lat(Integer.parseInt(parser.nextText()));
+						if (restaurant_map != null)
+							restaurant_map.put("r_lat",Integer.parseInt(parser.nextText()));
 						break;
 					case "mapy":
-						if (restaurant != null)
-							restaurant.setR_lon(Integer.parseInt(parser.nextText()));
-						HashMap<String, Object> map = new HashMap<String, Object>();
-						map.put("r_name", restaurant.getR_name());
-						map.put("r_address", restaurant.getR_address());
-						if (restaurantDao.countRestaurantNum(map) < 1) {
-							restaurantDao.insertRestaurant(restaurant);
+						if (restaurant_map != null)
+							restaurant_map.put("r_lon",Integer.parseInt(parser.nextText()));
+						try {
+							int r_num=restaurantDao.countRestaurantNum(restaurant_map);
+							restaurant_map.put("r_num",r_num);
+							restaurant_map.put("m_num",m_num);
+							
+							try {
+								restaurant_map.put("e_grade", evaluationDao.selectOneEvaluation(restaurant_map));
+							} catch (Exception e) {
+								restaurant_map.put("e_grade", 0);
+							}
+						} catch (Exception e) {
+							restaurantDao.insertRestaurant(restaurant_map);
 						}
 						break;
 					}
@@ -186,16 +319,24 @@ public class RestaurantService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println(restaurantList);
 		return restaurantList;
 	}
 
 	/*--------------------소연--------------------*/
 	public Restaurant selectOneRestaurant(String r_name, String r_address) {
-		return restaurantDao.selectOneRestaurantName(r_name, r_address);
+		HashMap<String, String> map=new HashMap<String, String>();
+		map.put("r_name", r_name);
+		map.put("r_address", r_address);
+		return restaurantDao.selectOneRestaurantName(map);
 	}
 
 	public List<Restaurant> getRestaurantList() {
 		return restaurantDao.selectAllRestaurant();
+	}
+	
+	public int getRestaurantCount() {
+		return restaurantDao.getCount();
 	}
 
 	/*
@@ -233,78 +374,62 @@ public class RestaurantService {
 
 	}
 
-//게시물 페이지정보 얻기 가능
-	public HashMap<String, Object> getBoardListPage(int page, String keyword) {
-		// searchRestaurant(keyword);
+	//게시물 페이지정보 얻기 가능
+		public HashMap<String, Object> getBoardListPage(int page, String keyword, int m_num) {
+			// searchRestaurant(keyword);
+			//----------------------------용화수정--------------------
+			List<HashMap<String, Object>> list=searchRestaurant(keyword,m_num);
+			System.out.println(list);
+			
+			// mapper에 인수를 전달하기 위한 map
+			HashMap<String, Object> params = new HashMap<String, Object>();
+			params.put("offset", getOffset(page));
+			params.put("boardsPerPage", 10);
+			params.put("keyword", keyword);
 
-		// mapper에 인수를 전달하기 위한 map
-		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("offset", getOffset(page));
-		params.put("boardsPerPage", 10);
-		params.put("keyword", keyword);
+			// 페이징 처리 정보를 담은 맵
+			HashMap<String, Object> pageInfo = new HashMap<String, Object>();
+			pageInfo.put("page", page);
+			// pageInfo.put("current", page);
+			pageInfo.put("start", getStartPage(page));
+			pageInfo.put("end", getEndPage(page));
+			pageInfo.put("last", getLastPage(list.size()) - 1);
+			pageInfo.put("totalPage", list.size());
 
-		// 페이징 처리 정보를 담은 맵
-		HashMap<String, Object> pageInfo = new HashMap<String, Object>();
-		pageInfo.put("page", page);
-		// pageInfo.put("current", page);
-		pageInfo.put("start", getStartPage(page));
-		pageInfo.put("end", getEndPage(page));
-		pageInfo.put("last", getLastPage(searchRestaurant(keyword).size()) - 1);
-		pageInfo.put("totalPage", searchRestaurant(keyword).size());
+			System.out.println("크기: " + list.size());
 
-		System.out.println("크기: " + searchRestaurant(keyword).size());
-
-		List<Restaurant> searchList = new ArrayList<Restaurant>();
-		if (searchRestaurant(keyword).size() == 50) {
-			int j = 0;
-			for (int i = getOffset(page); i < getOffset(page) + 10; i++) {
-				// System.out.println(i);
-				// System.out.println(searchRestaurant(keyword).get(i));
-				searchList.add(j, searchRestaurant(keyword).get(i));
-				// System.out.println("result: " + searchList.get(j));
-				j++;
+			List<HashMap<String, Object>> searchList = new ArrayList<HashMap<String, Object>>();
+			
+			if (list.size() == 50) {
+				int j = 0;
+				for (int i = getOffset(page); i < getOffset(page) + 10; i++) {
+					// System.out.println(i);
+					// System.out.println(searchRestaurant(keyword).get(i));
+					searchList.add(j, list.get(i));
+					// System.out.println("result: " + searchList.get(j));
+					j++;
+				}
+			} else {
+				int j = 0;
+				for (int i = getOffset(page); i < list.size(); i++) {
+					// System.out.println(i);
+					// System.out.println(searchRestaurant(keyword).get(i));
+					searchList.add(j, list.get(i));
+					// System.out.println("result: " + searchList.get(j));
+					j++;
+				}
 			}
-		} else {
-			int j = 0;
-			for (int i = getOffset(page); i < searchRestaurant(keyword).size(); i++) {
-				// System.out.println(i);
-				// System.out.println(searchRestaurant(keyword).get(i));
-				searchList.add(j, searchRestaurant(keyword).get(i));
-				// System.out.println("result: " + searchList.get(j));
-				j++;
-			}
+			//----------------------------용화수정끝--------------------
+			pageInfo.put("searchList", searchList);
+
+			return pageInfo;
 
 		}
 
-		pageInfo.put("searchList", searchList);
-
-		return pageInfo;
-
-	}
-
-	/*
-	 * public HashMap<String, Object> getBoardListPageAdmin(int page) { //
-	 * searchRestaurant(keyword);
-	 * 
-	 * // mapper에 인수를 전달하기 위한 map HashMap<String, Object> params = new
-	 * HashMap<String, Object>(); params.put("offset", getOffset(page));
-	 * params.put("boardsPerPage", 10);
-	 * 
-	 * 
-	 * // 페이징 처리 정보를 담은 맵 HashMap<String, Object> pageInfo = new HashMap<String,
-	 * Object>(); pageInfo.put("page", page); // pageInfo.put("current", page);
-	 * pageInfo.put("start", getStartPage(page)); pageInfo.put("end",
-	 * getEndPage(page)); pageInfo.put("last",
-	 * getLastPage(restaurantDao.getCount())); pageInfo.put("totalPage",
-	 * restaurantDao.getCount()); pageInfo.put("restaurantList",
-	 * restaurantDao.selectBoardPage(params));
-	 * 
-	 * return pageInfo;
-	 * 
-	 * }
-	 */
+	
 
 	// 관리자 페이지 음식점 리스트를 검색 키워드로 가져오기
+	//09-11 수정
 	public HashMap<String, Object> getBoardListPageAdminKeyword(int page, String keyword) {
 		// mapper에 인수를 전달하기 위한 map
 		HashMap<String, Object> params = new HashMap<String, Object>();
@@ -314,17 +439,33 @@ public class RestaurantService {
 
 		// 페이징 처리 정보를 담은 맵
 		HashMap<String, Object> pageInfo = new HashMap<String, Object>();
-		pageInfo.put("page", page);
+		/*pageInfo.put("page", page);
 		// pageInfo.put("current", page);
 		pageInfo.put("start", getStartPage(page));
 		pageInfo.put("end", getEndPage(page));
 		pageInfo.put("last", getLastPage(restaurantDao.getCount()));
 		pageInfo.put("totalPage", restaurantDao.getCount());
-		pageInfo.put("keyword", keyword);
+		pageInfo.put("keyword", keyword);*/
 		if (keyword != null) {
+			// 페이징 처리 정보를 담은 맵
+			//HashMap<String, Object> pageInfo = new HashMap<String, Object>();
+			pageInfo.put("page", page);
+			// pageInfo.put("current", page);
+			pageInfo.put("start", getStartPage(page));
+			pageInfo.put("end", getEndPage(page));
+			pageInfo.put("last", getLastPage(restaurantDao.getCountKeyword(params)));
+			pageInfo.put("totalPage", restaurantDao.getCountKeyword(params));
+			pageInfo.put("keyword", keyword);
 			pageInfo.put("restaurantList", restaurantDao.selectBoardPagebyKeyword(params));
 		}
 		else {
+			pageInfo.put("page", page);
+			// pageInfo.put("current", page);
+			pageInfo.put("start", getStartPage(page));
+			pageInfo.put("end", getEndPage(page));
+			pageInfo.put("last", getLastPage(restaurantDao.getCount()));
+			pageInfo.put("totalPage", restaurantDao.getCount());
+			pageInfo.put("keyword", keyword);
 			pageInfo.put("restaurantList",restaurantDao.selectBoardPage(params));
 		}
 
@@ -333,8 +474,8 @@ public class RestaurantService {
 	}
 
 	// 신고받은 상세정보 기록 삭제위해 가져옴 (번호 얻기위해)
-	public RestModify getRestModify(String rm_name) {
-		return restModifyDao.selectModify(rm_name);
+	public RestModify getRestModify(int rm_num) {
+		return restModifyDao.selectModify(rm_num);
 	}
 
 	// 위에서 얻은 번호로 기록 삭제
@@ -347,6 +488,7 @@ public class RestaurantService {
 		restaurantDao.updateRestaurantByReport(rm);
 
 	}
+	
 
 	/*--------------------용화--------------------*/
 	// 맛집 상세보기 페이지(기본)
@@ -399,92 +541,92 @@ public class RestaurantService {
 	}
 
 	// 폴더안에 이미지 파일들 조회
-	public List<String> FolderList(String path) {
-		String root = "C:/Users/USER/Desktop/Dropbox/project_work/demo-3/target/classes/static/img/" + path;
+		public List<String> FolderList(String path) {
+			String root = System.getProperty("user.dir")+"/target/classes/static/img/" + path;
 
-		File folder = new File(root);
-		if (!folder.isDirectory()) {
-			folder.mkdir();
-		}
-
-		List<String> list = new ArrayList<String>();
-		try {
-			File[] listOfFiles = folder.listFiles();
-			for (File file : listOfFiles) {
-				if (file.isFile()) {
-					list.add("img/" + path + file.getName());
-				}
+			File folder = new File(root);
+			if (!folder.isDirectory()) {
+				folder.mkdirs();
 			}
-		} catch (Exception e) {
+
+			List<String> list = new ArrayList<String>();
+			try {
+				File[] listOfFiles = folder.listFiles();
+				for (File file : listOfFiles) {
+					if (file.isFile()) {
+						list.add("img/" + path + file.getName());
+					}
+				}
+			} catch (Exception e) {
+			}
+			return list;
 		}
-		return list;
-	}
 
-	// 슬라이드에 사용되는 랜덤이미지
-	public List<String> ImgList(int r_num) throws IOException {
-		Restaurant r = restaurantDao.selectOne(r_num);
-		String root = "C:/Users/USER/Desktop/Dropbox/project_work/demo-3/target/classes/static/img/" + r.getR_photo();
+		// 슬라이드에 사용되는 랜덤이미지
+		public List<String> ImgList(int r_num) throws IOException {
+			Restaurant r = restaurantDao.selectOne(r_num);
+			String root = System.getProperty("user.dir")+"/target/classes/static/img/" + r_num+"/";
 
-		File folder = new File(root);
-		if (!folder.isDirectory()) {
-			folder.mkdir();
-		}
+			File folder = new File(root);
+			if (!folder.isDirectory()) {
+				folder.mkdirs();
+			}
 
-		List<String> list = new ArrayList<String>();
-		try {
-			File[] listOfFiles = folder.listFiles();
-			for (File file : listOfFiles) {
-				if (file.isDirectory()) {
-					File[] Files = file.listFiles();
-					for (File f : Files) {
-						if (f.isFile()) {
-							list.add("img/" + r.getR_photo() + file.getName() + "/" + f.getName());
+			List<String> list = new ArrayList<String>();
+			try {
+				File[] listOfFiles = folder.listFiles();
+				for (File file : listOfFiles) {
+					if (file.isDirectory()) {
+						File[] Files = file.listFiles();
+						for (File f : Files) {
+							if (f.isFile()) {
+								list.add("img/" + r_num + "/" + file.getName() + "/" + f.getName());
+							}
 						}
 					}
 				}
+			} catch (Exception e) {
 			}
-		} catch (Exception e) {
-		}
 
-		while (list.size() != 5) {
-			if (list.size() > 5) {
-				list.remove(new Random().nextInt(list.size()));
-			} else {
-				list.add("img/No_Image.jpg");
+			while (list.size() != 5) {
+				if (list.size() > 5) {
+					list.remove(new Random().nextInt(list.size()));
+				} else {
+					list.add("img/No_Image.jpg");
+				}
 			}
+
+			return list;
 		}
 
-		return list;
-	}
+		// 모두보기에 사용되는 전체이미지
+		public List<String> ImgList_More(int r_num) throws IOException {
+			Restaurant r = restaurantDao.selectOne(r_num);
+			String root = System.getProperty("user.dir")+"/target/classes/static/img/" + r_num + "/";
 
-	// 모두보기에 사용되는 전체이미지
-	public List<String> ImgList_More(int r_num) throws IOException {
-		Restaurant r = restaurantDao.selectOne(r_num);
-		String root = "C:/Users/USER/Desktop/Dropbox/project_work/demo-3/target/classes/static/img/" + r.getR_photo();
+			File folder = new File(root);
+			if (!folder.isDirectory()) {
+				folder.mkdirs();
+			}
 
-		File folder = new File(root);
-		if (!folder.isDirectory()) {
-			folder.mkdir();
-		}
-
-		List<String> list = new ArrayList<String>();
-		try {
-			File[] listOfFiles = folder.listFiles();
-			for (File file : listOfFiles) {
-				if (file.isDirectory()) {
-					File[] Files = file.listFiles();
-					for (File f : Files) {
-						if (f.isFile()) {
-							list.add("img/" + r.getR_photo() + file.getName() + "/" + f.getName());
+			List<String> list = new ArrayList<String>();
+			try {
+				File[] listOfFiles = folder.listFiles();
+				for (File file : listOfFiles) {
+					if (file.isDirectory()) {
+						File[] Files = file.listFiles();
+						for (File f : Files) {
+							if (f.isFile()) {
+								list.add("img/" + r_num + "/" + file.getName() + "/" + f.getName());
+							}
 						}
 					}
 				}
+			} catch (Exception e) {
 			}
-		} catch (Exception e) {
-		}
 
-		return list;
-	}
+			return list;
+		}
 
 	// 좋아요 on/off
 	public HashMap<String, Object> LikeUpdate(HashMap<String, String> map) {

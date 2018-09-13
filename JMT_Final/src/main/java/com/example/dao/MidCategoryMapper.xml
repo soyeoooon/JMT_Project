@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.dao.MidCategoryDao">
+<!-- /*=============성록=============*/ -->
  <insert id="insertMidCategory">
+ 		insert into midcategory values(0,#{big_num},#{mid_name})
   	</insert>
     <update id="updateMidCategory">
   	</update>
     <delete id="deleteMidCategory">
     </delete>
   	<select id="selectAllMidCategory" resultType="com.example.model.MidCategory">
+  	</select>
+  	<select id="countMidCategory" resultType="int">
+  		select count(*) from midcategory where big_num = #{big_num} and mid_name = #{mid_name}
   	</select>
   </mapper>

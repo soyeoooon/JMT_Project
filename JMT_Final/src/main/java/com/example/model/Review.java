@@ -1,6 +1,6 @@
 package com.example.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Review {
 	private int rev_num;
@@ -57,5 +57,20 @@ public class Review {
 		return "Review [rev_num=" + rev_num + ", r_num=" + r_num + ", m_num=" + m_num + ", rev_content=" + rev_content
 				+ ", rev_grade=" + rev_grade + ", rev_date=" + rev_date + ", rev_path=" + rev_path + "]";
 	}
+	
+	//수정(v1)
+		public Review(int rev_num, int r_num, int m_num, String rev_content, double rev_grade, Date rev_date,
+				String rev_path) {
+			this.rev_num = rev_num;
+			this.r_num = r_num;
+			this.m_num = m_num;
+			this.rev_content = rev_content;
+			this.rev_grade = rev_grade;
+			this.rev_date = rev_date;
+			this.rev_path = rev_path;
+		}
+		
+		public Review() {
+		}
 	
 }

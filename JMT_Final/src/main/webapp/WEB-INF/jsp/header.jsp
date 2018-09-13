@@ -34,7 +34,7 @@
 
       </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" id="myPage" href="#">My Page</a>
+          <a class="dropdown-item" id="myPage" href="/myPage">My Page</a>
           <a class="dropdown-item" id="selection" href="/selectForm">취향 선택</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" id="logout" href="/logout">로그아웃</a>

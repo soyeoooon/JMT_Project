@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.dao.BigCategoryDao">
+<!-- /*=============성록=============*/ -->
  <insert id="insertBigCategory">
+ 		insert into bigcategory values(0,#{big_name})
   	</insert>
     <update id="updateBigCategory">
   	</update>
     <delete id="deleteBigCategory">
     </delete>
   	<select id="selectAllBigCategory" resultType="com.example.model.BigCategory">
+  		select * from bigcategory;
+  	</select>
+  	<select id="countBigcategory" resultType="int">
+  		select count(*) from bigcategory where big_name = #{big_name}
+  	</select>
+  	<select id="getBigcategoryNum" resultType="int">
+  		select big_num from bigcategory where big_name = #{big_name}
   	</select>
   </mapper>

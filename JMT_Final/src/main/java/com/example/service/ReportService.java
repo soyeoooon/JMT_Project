@@ -45,7 +45,7 @@ public class ReportService {
 		//총 게시물의 수를 가져와서 맨 마지막 페이지 구하기
 		
 		int page=0;
-		if((NumOfBoards/10) !=0) {
+		if((NumOfBoards%10) !=0) {
 			page=(NumOfBoards/10)+1;
 		}
 		else {
@@ -88,6 +88,10 @@ public class ReportService {
 	
 	public void UpdateReport(int rep_num) {
 		reportdao.updateReport(rep_num);
+	}
+	
+	public int getCountReport() {
+		return reportdao.getCount2();
 	}
 
 }

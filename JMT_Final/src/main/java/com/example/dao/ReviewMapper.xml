@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.dao.ReviewDao">
- <insert id="insertReview">
-  	</insert>
-    <update id="updateReview">
-  	</update>
+ <!-- 수정(v1) -->
+	<select id="ReviewInfo" parameterType="int" resultType="review">
+		select * from review where rev_num=#{rev_num}
+	</select>
+	<insert id="insert" parameterType="review" useGeneratedKeys="true" keyProperty="rev_num" >
+		insert into review values(#{rev_num},#{r_num},#{m_num},#{rev_content},#{rev_grade},#{rev_date},#{rev_path})
+	</insert>
+	<update id="update" parameterType="review">
+		update review set rev_content=#{rev_content},rev_grade=#{rev_grade},rev_date=#{rev_date} where rev_num=#{rev_num}
+	</update>
     <delete id="deleteReview">
     </delete>
   	<select id="selectAllReview" resultType="com.example.model.Review">

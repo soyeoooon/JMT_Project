@@ -22,11 +22,10 @@ public class MemberListService {
 
 	@Autowired
 	EmailDao emailDao;
-
-	/*
-	 * public MemberList selectOneMember(String m_mail) { return
-	 * memberListDao.selectOneMemberList(m_mail); }
-	 */
+	/*--------------------성록--------------------*/
+	public MemberList selectOneMemberListByNum(int email_num) {
+		return memberListDao.selectOneMemberListByNum(email_num);
+	}
 
 	public List<MemberList> selectOneMember(List<Integer> friendNums) {
 		List<MemberList> friendList = new ArrayList<MemberList>();
@@ -35,13 +34,31 @@ public class MemberListService {
 		}
 		return friendList;
 	}
-
-	public String getFriendPhoto(int friendNum) {
-		if (memberListDao.selectOneMemberListByNum(friendNum).getM_photo() == null) {
+	public String getFriendPhoto(int friendNum){
+		if(memberListDao.selectOneMemberListByNum(friendNum).getM_photo()==null){
 			return "0";
-		} else {
+		}else{
 			return memberListDao.selectOneMemberListByNum(friendNum).getM_photo();
 		}
+	}
+	public int getM_NumByEmailNum(int email_num) {
+		return memberListDao.getM_NumByEmailNum(email_num);
+	}
+	public void updateMemberlist(int email_num,String m_nick,String m_pwd){
+		HashMap<String,Object> map = new HashMap<String,Object>();
+		map.put("email_num", email_num);
+		map.put("m_nick", m_nick);
+		map.put("m_pwd", m_pwd);
+		memberListDao.updateMemberList(map);
+	}
+	public void updateIntro(int email_num,String m_intro){
+		HashMap<String,Object> map = new HashMap<String,Object>();
+		map.put("email_num", email_num);
+		map.put("m_intro", m_intro);
+		memberListDao.updateIntro(map);
+	}
+	public List<MemberList> getMemberListByNick(String search){
+		return memberListDao.getAllByNick(search);
 	}
 
 	// ----------------------------------소연추가---------------------------------------------//
@@ -87,6 +104,10 @@ public class MemberListService {
 			return memberListDao.selectOneMemberList(e.getEmail_num());
 		}
 		return null;
+	}
+	
+	public int getCountMember() {
+		return memberListDao.getCountMember();
 	}
 
 

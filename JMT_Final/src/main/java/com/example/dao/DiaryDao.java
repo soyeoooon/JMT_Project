@@ -6,6 +6,9 @@ import java.util.List;
 import com.example.model.Diary;
 
 public interface DiaryDao {
+	//추가(v1)
+		public List<Integer> getDiaryNumBySearch(HashMap<String,Object> map);
+	/*--------------------성록--------------------*/
 	public void insertDiary(Diary diary);
 	public void updateDiary();
 	public void deleteDiary(int diary_num);

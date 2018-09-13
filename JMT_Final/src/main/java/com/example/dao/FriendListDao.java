@@ -6,13 +6,18 @@ import java.util.List;
 import com.example.model.FriendList;
 
 public interface FriendListDao {
-	public void insertFriendList();
-	public void updateFriendList();
-	public void deleteFriendList();
+	/*--------------------성록--------------------*/
+	public void insertFriendList(HashMap<String, Object> map);
+	public void updateFriendList(HashMap<String, Object> map);
+	public void deleteFriendList(HashMap<String, Object> map);
 	public List<FriendList> selectAllFriendList();
 	public List<FriendList> selectAllFriendListByEmail(int email_num);
 	public List<Integer> selectApplyFriendListByEmailreq(int email_num);
 	public List<Integer> selectApplyFriendListByEmailresp(int email_num);
+	public List<Integer> selectReqFriendListByEmail(int email_num);
+	public int isFriend(HashMap<String,Object> map);
+	public int isFriend2(HashMap<String,Object> map);
+	public int isFriend3(HashMap<String,Object> map);
 	
 	/*--------------------용화--------------------*/
 	//친구 추가

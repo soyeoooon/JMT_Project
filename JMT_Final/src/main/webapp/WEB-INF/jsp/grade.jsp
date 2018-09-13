@@ -57,7 +57,7 @@
 		<span class="starR1" id="9">별5_왼쪽</span>
 		<span class="starR2" id="10">별5_오른쪽</span>
 	</div>
-	<script type="text/javascript">
+	<!-- <script type="text/javascript">
 		$(function(){
 			$('#'+${info.user.e_grade}*2).addClass('on').prevAll('span').addClass('on');
 		});
@@ -82,6 +82,6 @@
 			})
 			
 		});
-	</script>
+	</script> -->
 </body>
 </html>

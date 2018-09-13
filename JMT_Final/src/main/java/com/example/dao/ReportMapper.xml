@@ -39,6 +39,11 @@
 		select count(*) from report
 	</select>
 	
+	<select id="getCount2" resultType="int">
+		select count(*) from report where replist_status = 1;
+	</select>
+	
+	<!-- Report테이블을 재수정하여 번호에 따른 내용 출력될 수 있도록 가져오기.  -->
 	<select id="selectReportList" parameterType="java.util.HashMap"
 		resultType="com.example.model.adminReport">
 		select rep_num,restaurant.r_name,rm_num,e1.email as 'req',e2.email as 'resp',replist_content,
