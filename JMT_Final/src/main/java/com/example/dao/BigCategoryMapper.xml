@@ -18,4 +18,9 @@
   	<select id="getBigcategoryNum" resultType="int">
   		select big_num from bigcategory where big_name = #{big_name}
   	</select>
+  	
+  	<!-- // 빅카테고리매퍼 추가 -->
+     <select id="getBigcategoryName" resultType="String">
+        select big_name from bigcategory where big_num = #{big_num}
+     </select>
   </mapper>

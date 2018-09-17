@@ -7,9 +7,11 @@ import com.example.model.RestModify;
 import com.example.model.Restaurant;
 
 public interface RestaurantDao {
+	/*--------------------------------추가(v2)-----------------------------------------*/
+	public void countUpdate(HashMap<String, Object> map);
+	/*--------------------------------수정(v2)-----------------------------------------*/
+	public void insertRestaurant2(HashMap<String, Object> map);
 	
-	/*--------------------------------추가(v1)-----------------------------------------*/
-	public void insertRestaurant(HashMap<String, Object> map);
 	/*--------------------성록----------------------*/
 	public void insertRestaurant(Restaurant restaurant);
 	public void updateRestaurant(Restaurant restaurant);
@@ -21,6 +23,9 @@ public interface RestaurantDao {
 	public List<HashMap<String,Object>> selectRestaurantByLike(int m_num);
 	public List<HashMap<String,Object>> selectRestaurantByMark(int m_num);
 	//public List<Restaurant> selectAllRestaurant();
+	// 레스토랑다오 추가
+	   public Restaurant selectRestaurantByRNum(int r_num);
+
 	
 	
 	/*--------------------소연----------------------*/

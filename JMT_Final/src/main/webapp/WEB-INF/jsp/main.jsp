@@ -101,254 +101,211 @@
 
     <div style="text-align: center; margin-bottom: 50px;">
         <h3>당신을 위한 추천이 준비되었습니다.</h3><br>
-        <button type="button" class="btn btn-outline-danger btn-lg" data-toggle="modal" data-target="#myModal">필터적용하기</button>
+        <button type="button" class="btn btn-outline-danger btn-lg" data-toggle="modal" data-target="#myModal" id="filter">필터적용하기</button>
     </div>
 
 <!-- 모달 페이지 -->
-<div class="modal fade" id="myModal" role="dialog">
+<div class="modal fade" id="myModal">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">필터적용</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>모달페이지</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">적용하기</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-            </div>
-            </div>
+        <div class="modal-header">
+            <h4 class="modal-title">필터적용</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+        
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            <button type="button" class="btn btn-warning" id="reset">초기화</button>
+            <button type="button" class="btn btn-primary" id="apply" data-dismiss="modal">적용하기</button>
+        </div>
         </div>
     </div>
 </div>
 
 <!-- 이미지 슬라이드 영역-->
+
 <div class="RestList">
-    <div class="container-fluid bg-3 text-center">
-        
-        <div class="row">
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <h2>Restaurant Name</h2>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            <p>
-                <button type="button" class="btn btn-outline-danger">#소고기스테이크</button>
-                <button type="button" class="btn btn-outline-danger">#로제파스타</button>
-                <button type="button" class="btn btn-outline-danger">#이색적인</button>
-            </p>
-            </div>
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <h2>Restaurant Name</h2>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            <p>
-                <button type="button" class="btn btn-outline-danger">#돈코츠라멘</button>
-                <button type="button" class="btn btn-outline-danger">#차슈덮밥</button>
-                <button type="button" class="btn btn-outline-danger">#일본가정식</button>
-            </p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <h2>Restaurant Name</h2>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            <p>
-                <button type="button" class="btn btn-outline-danger">#전주비빔밥</button>
-                <button type="button" class="btn btn-outline-danger">#물만두</button>
-            </p>
-            </div>
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <h2>Restaurant Name</h2>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            <p>
-                <button type="button" class="btn btn-outline-danger">#평양식물냉면</button>
-                <button type="button" class="btn btn-outline-danger">#특선비빔냉면</button>
-            </p>
-            </div>
-        </div>
-    </div><br>
 
-    <div class="container-fluid bg-3 text-center">    
-        <div class="row">
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <h2>Restaurant Name</h2>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <h2>Restaurant Name</h2>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <h2>Restaurant Name</h2>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            </div>
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <h2>Restaurant Name</h2>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            </div>
-        </div>
-    </div><br>
-
-        <div class="container-fluid bg-3 text-center">    
-        <div class="row">
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant Name</p>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant Name</p>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant Name</p>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            </div>
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant Name</p>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            </div>
-        </div>
-    </div><br>
-
-        <div class="container-fluid bg-3 text-center">    
-        <div class="row">
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant Name</p>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant Name</p>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant Name</p>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            </div>
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant Name</p>
-            <p>서울시 강남구</p>
-            <p>평점: 3.5</p>
-            </div>
-        </div>
-    </div><br>
-
-        <div class="container-fluid bg-3 text-center">    
-        <div class="row">
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 5</p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 6</p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 7</p>
-            </div>
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 8</p>
-            </div>
-        </div>
-    </div><br>
-
-        <div class="container-fluid bg-3 text-center">    
-        <div class="row">
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 5</p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 6</p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 7</p>
-            </div>
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 8</p>
-            </div>
-        </div>
-    </div><br>
-
-        <div class="container-fluid bg-3 text-center">    
-        <div class="row">
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 5</p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 6</p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 7</p>
-            </div>
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 8</p>
-            </div>
-        </div>
-    </div><br>
-
-        <div class="container-fluid bg-3 text-center">    
-        <div class="row">
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 5</p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 6</p>
-            </div>
-            <div class="col-sm-3"> 
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 7</p>
-            </div>
-            <div class="col-sm-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">
-            <p>Restaurant 8</p>
-            </div>
-        </div>
-    </div><br>
-</div>
+</div>        
 
 <br><br>
-
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+   $(function(){
+      
+      var getFilter = ''
+      function filterInitialize(){
+         getFilter = '';
+         filterClick()
+      }
+      
+      function deleteElse(str,big_num) {
+         var tempstr = str.split('@');
+         var returnStr = '';
+         for(var i=0;i<tempstr.length;i++){
+            if(tempstr[i].split('-')[0]==big_num){
+               tempstr[i]='';
+            }else{
+               tempstr[i] = '@'+tempstr[i];
+            }
+         }
+         for(var i=0;i<tempstr.length;i++){
+            returnStr += tempstr[i];
+         }
+           return returnStr.substring(1,returnStr.length);
+      }
+      
+      function midcateClick(big_num){
+         $('.midcate').off().on('click',function inMidcateClick(conf){
+            var   confirm = $(this).attr('class').split(' ')[3];
+            if(confirm==big_num){
+               if($(this).attr('class')=='btn btn-outline-info midcate '+big_num){
+                  if($(this).text()=='ALL'){
+                     $(this).siblings('button.'+big_num).attr('class','btn btn-outline-info midcate '+big_num)
+                     $(this).attr('class','btn btn-info midcate '+big_num);
+                     getFilter = deleteElse(getFilter,big_num)
+                  }else{
+                     $(this).attr('class','btn btn-info midcate '+big_num);
+                     $('#ALL'+big_num).attr('class','btn btn-outline-info midcate '+big_num)
+                     getFilter = getFilter.replace('@'+big_num+'-ALL','')
+                  }
+                  getFilter += '@'+big_num+'-'+$(this).text();
+               }
+               else{
+                  $(this).attr('class','btn btn-outline-info midcate '+big_num);
+                  getFilter = getFilter.replace('@'+big_num+'-'+$(this).text(),'')
+               }
+            }else{
+               midcateClick(confirm);
+            }
+         })
+      }
+      function getMidCate(big_num,big_name,lastbig_num){
+         midcateClick(big_num);
+         $.ajax({
+            data : {
+               big_num : big_num
+            },
+            url : 'getMidCate',
+            type : 'post',
+            success : function(midcate){
+               var result2 ='<h2 class="'+big_num+'">'+big_name+'</h2><hr class="'+big_num+'">';
+               result2 += '<button class="btn btn-outline-info midcate '+big_num+'" id="ALL'+big_num+'">ALL</button>'
+               for(var i=0;i<midcate.length;i++){
+                  result2 += '<button class="btn btn-outline-info midcate '+big_num+'">'+midcate[i].mid_name+'</button>'
+               }
+               $('#'+lastbig_num).after(result2);
+               midcateClick(big_num);
+            }
+         })
+      }
+      function deleteMidCate(big_num){
+         $('.'+big_num).remove();
+      }
+      function bigcateClick(lastbig_num){
+         $('.bigcate').on('click',function(){
+            if($(this).attr('class')=='btn btn-outline-danger bigcate'){
+               $(this).attr('class','btn btn-danger bigcate');
+               getMidCate($(this).attr('id'),$(this).text(),lastbig_num)
+            }
+            else{
+               $(this).attr('class','btn btn-outline-danger bigcate');
+               deleteMidCate($(this).attr('id'));
+            }
+         })
+      }
+      
+      function filterClick(){
+         $('#modal-body').html('');
+         var result = '';
+         $.get('getBigCate',function(bigcate){
+            for(var i=0;i<bigcate.length;i++){
+               result += '<button class="btn btn-outline-danger bigcate" id="'+bigcate[i].big_num+'">'+bigcate[i].big_name+'</button>'
+            }
+            $('.modal-body').html(result);
+            bigcateClick(bigcate[bigcate.length-1].big_num)
+         })
+      }
+      
+      $('#filter').off().on('click',function(){
+         filterClick();
+      })
+      $('#reset').on('click',function(){
+         filterInitialize();
+      });
+      
+      function makeList(data){
+         if(data.length==0){
+            $('.RestList').html('<h1>표시할 데이터가 존재하지 않습니다.</h1>');
+         }else{
+            var result = ''
+            result +='<div class="container-fluid bg-3 text-center">';
+            result +='<div class="row">';
+            for(var i =0;i<data.length;i++){
+               result +='<div class="col-sm-3">'
+               result +='<img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">'
+               result +='<h2><a href="/RestaurantView?r_num='+data[i].r_num+'">'+data[i].r_name+'</a></h2>'
+               result +='<p>'+data[i].r_address+'</p>'
+               $.ajax({
+                  url : 'getGrade',
+                  data : {
+                     r_num : data[i].r_num
+                  },
+                  type : 'post',
+                  async : false,
+                  success : function(data){
+                     if(data!=0)
+                        result +='<p>평점: '+data+'</p>'
+                  }
+               })
+               $.ajax({
+                      url : 'getHashTag',
+                      data : {
+                         r_name : data[i].r_name,
+                         r_address : data[i].r_address
+                      },
+                      type : 'post',
+                      async : false,
+                      success : function(foodNames){
+                         if(foodNames.length>0){
+                            result += '<p id="hashTags">'
+                            for(var i =0;i<foodNames.length;i++){
+                               result += '<button type="button" class="btn btn-outline-danger">#'+foodNames[i]+'</button>'
+                            }
+                            result += '</p>';
+                         }else{
+                            result += '<p id="hashTags"></p>';
+                         }
+                      }
+                   })
+               result +='</div>'
+            }
+               result +='</div>'
+               result +='</div>'
+            $('.RestList').html(result);
+         }
+      }
+      function onload(getFilter){
+         $.ajax({
+            data :{
+               filter : getFilter
+            },
+            url : 'getRecommend',
+            type : 'post',
+            success : function(data){
+               makeList(data);
+            }
+         })
+      }
+      onload();
+      $('#apply').on('click',function(){
+         onload(getFilter)
+      })
+      
+   })
+</script>
 <div>
     <jsp:include page="footer.jsp"></jsp:include>
 </div>

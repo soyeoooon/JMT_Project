@@ -20,7 +20,7 @@
 
 .poster-main {
 	position: relative;
-	margin: 30px auto;
+	margin: 100px auto;
 	max-width: 1000px;
 }
 

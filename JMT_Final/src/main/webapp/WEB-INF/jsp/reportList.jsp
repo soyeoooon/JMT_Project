@@ -39,7 +39,7 @@
 				txt += '<tr>';
 				txt += '<td>' + data['reportList'][i].rep_num + '</td>';
 				//txt += '<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Open modal</button>' + data['reportList'][i].r_name + '</td>';
-				txt+='<td><a target="_blank" href="/RestaurantView?r_name='+data['restaurantList'][test-1].r_name+'&r_address='+data['restaurantList'][test-1].r_address+'">'+data['restaurantList'][test-1].r_name+'</a></td>';
+				txt+='<td><a target="_blank" href="/RestaurantView?r_num='+data['restaurantList'][test-1].r_num+'">'+data['restaurantList'][test-1].r_name+'</a></td>';
 				txt += '<td>' + data['reportList'][i].req + '</td>';
 				txt += '<td>' + data['reportList'][i].resp + '</td>';
 				txt += '<td>' + data['reportList'][i].replist_content + '</td>';
@@ -127,7 +127,7 @@
 					txt += '<td>' + data['reportList'][i].rep_num + '</td>';
 					//txt += '<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Open modal</button>' + data['reportList'][i].r_name + '</td>';
 					
-					txt+='<td><a href="/RestaurantView?r_name='+data['restaurantList'][test-1].r_name+'&r_address='+data['restaurantList'][test-1].r_address+'">'+data['restaurantList'][test-1].r_name+'</a></td>';
+					txt+='<td><a target="_blank" href="/RestaurantView?r_num='+data['restaurantList'][test-1].r_num+'">'+data['restaurantList'][test-1].r_name+'</a></td>';
 					txt += '<td>' + data['reportList'][i].req + '</td>';
 					txt += '<td>' + data['reportList'][i].resp + '</td>';
 					txt += '<td>' + data['reportList'][i].replist_content + '</td>';
@@ -202,7 +202,7 @@
               <div class="card">
                 <div class="card-body">
 
-                  <div class="btn-group">
+                  <!-- <div class="btn-group">
                     <button type="button" class="btn btn-info" id="btn1">분류</button>
                     <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <span class="sr-only">Toggle Dropdown</span>
@@ -212,7 +212,7 @@
                       <div class="dropdown-divider"></div>
                       <a class="dropdown-item" href="#">Separated link</a>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="table-responsive">
                     <table class="table table-hover">
                       <thead>
@@ -220,7 +220,7 @@
                           <th>번호</th>
                           <th>게시물</th>
                           <th>신고자</th>
-                          <th>피신고자</th>
+                          <th>작성자</th>
                           <th>신고 내용</th>
                           <th>처리 상태</th>
                           <th>신고 날짜</th>

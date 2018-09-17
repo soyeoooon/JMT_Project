@@ -3,8 +3,7 @@ package com.example.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +21,38 @@ public class MemberListService {
 
 	@Autowired
 	EmailDao emailDao;
+	
+	//수정(v2)
+		public String SNSjoin(Map<String, Object> map) {
+			MemberList memberList = new MemberList();
+			String email=map.get("type").toString()+map.get("id").toString();
+			String id=map.get("id").toString();
+			
+			if(map.get("type").toString().equals("N")) {
+				Integer num=memberListDao.naverCheck(id);
+				if(num!=null) {
+					email=emailDao.getEmailByNum(num);
+					return email;
+				}
+				memberList.setM_nick(map.get("name").toString());
+				memberList.setM_naver(id);
+			}else {
+				Integer num=memberListDao.kakaoCheck(id);
+				if(num!=null) {
+					email=emailDao.getEmailByNum(num);
+					return email;
+				}
+				
+				memberList.setM_nick(map.get("nick").toString());
+				memberList.setM_kakao(id);
+			}
+			emailDao.insertEmail(email);
+			memberList.setEmail_num(emailDao.getEmailNum(email));
+			memberList.setM_pwd("0000");
+			memberListDao.insert(memberList);
+			System.out.println(email);
+			return email;
+		}
 	/*--------------------성록--------------------*/
 	public MemberList selectOneMemberListByNum(int email_num) {
 		return memberListDao.selectOneMemberListByNum(email_num);

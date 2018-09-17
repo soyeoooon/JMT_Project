@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,10 +14,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,17 +32,23 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.model.Diary;
+import com.example.model.FoodChoice;
 import com.example.model.FriendList;
 import com.example.model.MemberList;
 import com.example.model.PhotoDeco;
+import com.example.model.Preference;
+import com.example.model.Recommend;
 import com.example.model.Restaurant;
 import com.example.service.BigCategoryService;
 import com.example.service.DiaryService;
 import com.example.service.EmailService;
 import com.example.service.EvaluationService;
+import com.example.service.FoodChoiceService;
 import com.example.service.FriendlistService;
 import com.example.service.MemberListService;
 import com.example.service.PhotoDecoService;
+import com.example.service.PreferenceService;
+import com.example.service.RecommendService;
 import com.example.service.RestaurantService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -67,6 +78,215 @@ public class MemberController {
 	EmailService emailService;
 	@Autowired
 	BigCategoryService bigCategoryService;
+	
+	@Autowired
+	JavaMailSender emailSender;
+	
+	@Autowired
+	RecommendService recommendService;
+	
+	@Autowired
+	   PreferenceService preferenceService;
+	   
+	   @Autowired
+	   FoodChoiceService foodChoiceService;
+	   
+	   @RequestMapping("/preference_info")
+	   public @ResponseBody HashMap<String, Object> preference_info(HttpSession session) {
+	      String email = (String) session.getAttribute("email");
+	      MemberList ml = memberListService.getOneMember(email);
+	      int m_num=ml.getM_num();
+	      
+	      Preference preference=preferenceService.preferenceSelect(m_num);
+	      List<FoodChoice> list=foodChoiceService.foodChoiceSelect(m_num);
+	      HashMap<String, Object> map=new HashMap<String, Object>();
+	      HashMap<String, Object> prefer=new HashMap<String, Object>();
+	      prefer.put("rank"+preference.getPrefer_price(), "1");
+	      prefer.put("rank"+preference.getPrefer_mood(), "2");
+	      prefer.put("rank"+preference.getPrefer_distance(), "3");
+	      prefer.put("rank"+preference.getPrefer_service(), "4");
+	      prefer.put("rank"+preference.getPrefer_health(), "5");
+	      map.put("prefer", prefer);
+	      map.put("list", list);
+	      return map;
+	   }
+	   
+	   @RequestMapping("/preference_save")
+	   public @ResponseBody String preference_save(@RequestParam HashMap<String, Object> map, HttpSession session) {
+	      String email = (String) session.getAttribute("email");
+	      MemberList ml = memberListService.getOneMember(email);
+	      int m_num=ml.getM_num();
+	      
+	      int price=Integer.parseInt(map.get("가격").toString());
+	      map.remove("가격");
+	      int mood=Integer.parseInt(map.get("분위기").toString());
+	      map.remove("분위기");
+	      int distance=Integer.parseInt(map.get("위치").toString());
+	      map.remove("위치");
+	      int service=Integer.parseInt(map.get("서비스").toString());
+	      map.remove("서비스");
+	      int health=Integer.parseInt(map.get("건강").toString());
+	      map.remove("건강");
+	      
+	      if(preferenceService.preferenceSelect(m_num)==null) {
+	         preferenceService.preferenceInsert(new Preference(m_num,price,mood,distance,service,health));
+	      }else {
+	         preferenceService.preferenceUpdate(new Preference(m_num,price,mood,distance,service,health));
+	      }
+	      
+	      for(String key:map.keySet()) {
+	         HashMap<String, String> c_map=new HashMap<String,String>();
+	         c_map.put("m_num", m_num+"");
+	         c_map.put("choice_food", key);
+	         if(foodChoiceService.foodChoiceSelectOne(c_map)==null) {
+	            foodChoiceService.foodChoiceInsert(new FoodChoice(m_num, key, Double.parseDouble(map.get(key).toString())));
+	         }else {
+	            foodChoiceService.foodChoiceUpdate(new FoodChoice(m_num, key, Double.parseDouble(map.get(key).toString())));
+	         }
+	      }
+	      return null;
+	   }
+	
+	 @RequestMapping("/getRecommend")
+	   public @ResponseBody List<Restaurant> getRecommend(HttpSession session,@RequestParam (required = false)String filter){
+	      List<Restaurant> favorlist = new ArrayList<Restaurant>();
+	      List<Restaurant> favorlistwithFilter = new ArrayList<Restaurant>();
+	      for(Recommend r : recommendService.getRecommend(getM_NumByEmailNum(emailNumBySession(session)))){
+	         favorlist.add(restaurantService.getRestaurantByRNum(r.getR_num_final()));
+	      }
+	      if(filter!=null){
+	         String[] filterList = filter.split("@");
+	         for(int i=0;i<filterList.length;i++){
+	            String[] detailFilter = filterList[i].split("-");
+	            int big_num = Integer.parseInt(detailFilter[0]);
+	            String category1 = bigCategoryService.getBigcategoryName(big_num);
+	            String category2 = detailFilter[1];
+	            for(Restaurant r : favorlist){
+	               if(category2.equals("ALL")){
+	                  if(r.getR_category1().equals(category1)){
+	                     favorlistwithFilter.add(r);
+	                  }
+	               }else{
+	                  if(r.getR_category1().equals(category1)&&r.getR_category2().equals(category2)){
+	                     favorlistwithFilter.add(r);
+	                  }
+	               }
+	            }
+	         }
+	         return favorlistwithFilter;
+	      }else{
+	         return favorlist;
+	      }
+	   }
+	
+	//수정(v2)시작---------------------------------------------------
+		//이메일 보내기
+		@RequestMapping("/email_send")
+		public @ResponseBody String email_send(String email) {
+			//인증횟수
+			//03:00 시간제한
+			try {
+				MimeMessage mimeMessage = emailSender.createMimeMessage();
+				MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "utf-8");
+				int r = new Random().nextInt(9999);
+				String Pw = new DecimalFormat("0000").format(r);
+				
+				String htmlMsg = "<h2>인증번호 : "+Pw+"</h2>";
+				mimeMessage.setContent(htmlMsg, "text/html; charset=utf-8");
+				helper.setTo(email);
+				helper.setSubject("(사이트) 인증번호 발송");
+				emailSender.send(mimeMessage);
+				return Pw;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		@RequestMapping("/email_check")
+		public @ResponseBody boolean email_check(String email) {
+			boolean is=false;
+			try {
+				int i=emailService.getEmailNum(email);
+				if(i<0) {
+					is=false;
+				}			
+			} catch (Exception e) {
+				is=true;
+			}
+			return is;
+		}
+		
+		//인증하기
+		@RequestMapping("/pw_check")
+		public @ResponseBody String pw_check(String pw, String pw_check, int time) {
+			String msg="";
+			if(time==-1) {
+				msg="만료된 인증번호입니다.";
+			}else {
+				if(pw.equals(pw_check)) {
+					msg="인증";
+				}else{
+					msg="인증번호를 다시 확인해주세요.";
+				}			
+			}
+			return msg;
+		}
+		
+		@RequestMapping("/Naver_Login")
+		public String Naver_Login() {
+			return "NaverLogin";
+		}
+		
+		@RequestMapping("/naver_login_profile")
+		public @ResponseBody String naver_login_profile(String token, HttpSession session) {
+			String header = "Bearer " + token; // Bearer 다음에 공백 추가
+			try {
+				String apiURL = "https://openapi.naver.com/v1/nid/me";
+				URL url = new URL(apiURL);
+				HttpURLConnection con = (HttpURLConnection) url.openConnection();
+				con.setRequestMethod("GET");
+				con.setRequestProperty("Authorization", header);
+				int responseCode = con.getResponseCode();
+				BufferedReader br;
+				if (responseCode == 200) { // 정상 호출
+					br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				} else { // 에러 발생
+					br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+				}
+				String inputLine;
+				StringBuffer response = new StringBuffer();
+				while ((inputLine = br.readLine()) != null) {
+					response.append(inputLine);
+				}
+				br.close();
+				Map<String, Object> map = new ObjectMapper().readValue(response.toString(), HashMap.class);
+				HashMap<String, Object> resp_map=new HashMap<String, Object>();
+				String[] elements = map.get("response").toString().replace("{", "").replace("}", "").split(", ");
+				for (String s1 : elements) {
+					String[] keyValue = s1.split("=");
+					resp_map.put(keyValue[0], keyValue[1]);
+				}
+				resp_map.put("type","N");
+				return memberListService.SNSjoin(resp_map);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@RequestMapping("/kakao_login")
+		public @ResponseBody String kakao_login(@RequestParam HashMap<String, Object> map, HttpSession session) {
+			System.out.println(map);
+			map.put("type","K");
+			return memberListService.SNSjoin(map);
+		}
+		@RequestMapping("/sns_login")
+		public String sns_login(String email, HttpSession session) {
+			session.setAttribute("email", email);
+			return "main";
+		}
+		//수정(v2)끝---------------------------------------------------
 
 	/* 소연 부분 수정 -> 세션 "id"를 "email"로 변경*/ 
 	public String emailBySession(HttpSession session) {
@@ -462,7 +682,7 @@ public class MemberController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		diary_date.setDate(diary_date.getDate() + 1); // utc 시간이라 그런가 저장할때 자꾸 하루
+		diary_date.setDate(diary_date.getDate()); // utc 시간이라 그런가 저장할때 자꾸 하루
 														// 전으로 저장되어서 설정해줌
 		diary.setR_num(r_num);
 		diary.setM_mail(emailNumBySession(session));
@@ -573,6 +793,7 @@ public class MemberController {
 			params.put("pwd", password);
 			if (memberListService.login(params) == 1) {
 				session.setAttribute("email", email);
+				session.setAttribute("profile", memberListService.getOneMember(email).getM_photo());
 				if (email.equals("admin123@naver.com")) {
 					return "adminIndex";
 				} else {
@@ -588,41 +809,9 @@ public class MemberController {
 	 * @RequestMapping("/Login") public String Login() { return "Login"; }
 	 */
 
-	@RequestMapping("/Naver_Login")
-	public String Naver_Login() {
-		return "NaverLogin";
-	}
+	
 
-	@RequestMapping("/naver_login_profile")
-	public @ResponseBody Map<String, Object> naver_login_profile(String token) {
-		String header = "Bearer " + token; // Bearer 다음에 공백 추가
-		try {
-			String apiURL = "https://openapi.naver.com/v1/nid/me";
-			URL url = new URL(apiURL);
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("GET");
-			con.setRequestProperty("Authorization", header);
-			int responseCode = con.getResponseCode();
-			BufferedReader br;
-			if (responseCode == 200) { // 정상 호출
-				br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			} else { // 에러 발생
-				br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-			}
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-			while ((inputLine = br.readLine()) != null) {
-				response.append(inputLine);
-			}
-			br.close();
-			System.out.println(response.toString());
-			Map<String, Object> map = new ObjectMapper().readValue(response.toString(), HashMap.class);
-			return map;
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		return null;
-	}
+	
 
 	@RequestMapping("/logout")
 	public String logout(HttpSession session) {

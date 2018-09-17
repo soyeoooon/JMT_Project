@@ -10,11 +10,17 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 <title></title>
+<style type="text/css">
+  .navbar{
+    background-color: rgba(242,242,242,0.5);
+  
+  }
+</style>
 
 
 </head>
 <body>
-  <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-danger">
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/main"><img src="${pageContext.request.contextPath}/resources/front_image/logo.png"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -28,9 +34,9 @@
       </form>
       <p id="session"></p>
     </div>
-    <ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav">
       <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
-      <img class="img-xs rounded-circle" src="${pageContext.request.contextPath}/resources/front_image/user.png" width="50" alt="Profile image">
+      <img class="img-xs rounded-circle" src="resources/front_image/user.png" width="50" alt="Profile image">
 
       </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -60,7 +66,7 @@
 					}
 					$('#session').text(session);
 					$('#logout').text('로그아웃');
-					$('.img-xs').attr('src','${member.m_photo}');
+					$('.img-xs').attr('src','${sessionScope.profile}');
 					
 					
 				} else if (!session) {

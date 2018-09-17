@@ -6,6 +6,10 @@ import java.util.List;
 import com.example.model.MemberList;
 
 public interface MemberListDao {
+	//수정(v2)
+		public void insert(MemberList memberList);
+		public Integer naverCheck(String id);
+		public Integer kakaoCheck(String id);
 	/*--------------------성록--------------------*/
 	//public void insertMemberList();
 	public void updateMemberList(HashMap<String,Object> map);

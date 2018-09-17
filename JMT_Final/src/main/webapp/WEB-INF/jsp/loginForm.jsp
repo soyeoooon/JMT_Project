@@ -10,9 +10,6 @@
 <!-- kakao 사용 스크립트 -->
 <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 
-<meta name="google-signin-scope" content="profile email">
-<meta name="google-signin-client_id" content="153041349247-tnlo9sap0gqfbsrugjn3tvhmvjupd6cn.apps.googleusercontent.com">
-<script src="https://apis.google.com/js/platform.js" async defer></script>
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <style type="text/css">
 body {
@@ -86,7 +83,7 @@ div#form {
    border-radius: 5px;
    padding: 20px;
    left: 50%;
-   top: 50%;
+   top: 30%; 
    margin-left: -180px;
    margin-top: -200px;
 }
@@ -206,8 +203,6 @@ input[type="button"].login:focus {
         <a href="#" onclick="document.getElementById('naver_id_login_anchor').click();"> <img src="img/naver_login.PNG" width="38" />
         </a> <a id="custom-login-btn" href="javascript:loginWithKakao()"> <img src="img/kakao_login.png" width="38" />
         </a>
-
-        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
     </div>
   </div>
   <div class="container">
@@ -295,26 +290,12 @@ input[type="button"].login:focus {
         })
      })
     // 끝
-         function onSignIn(googleUser) {
-            // Useful data for your client-side scripts:
-            var profile = googleUser.getBasicProfile();
-            console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-            console.log('Full Name: ' + profile.getName());
-            console.log('Given Name: ' + profile.getGivenName());
-            console.log('Family Name: ' + profile.getFamilyName());
-            console.log("Image URL: " + profile.getImageUrl());
-            console.log("Email: " + profile.getEmail());
-
-            // The ID token you need to pass to your backend:
-            var id_token = googleUser.getAuthResponse().id_token;
-            console.log("ID Token: " + id_token);
-         };
       </script>
 
   <!-- 네이버 로그인 -->
   <script type="text/javascript">
          //client id와 callback 주소
-         var naver_id_login = new naver_id_login("vLmPHRNNdF216wWVHew8", "http://192.168.0.11:8080/Naver_Login");
+         var naver_id_login = new naver_id_login("vLmPHRNNdF216wWVHew8", "http://192.168.0.105:8080/Naver_Login");
          //사이트 간 요청 위조 공격을 방지하기 위해 애플리케이션에서 생성한 상태 토큰으로 URL 인코딩을 적용한 값
          var state = naver_id_login.getUniqState();
          naver_id_login.setState(state);
@@ -331,26 +312,35 @@ input[type="button"].login:focus {
          naver_id_login.init_naver_id_login();
       </script>
 
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script type='text/javascript'>
-         // 사용할 앱의 JavaScript 키를 설정해 주세요.
-         Kakao.init('65a793362e117400ccd8a9a8d6e1c784');
-         function loginWithKakao() {
-            // 로그인 창을 띄웁니다.
-            Kakao.Auth.login({
-               success : function(authObj) {
-                  Kakao.API.request({
-                     url : '/v2/user/me',
-                     success : function(res) {
-                        alert(JSON.stringify(res));
-                     }
-                  })
-               },
-               fail : function(err) {
-                  alert(JSON.stringify(err));
-               }
-            });
-         };
-      </script>
+		// 사용할 앱의 JavaScript 키를 설정해 주세요.
+		Kakao.init('65a793362e117400ccd8a9a8d6e1c784');
+		function loginWithKakao() {
+			// 로그인 창을 띄웁니다.
+			Kakao.Auth.login({
+				success : function(authObj) {
+					Kakao.API.request({
+						url : '/v2/user/me',
+						success : function(res) {
+							$.ajax({
+								url:'/kakao_login',
+								type:'post',
+								data:{"id":res.id,"nick":res.properties.nickname,"img":res.properties.profile_image},
+								success:function(data){
+									location.href="sns_login?email="+data;
+								}
+							})
+						}
+					})
+				},
+				fail : function(err) {
+					alert(JSON.stringify(err));
+				}
+			});
+		};
+	</script>
+	
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
    <script
       src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>

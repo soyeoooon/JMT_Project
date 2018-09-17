@@ -1,16 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@include file="header.jsp"%>
+<%@ include file="header.jsp" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">  -->
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
+ integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> 
+<!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/editor/jquery-te-1.4.0.min.js" charset="utf-8"></script>
+
+
 <script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.5.0/d3.min.js"></script>
 <link type="text/css" rel="stylesheet" href="/editor/jquery-te-1.4.0.css">
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous"></script>
 <style type="text/css">
+@import url(https://fonts.googleapis.com/earlyaccess/nanumpenscript.css);
+
+#diary {
+	font-size: 15px;
+	font-family: 'Nanum Pen Script', serif;
+	line-height: 1.5;
+}
 
 /* 별점주기 css */
 .starR1 {
@@ -59,6 +75,14 @@
 	cursor: pointer;
 }
 
+#calendar{
+  border : 1px solid #ddd;
+}
+
+#diary{
+  padding : 10px;
+}
+
 #myModal .modal-dialog {
 	width: 300px;
 	height: 100px;
@@ -101,10 +125,23 @@ ul.tabs {
 }
 
 ul.tabs li {
-	background: none;
-	color: #222;
+	/* background: none;
+  color: #222; */
 	display: inline-block;
-	padding: 10px 15px;
+	/* padding: 10px 15px; */
+	/* cursor: pointer; */
+margin: 0 0 -1px;
+  padding: 15px 25px;
+  font-weight: 600;
+  text-align: center;
+  color: #bbb;
+  border: 1px solid transparent;
+	font-family: FontAwesome;
+}
+
+/*소연 추가*/
+ul.tabs li:hover {
+	color: #888;
 	cursor: pointer;
 }
 
@@ -112,31 +149,25 @@ img {
 	cursor: pointer;
 }
 
+/*선택된 탭 꾸미기*/
 ul.tabs li.current {
-	background: #ededed;
-	color: #222;
+	
+	color: #555;
+	border: 1px solid #ddd;
+	border-top: 2px solid orange;
+  border-bottom: 1px solid #fff;
 }
 
 .tab-content {
 	display: none;
-	background: #ededed;
+	/* background: #ededed; */
 	padding: 15px;
-  
-    
+	border-top: 1px solid #ddd; /* 검은색 */
 }
 
 .tab-content.current {
-	/* display: inherit; */
-	/* width: 830px; */
+  display: inherit;
   
-/* 소연 추가 */
-
-    display: flex;
-    flex-wrap: wrap;
-	height: 450px;
-/* 소연 추가 끝 */
-  
-    
 }
 
 #calendar td, th {
@@ -174,11 +205,6 @@ ul.tabs li.current {
 #myModal3Image {
 	width: 550px;
 }
-
-
-
-
-
 </style>
 
 </head>
@@ -186,10 +212,10 @@ ul.tabs li.current {
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=rDqRFTNAaK_2mefWZroL&submodules=geocoder"></script>
 <body>
 
-  <div>
+  <!-- <div>
     <input type="text" id="searchThing">
     <button id="searchThingBtn">서치</button>
-  </div>
+  </div> -->
   <script type="text/javascript">
 	$(function(){
 		$('#searchThingBtn').on('click',function(){
@@ -251,22 +277,23 @@ ul.tabs li.current {
   <div class="container">
 
     <ul class="tabs">
-      <li class="tab-link current" data-tab="tab-1" id="firstmenu">메뉴_하나</li>
-      <li class="tab-link" data-tab="tab-2" id="secondmenu">메뉴_둘</li>
-      <li class="tab-link" data-tab="tab-3" id="thirdmenu">메뉴_셋</li>
-      <li class="tab-link" data-tab="tab-4" id="fourthmenu">메뉴_넷</li>
-      <li class="tab-link" data-tab="tab-5" id="fifthmenu">메뉴_다섯</li>
+      <li class="tab-link current" data-tab="tab-1" id="firstmenu"><i class="fas fa-chart-pie"></i> 내 정보</li>
+      <li class="tab-link" data-tab="tab-2" id="secondmenu"><i class="fas fa-pen-square"></i> 다이어리</li>
+      <li class="tab-link" data-tab="tab-3" id="thirdmenu"><i class="fas fa-map-marked-alt"></i> 즐겨찾기</li>
+      <li class="tab-link" data-tab="tab-4" id="fourthmenu"><i class="fas fa-user-friends"></i> 나의 친구</li>
+      <li class="tab-link" data-tab="tab-5" id="fifthmenu"><i class="far fa-id-card"></i> 정보수정</li>
     </ul>
 
     <div id="tab-1" class="tab-content current">
       <div class="graph" style="display: inline-block;"></div>
       <div id="graphlist" style="display: inline-block;"></div>
-      <div id = "wordcloud" style="display: inline-block;"></div>
-      
+      <div id="wordcloud" style="display: inline-block;"></div>
     </div>
-    <script type="text/javascript">
+  
+
+  <script type="text/javascript">
 	$(function(){
-		/* $.get('wordcloud',function(data){
+		$.get('wordcloud',function(data){
 	         var fill = d3.scale.category20();
 	         var words = [];
 	         var sizes = [];
@@ -282,8 +309,7 @@ ul.tabs li.current {
 	               }
 	            }
 	         }
-	         var layout = d3.layout.cloud()
-	             .size([500, 500])
+	         var layout = d3.layout.cloud().size([500, 500])
 	             .words(words.map(function(d) {
 	               return {text: d, size: returnCount(d)*10, test: "haha"};
 	             }))
@@ -296,11 +322,11 @@ ul.tabs li.current {
 	         layout.start();
 	          
 	         function draw(words) {
-	           d3.select("wordcloud").append("svg")
+	           d3.select("#wordcloud").append("svg")
 	               .attr("width", layout.size()[0])
 	               .attr("height", layout.size()[1])
 	             .append("g")
-	               .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+	               .attr("transform", "translate(" + layout.size()[0]/2 + "," + layout.size()[1] / 2 + ")")
 	             .selectAll("text")
 	               .data(words)
 	             .enter().append("text")
@@ -313,7 +339,7 @@ ul.tabs li.current {
 	               })
 	               .text(function(d) { return d.text; });
 	         }
-	   }) */
+	   })
 		function myPageTab1(){
 			$.get('myPageTab1',function(data){
 				$('.graph').html('');
@@ -383,116 +409,157 @@ ul.tabs li.current {
 		myPageTab1();
 	})
 	</script>
-    <div id="tab-2" class="tab-content">
-      <table>
-        <tr>
-          <td style="text-align: center;">
-            <button id="ListorCalendar">리스트로보기</button>
-          </td>
-          <td colspan="3" id="deleteD"></td>
-          <td colspan="3" id="writeD"></td>
-        </tr>
-        <tr>
-          <td rowspan="4" style="vertical-align: top;">
-            <div id="calendar" style="width: 400px; height: 200px;"></div>
-          </td>
-          <td colspan="6">
-            <div id="diary" style="width: 350px; height: 200px;"></div>
-          </td>
-        </tr>
-        <tr id="icons">
-        </tr>
-        <tr id="photos">
-        </tr>
-      </table>
-      <table style="float: right;">
-        <tr id="anotherDiary">
+  <div id="tab-2" class="tab-content">
+    <table>
+      <tr>
+        <td style="text-align: center;">
+          <button class="btn btn-outline-success" id="ListorCalendar">리스트로보기</button>
+        </td>
+        <td colspan="3" id="deleteD"></td>
+        <td colspan="3" id="writeD"></td>
+      </tr>
+      <tr>
+        <td rowspan="4" id="calendar" style="vertical-align: top;">
+          <!-- <div id="calendar" style="width: 400px; height: 200px;"> -->
+          <!-- 달력테이블이 만들어지는 자리 -->
 
-        </tr>
-      </table>
-    </div>
-    
-    
-    <div id="tab-3" class="tab-content">
+          <!-- </div> -->
+        </td>
+        <td colspan="6">
+          <div id="diary" style="width: 350px; height: 200px; padding: 10px;">
+            <!-- 다이어리 제목과 내용이 만들어지는 자리  -->
+          </div>
+        </td>
+      </tr>
+      <tr id="icons">
+      </tr>
+      <tr id="photos">
+      </tr>
+      <tr id="anotherDiary">
+
+      </tr>
+    </table>
+    <!-- <table border="2" style="float: right;">
+      </table> -->
+  </div>
+
+
+  <div id="tab-3" class="tab-content">
+    <div class="card-deck">
+    <div class="card">
+    <div class="card-header">즐겨찾기 목록을 오른쪽 지도에서 확인하세요</div>
       <div id="tab3List" style="display: inline-block;"></div>
-      <div style="display: inline-block;">
-        <div style="position: absolute;">
-          <div id="likestarmap" style="width: 400px; height: 300px; position: relative;"></div>
-        </div>
-        <div style="position: absolute;">
+  </div>
+      <div class="card">
+      <div class="card-header">
+      
+        <!-- <div style="position: absolute;"> -->
           <div style="position: relative;">
             <img id="relateLike" src="/icons/like.png"> <img id="relateMark" src="/icons/star.png">
+          </div>
+        <!-- </div> -->
+      </div>
+      <div class="card-body">
+      <div id="likestarmap" style="width: 400px; height: 300px; position: relative;"></div>
+      </div>
+      
+      </div>
+      
+      
+    </div>
+  </div>
+
+
+
+
+
+
+  <div id="tab-4" class="tab-content">
+    친구찾기
+    <button class="btn btn-primary">
+      <img src="/icons/search.png" id="findFriendBtn" data-toggle="modal" data-target="#findFriend">
+    </button>
+      <div class="card-deck">
+        <div class="card">
+        <div class="card-header">나의 친구목록</div>
+          <div class="card-body">
+            <div id="myFriends" style="display: inline-block;"></div>
+          </div>
+        </div>
+
+        <div class="card">
+        <div class="card-header">친구 요청목록</div>
+          <div class="card-body">
+            <div id="forRespFriends" style="display: inline-block;"></div>
           </div>
         </div>
       </div>
     </div>
-    
-    
-    
-    <div id="tab-4" class="tab-content">
-      친구찾기<button class="btn btn-primary"><img src="/icons/search.png" id="findFriendBtn" data-toggle="modal" data-target="#findFriend"></button>
-      <div>
-        <div id="myFriends" style="display: inline-block;"></div>
-        <div id="forRespFriends" style="display: inline-block;"></div>
-      </div>
-    </div>
-    <div id="tab-5" class="tab-content">
-      <div style="display: inline-block;">
-        <table>
-          <tr>
-            <td style="text-align: center; vertical-align: top;">
-              <img id="profilePhoto" src="" style="width: 250px;" />
-            </td>
-          </tr>
-          <tr>
-            <td style="text-align: center;">
-              <button id="changePP" data-toggle="modal" data-target="#myModal6">사진변경</button>
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div style="display: inline-block;">
-        <table>
-          <tr>
-            <th><h4>이메일</h4></th>
-          </tr>
-          <tr>
-            <td id="profileEmail"></td>
-          </tr>
-          <tr>
-            <th><h4>닉네임</h4></th>
-          </tr>
-          <tr>
-            <td>
-              <input type="text" id="profileNickName">
-            </td>
-          </tr>
-          <tr>
-            <th><h4>새 비밀번호 입력</h4></th>
-          </tr>
-          <tr>
-            <td>
-              <input type="password" id="profileNewPwd1">
-            </td>
-          </tr>
-          <tr>
-            <th><h4>새 비밀번호 확인</h4></th>
-          </tr>
-          <tr>
-            <td>
-              <input type="password" id="profileNewPwd2">
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <button style="width: 100px; height: 50px;" id="changeID">변경</button>
-            </td>
-          </tr>
-        </table>
-        <div id="checkPwd"></div>
-      </div>
-    </div>
 
+
+
+  <div id="tab-5" class="tab-content">
+    <div class="row justify-content-md-center">
+    
+    <div style="display: inline-block;">
+      <table>
+        <tr>
+          <td style="text-align: center; vertical-align: top;">
+            <img id="profilePhoto" src="" style="width: 250px;" />
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align: center;">
+            <button class="btn btn-outline-dark" id="changePP" data-toggle="modal" data-target="#myModal7">사진변경</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="card text-center">
+    <div class="card-body" style="display: inline-block;">
+      <table>
+        <tr>
+          <th>이메일</th>
+        </tr>
+        <tr>
+          <td id="profileEmail"></td>
+        </tr>
+        <tr>
+          <th>닉네임</th>
+        </tr>
+        <tr>
+          <td>
+            <input type="text" id="profileNickName">
+          </td>
+        </tr>
+        <tr>
+          <th>새 비밀번호 입력</th>
+        </tr>
+        <tr>
+          <td>
+            <input type="password" id="profileNewPwd1">
+          </td>
+        </tr>
+        <tr>
+          <th>새 비밀번호 확인</th>
+        </tr>
+        <tr>
+          <td>
+            <input type="password" id="profileNewPwd2">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button class="btn btn-outline-dark" style="width: 100px; height: 50px;" id="changeID">변경</button>
+          </td>
+        </tr>
+      </table>
+      <div id="checkPwd"></div>
+    </div>
+    
+    </div>
+  </div>
+</div>
   </div>
   <br>
   <!-- ///////////////////////////////////////////////// 두번째 탭 ///////////////////////////////////////////////// -->
@@ -620,19 +687,6 @@ ul.tabs li.current {
         </div>
       </div>
     </div>
-    <div class="modal fade" id="myModal7">
-      <div class="modal-dialog" style="width: 310px; height: 300px;">
-        <div class="modal-content">
-          <div class="modal-body" id="myModal7Body">
-            <img id="readDiaryImage">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="uploadDiaryImage" data-dismiss="modal">Save</button>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- 친구목록보기 -->
     <div class="modal fade" id="myModal8">
@@ -664,7 +718,7 @@ ul.tabs li.current {
             <table>
               <tr>
                 <td style="text-align: center; vertical-align: top;">
-                  <img id="PicAndIntPhoto" src="" style="width: 100px;" data-toggle="modal" data-target="#myModal6" />
+                  <img id="PicAndIntPhoto" src="" style="width: 100px;" data-toggle="modal" data-target="#myModal7" />
                 </td>
                 <td>
                   <input type="text" style="width: 250px; height: 100px;" id="PicAndIntIntro" value="${memberList.m_intro }">
@@ -686,11 +740,26 @@ ul.tabs li.current {
           <form action="uploadDiaryImage" id="diaryImageForm" enctype="multipart/form-data">
             <input type="hidden" id="diaryImageNum">
             <div class="modal-body" id="myModal6Body">
+              <input type="file" id="diary_pic" name="diary_pic" accept=".jpg, .jpeg, .png">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal" id="diaryImageSave1">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="myModal7">
+      <div class="modal-dialog" style="width: 600px;">
+        <div class="modal-content">
+          <form action="uploadProfileImage" id="profileImageForm" enctype="multipart/form-data">
+            <div class="modal-body" id="myModal7Body">
               <input type="file" id="profile_pic" name="profile_pic" accept=".jpg, .jpeg, .png">
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" data-dismiss="modal" id="diaryImageSave">Save</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal" id="diaryImageSave2">Save</button>
             </div>
           </form>
         </div>
@@ -808,8 +877,7 @@ ul.tabs li.current {
         <div class="modal-content" style="width: 400px;">
           <div class="modal-body" style="width: 400px; height: 600px; max-height: 600px;">
             이메일/닉네임<input type="text" id="searchFriend" width="400px">
-            <table id="searchFriendList" border="1" bordercolor="hotpink;">
-            </table>
+            <div id="searchFriendList"></div>
           </div>
 
           <div class="modal-footer">
@@ -819,7 +887,7 @@ ul.tabs li.current {
       </div>
     </div>
   </div>
-  <div><jsp:include page="footer.jsp"></jsp:include></div>
+  <jsp:include page="footer.jsp"></jsp:include>
 
   <script type="text/javascript">
 	$(function(){
@@ -845,13 +913,22 @@ ul.tabs li.current {
 				$('#searchFriend').val('');
 			})
 		}
+		function myModal7Hidden(){
+			$('#myModal7').on('hidden.bs.modal', function () {
+				$('#profile_pic').off('click');
+				$('#profile_pic').val('');
+				$('#profile_pic').siblings().remove();
+				$('#tagSaveBtn').off('click');
+			})
+			
+		}
 		function myModal6Hidden(diary_num){
 			$('#myModal6').on('hidden.bs.modal', function () {
 				if(diary_num!=null){
 					$.ajax({
 						url : "deletePhotoDeco",
 						data : {
-							p_imgname : '/diary/'+diary_num+'/'+$('#profile_pic').val().replace('C:\\fakepath\\', '')
+							p_imgname : '/diary/'+diary_num+'/'+$('#diary_pic').val().replace('C:\\fakepath\\', '')
 						},
 						type : "post",
 						success : function(){
@@ -859,9 +936,9 @@ ul.tabs li.current {
 						}
 					})
 				}
-				$('#profile_pic').off('click');
-				$('#profile_pic').val('');
-				$('#profile_pic').siblings().remove();
+				$('#diary_pic').off('click');
+				$('#diary_pic').val('');
+				$('#diary_pic').siblings().remove();
 				$('#tagSaveBtn').off('click');
 			})
 			
@@ -905,7 +982,7 @@ ul.tabs li.current {
 	            var formData = null;
 	            reader.onload = function(e) {
 	            	$('#PicAndIntPhoto').attr('src',e.target.result);
-					formData = new FormData($('#diaryImageForm')[0]);
+					formData = new FormData($('#profileImageForm')[0]);
 					$('#myModal6').modal('hide');
 	            }
 				 $('#PicAndIntSave').off().on('click',function(){
@@ -1179,7 +1256,7 @@ ul.tabs li.current {
 					}
 					for(var i =startPage;i<=endPage;i++){
 						if(i<=lastPage)
-							result += '<td><button class ="tab3ListBtn" id="'+i+'">'+i+'</button></td>'
+							result += '<td><button class ="btn btn-info tab3ListBtn" id="'+i+'">'+i+'</button></td>'
 					}
 					if(endPage<lastPage){
 						result += '<td><button id="tab3ListAfPage">></button></td>'
@@ -1232,7 +1309,7 @@ ul.tabs li.current {
 				type : "post",
 				success : function(data){
 					alert(data);
-					fourthMenu(1);
+					fourthMenu(1,1);
 				}
 			})
 		}
@@ -1245,7 +1322,7 @@ ul.tabs li.current {
 				type : "post",
 				success : function(data){
 					alert(data);
-					fourthMenu(1);
+					fourthMenu(1,1);
 				}
 			})
 		}
@@ -1402,49 +1479,81 @@ ul.tabs li.current {
 		}
 		
 		var Tab4Page = 1;
-		function fourthMenu(pageNum){
+		var FNum = 1;
+		var ReqFNum = 1;
+		function fourthMenu(FpageNum,ReqFpageNum){
 			$.get("getFriendList",function(data){
+				if(FpageNum>0){
+					Fnum = FpageNum
+				}
 				var result = '<table style ="align : center;">'
-					for(var i=0;i<data.length;i++){
-						result += '<tr class="'+data[i].email_num+'">'
-						if(data[i].m_photo!=undefined&&data[i].m_photo!=null){
-							result += '<td rowspan="2" style="width : 50px;" class="'+data[i].email_num+'"><img class="detailView" src="'+data[i].m_photo+'" style="width : 40px;"/></td>';
-						}else{
-							result += '<td rowspan="2" style="width : 50px;" class="'+data[i].email_num+'"><img src="/icons/friend'+(i%6+1)+'.png" /></td>';
-						}
-						result += '<td style="width: 220px;" class="detailView"><h3> '+data[i].m_nick+'</h3></td><td rowspan="2"><button class="deleteFriend1" id="'+data[i].email_num+'">삭제</button></td>';
-						result += '</tr>'
-						result += '<tr class="'+data[i].email_num+'">'
-						result += '<td  class="detailView"><h4> '+data[i].m_intro+'</h4></td>';
-						result += '</tr>'
+				var forlast = data.length>Fnum*5?Fnum*5:data.length
+				for(var i=(Fnum-1)*5;i<forlast;i++){
+					result += '<tr class="'+data[i].email_num+'">'
+					if(data[i].m_photo!=undefined&&data[i].m_photo!=null){
+						result += '<td rowspan="2" style="width : 50px;" class="'+data[i].email_num+'"><img class="detailView" src="'+data[i].m_photo+'" style="width : 40px;"/></td>';
+					}else{
+						result += '<td rowspan="2" style="width : 50px;" class="'+data[i].email_num+'"><img src="/icons/friend'+(i%6+1)+'.png" /></td>';
 					}
-					result += '</table>'
-					$('#myFriends').html(result);
-					$('.deleteFriend1').bind('click',deleteFriend);
-					$('.detailView').bind('click',seeDetail);
+					result += '<td style="width: 220px;" class="detailView"><h3> '+data[i].m_nick+'</h3></td><td rowspan="2"><button class="btn btn-warning deleteFriend1" id="'+data[i].email_num+'">삭제</button></td>';
+					result += '</tr>'
+					result += '<tr class="'+data[i].email_num+'">'
+					result += '<td  class="detailView"><h4> '+data[i].m_intro+'</h4></td>';
+					result += '</tr>'
+				}
+				result += '</table>'
+				result += '<table><tr>'
+				for(var i =1;i<data.length/5+1;i++){
+					result += '<td><button class="btn btn-info getF" id="'+i+'">'+i+'</button></td>'
+				}
+				result += '</tr></table>'
+				$('#myFriends').html(result);
+				$('.getF').off().on('click',function(){
+					console.log($(this).attr('id'),ReqFNum)
+					fourthMenu($(this).attr('id'),ReqFNum);
+				})
+				$('.deleteFriend1').bind('click',deleteFriend);
+				$('.detailView').bind('click',seeDetail);
 			})
 			$.get("getReqFriendList",function(data){
+				if(ReqFpageNum>0){
+					ReqFNum = ReqFpageNum
+				}
+				var forlast = data.length>ReqFNum*5?ReqFNum*5:data.length
 				var result = '<table style ="align : center;">'
-					for(var i=0;i<data.length;i++){
-						result += '<tr>'
-						if(data[i].m_photo!=undefined&&data[i].m_photo!=null){
-							result += '<td rowspan="2" style="width : 50px;"><img src="'+data[i].m_photo+'" style="width : 40px;" /></td>';
-						}else{
-							result += '<td rowspan="2" style="width : 50px;"><img src="/icons/friend'+(i%6+1)+'.png" /></td>';
-						}
-						result += '<td style="width: 220px;"><h3> '+data[i].m_nick+'</h3></td><td rowspan="2"><button class="applyFriend" id="'+data[i].email_num+'">수락</button><button class="deleteFriend2" id="'+data[i].email_num+'">거절</button></td>';
-						result += '</tr>'
-						result += '<tr>'
-						result += '<td><h4> '+data[i].m_intro+'</h4></td>';
-						result += '</tr>'
+				for(var i=(ReqFNum-1)*5;i<forlast;i++){
+					result += '<tr>'
+					if(data[i].m_photo!=undefined&&data[i].m_photo!=null){
+						result += '<td rowspan="2" style="width : 50px;"><img src="'+data[i].m_photo+'" style="width : 40px;" /></td>';
+					}else{
+						result += '<td rowspan="2" style="width : 50px;"><img src="/icons/friend'+(i%6+1)+'.png" /></td>';
 					}
-					result += '</table>'
-					$('#forRespFriends').html(result);
-					$('.applyFriend').bind('click',applyFriend);
-					$('.deleteFriend2').bind('click',deleteFriend);
+					result += '<td style="width: 220px;"><h3> '+data[i].m_nick+'</h3></td><td rowspan="2"><button class="btn btn-success applyFriend" id="'+data[i].email_num+'">수락</button><button class="btn btn-danger deleteFriend2" id="'+data[i].email_num+'">거절</button></td>';
+					result += '</tr>'
+					result += '<tr>'
+					result += '<td><h4> '+data[i].m_intro+'</h4></td>';
+					result += '</tr>'
+				}
+				result += '</table>'
+				result += '<table><tr>'
+				for(var i =1;i<data.length/5+1;i++){
+					result += '<td><button class="btn btn-info getReqF" id="'+i+'">'+i+'</button></td>'
+				}
+				result += '</tr></table>'
+				$('#forRespFriends').html(result);
+				$('.getReqF').off().on('click',function(){
+					fourthMenu(FNum,$(this).attr('id'));
+				})
+				$('.applyFriend').bind('click',applyFriend);
+				$('.deleteFriend2').bind('click',deleteFriend);
 			})
+			
+			var findPage = 1;
 			$('#findFriendBtn').off().on('click',function(){
-				$('#searchFriend').off().on('input',function(){
+				$('#searchFriend').off().on('input',function searchFriend2(findFriendPage){
+					if(findFriendPage>0){
+						findPage = findFriendPage;
+					}
 					$.ajax({
 						url : "findFriend",
 						data : {
@@ -1452,8 +1561,11 @@ ul.tabs li.current {
 						},
 						type : 'post',
 						success : function(data){
-							var result = '';
-							for(var i =0;i<data.length;i++){
+							var result = '<table border="1">';
+							console.log(findPage);
+							var forlast = findPage*5>data.length?data.length:findPage*5
+							for(var i =(findPage-1)*5;i<forlast;i++){
+								console.log(findPage);
 								$.ajax({
 									url : 'getFriendPhoto',
 									data : {
@@ -1480,13 +1592,13 @@ ul.tabs li.current {
 									async : false,
 									success : function(is){
 										if(is==1){
-											result += '<button style="height : 25px;">이미친구</button></td></tr>'
+											result += '<button class="btn btn-outline-success" style="height : 25px;">이미친구</button></td></tr>'
 										}else if(is==2){
-											result += '<button style="height : 25px;">이미신청</button></td></tr>'
+											result += '<button class="btn btn-outline-info"style="height : 25px;">이미신청</button></td></tr>'
 										}else if(is==3){
-											result += '<button style="height : 25px;">신청받음</button></td></tr>'
+											result += '<button class="btn btn-outline-primary" style="height : 25px;">신청받음</button></td></tr>'
 										}else{
-											result += '<button class="sendApply" id="'+data[i].email_num+'" style="height : 25px;">친구신청</button></td></tr>'
+											result += '<button class="btn btn-primary sendApply" id="'+data[i].email_num+'" style="height : 25px;">친구신청</button></td></tr>'
 										}
 									}
 								})
@@ -1502,7 +1614,16 @@ ul.tabs li.current {
 									}
 								})
 							}
+							result += '</table>'
+							result += '<table><tr>'
+							for(var i =1;i<data.length/5+1;i++){
+								result += '<td><button class="btn btn-info findP" id="'+i+'">'+i+'</button></td>'
+							}
+							result += '</tr></table>'
 							$('#searchFriendList').html(result);
+							$('.findP').off().on('click',function(){
+								searchFriend2($(this).attr('id'));
+							})
 							$('.sendApply').off().on('click',function(){
 								$.ajax({
 									url : "sendApplyFriend",
@@ -1513,7 +1634,7 @@ ul.tabs li.current {
 									async : false,
 									success : function(data){
 										alert(data);
-										$('#findFriend').modal('hide');
+										searchFriend2(findPage);
 									}
 								})
 							})
@@ -1532,7 +1653,7 @@ ul.tabs li.current {
 		function fifthMenu(){
 			$.get('myPageTab5',function(data){
 				$('#profilePhoto').attr('src',data.m_photo);
-				$('#profileEmail').text('${id}');
+				$('#profileEmail').text('${sessionScope.email}');
 				$('#profileNickName').val(data.m_nick);
 				$('#changePP').off().on('click',function(){
 					function readURL(input){
@@ -1540,8 +1661,8 @@ ul.tabs li.current {
 			            var reader = new FileReader();
 			            reader.onload = function(e) {
 							$('#profile_pic').after('<img id="uploadPreview" style="width : 550px;" src="'+e.target.result+'">');
-							 $('#diaryImageSave').off().on('click',function(){
-								var formData = new FormData($('#diaryImageForm')[0]);
+							 $('#diaryImageSave2').off().on('click',function(){
+								var formData = new FormData($('#profileImageForm')[0]);
 								 $.ajax({
 						            type : 'post',
 						            url : 'uploadProfileImage',
@@ -1564,7 +1685,7 @@ ul.tabs li.current {
 					$("#profile_pic").off().change(function() {
 			          readURL(this);
 			        });
-					myModal6Hidden(null);
+					myModal7Hidden();
 				});
 				$('#profileNewPwd2').focus(function(){
 					if($('#profileNewPwd1').val()!=null){
@@ -1597,7 +1718,7 @@ ul.tabs li.current {
 		}
 			
 		//다섯번째 탭 시작
-		$('#fifthmenu').bind('click',fifthMenu);
+		$('#fifthmenu').on('click',fifthMenu);
 		
 		
 	
@@ -1807,8 +1928,8 @@ ul.tabs li.current {
 		function writePhotoDeco(diary_num,offx,offy){
 			$('#tagSaveBtn').off().on('click',function(){
 				var imgname = null;
-				if($('#profile_pic').val()!=null&&$('#profile_pic').val()!=''){
-					imgname = '/diary/'+diary_num+'/'+$('#profile_pic').val().replace('C:\\fakepath\\', '');
+				if($('#diary_pic').val()!=null&&$('#diary_pic').val()!=''){
+					imgname = '/diary/'+diary_num+'/'+$('#diary_pic').val().replace('C:\\fakepath\\', '');
 				}else{
 					imgname = $('#myModal3Image').attr('src')
 				}
@@ -1945,15 +2066,15 @@ ul.tabs li.current {
 					result += '</ul>';
 					result += '<table class="pagingTable"><tr>';
 					if(startPage>1){
-						result += '<td><button id="BePage"><</button></td>';
+						result += '<td><button class="btn btn-warning" id="BePage"><</button></td>';
 					}
 					for(var i =startPage;i<=endPage;i++){
 						if(i==lastPage+1)
 							break;
-						result += '<td><button class="diaryPage" id="'+i+'">'+i+'</button></td>';
+						result += '<td><button class="btn btn-warning diaryPage" id="'+i+'">'+i+'</button></td>';
 					}
 					if(endPage<lastPage){
-						result += '<td><button id="AfPage">></button></td>';
+						result += '<td><button class="btn btn-warning" id="AfPage">></button></td>';
 					}
 					result += '</tr></table>';
 					
@@ -1965,7 +2086,7 @@ ul.tabs li.current {
 					$('#AfPage').on('click',function(){
 						makeList(endPage+1);
 					})
-					$('#writeD').html('<button style="float : right;" data-toggle = "modal" data-target="#myModal4">다이어리쓰기</button>');
+					$('#writeD').html('<button class="btn btn-outline-dark"style="float : right;" data-toggle = "modal" data-target="#myModal4">다이어리쓰기</button>');
 					myModal4Hidden();
 					$('.diaryPage').off().on('click',function(){
 						makeList($(this).attr('id'));
@@ -2011,7 +2132,7 @@ ul.tabs li.current {
 									var r_runtime = data.r_runtime;
 									var r_lat = data.r_lat;
 									var r_lon = data.r_lon;
-									$('#deleteD').html('<button style="float : right;" data-toggle = "modal" data-target="#confirmModal" id="deleteDiaryBtn">다이어리지우기</button>');
+									$('#deleteD').html('<button class="btn btn-outline-dark" style="float : right;" data-toggle = "modal" data-target="#confirmModal" id="deleteDiaryBtn">다이어리지우기</button>');
 									$('deleteDiaryBtn').bind('click',deleteDiary(diary_num));
 									
 									
@@ -2060,8 +2181,8 @@ ul.tabs li.current {
 										          if (input.files && input.files[0]) {
 										            var reader = new FileReader();
 										            reader.onload = function(e) {
-														$('#profile_pic').after('<img id="uploadPreview" style="z-index: 0; width : 550px;" src="'+e.target.result+'" data-toggle="modal" data-target="#myModal3">');
-														$('#profile_pic').after('<p id="tagExp">이미지를 클릭하여 태그를 입력해주세요</p>');
+														$('#diary_pic').after('<img id="uploadPreview" style="z-index: 0; width : 550px;" src="'+e.target.result+'" data-toggle="modal" data-target="#myModal3">');
+														$('#diary_pic').after('<p id="tagExp">이미지를 클릭하여 태그를 입력해주세요</p>');
 														$('#uploadPreview').on('click',function(){
 															$('#tagSaveBtn').text('Save');
 															var clix = event.clientX;
@@ -2083,17 +2204,17 @@ ul.tabs li.current {
 										          }
 										        }
 												
-										        $("#profile_pic").off().change(function() {
+										        $("#diary_pic").off().change(function() {
 										          readURL(this);
 										        });
-										        $('#diaryImageSave').off().on('click',function(){
+										        $('#diaryImageSave1').off().on('click',function(){
 													$.ajax({
 														type : 'post',
 														url : 'getDiaryNum',
 														async : false,
 														data : {diary_num : diary_num},
 														success : function() {
-														    alert("ㅇㅋ.");
+														    alert("저장되었습니다.");
 														}
 													});
 													$('#diaryImageNum').val(diary_num);
@@ -2106,14 +2227,16 @@ ul.tabs li.current {
 														contentType : false,
 														success : function(data) {
 														    alert(data);
+														    myModal6Hidden();
 														},
 														error : function(error) {
 														    alert("파일 업로드에 실패하였습니다.");
+														    myModal6Hidden(diary_num);
 														}
 													});
 												})
 												
-										        myModal6Hidden(diary_num);
+										        
 												
 												$('#greaterthan').on('click',function(){
 													if(imagelist.length<=start+4)
@@ -2157,22 +2280,26 @@ ul.tabs li.current {
 			$('#diary_weather').attr('src','');
 			$('#deleteD').html('');
 			$('#writeD').html('');
-			var result ='<table>';
+			var result='';
+			result+='<div class="card">';
+			result+='<div class="card-body">';
+			
+			result+='<table>';
 			today = new Date(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
-			result += '<tr><td><button id = "preYear">PY</button></td>'
-			result += '<td><button id = "preMonth">PM</button></td>'
+			result += '<tr><td><button class="btn btn-info" id = "preYear"><i class="fas fa-arrow-left"></i>Y</button></td>'
+			result += '<td><button class="btn btn-outline-info" id = "preMonth"><i class="fas fa-arrow-left"></i>M</button></td>'
 			if(today.getMonth()+1<10){
-				result += '<td colspan="3" id="today">'+today.getFullYear()+'-0'+(today.getMonth()+1);
+				result += '<td colspan="3" id="today"><b>'+today.getFullYear()+'-0'+(today.getMonth()+1);
 			}else{
-				result += '<td colspan="3" id="today">'+today.getFullYear()+'-'+(today.getMonth()+1);
+				result += '<td colspan="3" id="today"><b>'+today.getFullYear()+'-'+(today.getMonth()+1);
 			}
 			if(today.getDate()<10){
-				result += '-0'+today.getDate()+'</td>';
+				result += '-0'+today.getDate()+'</b></td>';
 			}else{
-				result += '-'+today.getDate()+'</td>';
+				result += '-'+today.getDate()+'</b></td>';
 			}
-			result += '<td><button id = "nextMonth">NP</button></td>'
-			result += '<td><button id = "nextYear">NY</button></td></tr>'
+			result += '<td><button class="btn btn-outline-info" id = "nextMonth">M<i class="fas fa-arrow-right"></i></button></td>'
+			result += '<td><button class="btn btn-info" id = "nextYear">Y<i class="fas fa-arrow-right"></i></button></td></tr>'
 			result += '<tr><th style=" color: red">Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th style=" color: blue">Sat</th></tr>'
 			var startDay = new Date(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+1);
 			var lastDay = new Date(today.getFullYear(),(today.getMonth()+1),0);
@@ -2204,7 +2331,7 @@ ul.tabs li.current {
 					result += '</tr><tr>';
 				}
 			}
-			result += '</tr></table>';
+			result += '</tr></table></div></div>';
 			
 			$('#calendar').html(result);
 			
@@ -2259,6 +2386,8 @@ ul.tabs li.current {
 				$('#'+thisid).css('background-color','#FF7F50');
 				$('#'+thisid).css('font-weight','bold');
 				
+				$('#today').css('font-weight','bold');
+				
 				//초기화
 				$('#diary').html('');
 				$('#icons').html('');
@@ -2267,7 +2396,7 @@ ul.tabs li.current {
 				$('#deleteD').html('');
 				$('#diary_weather').attr('src','');
 				
-				$('#writeD').html('<button style="float : right;" data-toggle = "modal" data-target="#myModal4">다이어리쓰기</button>');
+				$('#writeD').html('<button class="btn btn-outline-secondary" data-toggle = "modal" data-target="#myModal4">다이어리쓰기</button>');
 				
 				myModal4Hidden();
 				
@@ -2298,7 +2427,7 @@ ul.tabs li.current {
 							$('#diary').html('<h1>작성된 다이어리가 없습니다</h1>');
 						}else{
 							var index = pageNum-1;
-							diary_num = data[index].diary_num; 
+							diary_num = data[index].diary_num;
 							var title = data[index].diary_title;
 							var content = data[index].diary_content;
 							var weather = data[index].diary_weather;
@@ -2316,7 +2445,7 @@ ul.tabs li.current {
 							var r_runtime = data[index].r_runtime;
 							var r_lat = data[index].r_lat;
 							var r_lon = data[index].r_lon;
-							$('#deleteD').html('<button style="float : right;" data-toggle = "modal" data-target="#confirmModal" id="deleteDiaryBtn">다이어리지우기</button>');
+							$('#deleteD').html('<button class="btn btn-outline-secondary" data-toggle = "modal" data-target="#confirmModal" id="deleteDiaryBtn">다이어리지우기</button>');
 							$('deleteDiaryBtn').bind('click',deleteDiary(diary_num));
 							
 							$('#icons').html('<td><img id="diary_weather"></td><td colspan="2"></td><td><img src="/icons/icon1.png" id="icon1" data-toggle="modal" data-target="#myModal"></td><td><img src="/icons/icon2.png" id="icon2" data-toggle="modal" data-target="#myModal"></td><td><img src="/icons/icon3.png" id="icon3" data-toggle="modal" data-target="#myModal"></td>');
@@ -2334,7 +2463,7 @@ ul.tabs li.current {
 							}
 							var anotherDiary = '';
 							if(startPage>4){
-								anotherDiary += '<td><button id="bePage"><</button></td>';
+								anotherDiary += '<td><button class="btn btn-outline-dark" id="bePage"><</button></td>';
 							}
 							for(var i=startPage;i<=startPage+3;i++){
 								if(i<=data.length){
@@ -2393,8 +2522,8 @@ ul.tabs li.current {
 								          if (input.files && input.files[0]) {
 								            var reader = new FileReader();
 								            reader.onload = function(e) {
-												$('#profile_pic').after('<img id="uploadPreview" style="z-index: 0; width : 550px;" src="'+e.target.result+'" data-toggle="modal" data-target="#myModal3">');
-												$('#profile_pic').after('<p id="tagExp">이미지를 클릭하여 태그를 입력해주세요</p>');
+												$('#diary_pic').after('<img id="uploadPreview" style="z-index: 0; width : 550px;" src="'+e.target.result+'" data-toggle="modal" data-target="#myModal3">');
+												$('#diary_pic').after('<p id="tagExp">이미지를 클릭하여 태그를 입력해주세요</p>');
 												$('#uploadPreview').on('click',function(){
 													$('#tagSaveBtn').text('Save');
 													var clix = event.clientX;
@@ -2415,10 +2544,10 @@ ul.tabs li.current {
 								          }
 								        }
 										
-								        $("#profile_pic").off().change(function() {
+								        $("#diary_pic").off().change(function() {
 								          readURL(this);
 								        });
-								        $('#diaryImageSave').off().on('click',function(){
+								        $('#diaryImageSave1').off().on('click',function(){
 											 $.ajax({
 									            type : 'post',
 									            url : 'getDiaryNum',
@@ -2428,8 +2557,6 @@ ul.tabs li.current {
 									                alert("ㅇㅋ.");
 									            }
 										      });
-										})
-								        $('#diaryImageSave').off().on('click',function(){
 								        	$('#diaryImageNum').val(diary_num);
 											var formData = new FormData($('#diaryImageForm')[0]);
 											 $.ajax({
@@ -2440,13 +2567,15 @@ ul.tabs li.current {
 									            contentType : false,
 									            success : function(data) {
 									                alert(data);
+									                myModal6Hidden();
 									            },
 									            error : function(error) {
 									                alert("파일 업로드에 실패하였습니다.");
+									                myModal6Hidden(diary_num);
 									            }
 										      });
 										})
-								        myModal6Hidden(diary_num);
+								        
 										
 										$('#greaterthan').on('click',function(){
 											if(imagelist.length<=start+4)
@@ -2483,7 +2612,14 @@ ul.tabs li.current {
 	
 </script>
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <!-- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+  
+  <!-- bootstrap 4 버전 스크립트로 추가 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" 
+  integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" 
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script> 
+
 </body>
-<table></table>
+
 </html>

@@ -17,12 +17,24 @@
 
 <title></title>
 <style type="text/css">
-body {
-	position: relative;
-}
+
+    @import url(https://fonts.googleapis.com/earlyaccess/nanumpenscript.css);
+
+    #message{
+      font-family: 'Nanum Pen Script', serif;
+      padding: 200px;
+      border: #ddd;
+    }
+    
+    .row .map{
+      left : 800px;
+      position: fixed;
+    }
+
 </style>
 </head>
-<body data-spy="scroll" data-target="#map" data-offset="50">
+<body>
+
 
   <div class="container-fluid mt-5 pt-5">
     <img src="resources/front_image/settings.png">
@@ -31,8 +43,11 @@ body {
       <div class="row col-md-6 mr-3" id="cardList">
         <div class="card-deck" id="card-deck"></div>
       </div>
-      <div class="row col-md-6">
+      <div class="row col-md-6 map">
+
         <div id="map" style="width: 100%; height: 400px;"></div>
+   
+  
       </div>
     </div>
   </div>
@@ -57,7 +72,11 @@ body {
 				//검색어를 입력하지 않았을 경우
 				if (keyword == '' || keyword == null || keyword == ' ') {
 					keyword = "0";
-					$('#cardList').text('검색어를 입력해주세요');
+					/* $('#cardList').text('검색어를 입력해주세요'); */
+					$('#message').show();
+					$('#message').html('<h1>검색어를 입력해주세요.</h1><h5>(강남구 맛집, 홍대 맛집 등..)</h5>');
+					$('.row .map').hide();
+					
 					$('#cardList').css('height', '850px');
 				}
 				//검색어를 입력한 경우
@@ -68,9 +87,14 @@ body {
 						result = data['searchList'].length;
 
 						if (result == 0) {
-							$('#cardList').text('검색결과없음');
+							$('#message').show();
+							$('#message').html('<h1>검색결과가 없습니다</h1>');
+							$('.row .map').hide();
+							
+							$('#cardList').css('height', '850px');
 						} else {
 
+						$('#message').remove();
 							//-------------------------------용화수정끝--------------------------
 							var txt = '';
 

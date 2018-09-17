@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.FoodChoiceDao">
+   <insert id="insert">
+      insert into FoodChoice values(#{m_num},#{choice_food},#{choice_score})
+   </insert>
+   <update id="update">
+      update FoodChoice set choice_score=#{choice_score} where m_num=#{m_num} and choice_food=#{choice_food};
+   </update>
+   <select id="select" resultType="foodChoice" parameterType="int">
+      select * from FoodChoice where m_num=#{m_num}
+   </select>
+   <select id="selectOne" resultType="foodChoice">
+      select * from FoodChoice where m_num=#{m_num} and choice_food=#{choice_food};
+   </select>
+</mapper>

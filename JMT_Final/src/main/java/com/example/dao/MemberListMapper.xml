@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.dao.MemberListDao">
+<!-- /*=============수정(v2)==========*/ -->
+	<insert id="insert">
+		insert into memberlist values(#{m_num},#{email_num},#{m_nick},#{m_pwd},"resources/front_image/user.png",#{m_intro},#{m_level},#{m_naver},#{m_kakao},#{m_facebook})
+	</insert>
+	<select id="naverCheck" resultType="Integer">
+		select email_num from memberlist where m_naver=#{m_naver}
+	</select>
+	<select id="kakaoCheck" resultType="Integer">
+		select email_num from memberlist where m_kakao=#{m_kakao}
+	</select>
+
+
+
+
 <!-- /*=============소연=============*/ -->
     <insert id="insertMemberList" parameterType="com.example.model.MemberList">
-    	insert into memberList (m_num,email_num,m_nick,m_pwd) 
-    	values(0,#{email_num},#{m_nick},sha(#{m_pwd}));
+    	insert into memberList (m_num,email_num,m_nick,m_pwd,m_photo) 
+    	values(0,#{email_num},#{m_nick},sha(#{m_pwd}),"resources/front_image/user.png");
   	</insert>
     <!-- /*=============성록=============*/ -->
     <update id="updateMemberList">

@@ -14,4 +14,8 @@
   	<select id="countMidCategory" resultType="int">
   		select count(*) from midcategory where big_num = #{big_num} and mid_name = #{mid_name}
   	</select>
+  	
+  	 <select id="selectMidCategory" resultType="com.example.model.MidCategory">
+        select * from midcategory where big_num = #{big_num}
+     </select>
   </mapper>

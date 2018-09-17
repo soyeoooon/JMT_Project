@@ -17,5 +17,10 @@ public class BigCategoryService {
 	public List<BigCategory> selectAllBigCategory(){
 		return bigCategoryDao.selectAllBigCategory();
 	}
+	
+	// 빅카테고리서비스 추가
+	   public String getBigcategoryName(int big_num){
+	      return bigCategoryDao.getBigcategoryName(big_num);
+	   }
 
 }

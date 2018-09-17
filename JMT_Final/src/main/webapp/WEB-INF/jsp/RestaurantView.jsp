@@ -11,8 +11,8 @@
 	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	crossorigin="anonymous">
 
-<script type="text/javascript"
-	src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=6T8ZIXE0kc7v8_jMHLiQ"></script>
+<!-- <script type="text/javascript"
+	src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=6T8ZIXE0kc7v8_jMHLiQ"></script> -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 	crossorigin="anonymous"></script>
@@ -24,7 +24,8 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
 	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	crossorigin="anonymous"></script>
-
+<!-- 네이버지도 API -->
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=rDqRFTNAaK_2mefWZroL&submodules=geocoder"></script>
 <title>Insert title here</title>
 <style type="text/css">
 
@@ -48,8 +49,9 @@
 	cursor: pointer;
 }
 
+/* 수정(v2) */
 #slide_div {
-	height: 280px;
+	height: 320px;
 	overflow: hidden;
 }
 
@@ -472,7 +474,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td width="100%"><label id="u_level">단짠 러버</label></td>
+								<td width="100%"><label id="u_level"></label></td>
 							</tr>
 							<tr>
 								<td colspan="2"><img src="img/eva/하트on.png" id="u_like_img"
@@ -524,22 +526,36 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- 수정(v2) -->
+	<!-- 메세지 -->
+	<div class="modal fade" id="MsgModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">안내</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<!-- Modal body -->
+				<div class="modal-body">
+					<h3>로그인 후 사용가능합니다.</h3>
+				</div>
+
+				<!-- Modal footer -->
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+	
 
 	<script type="text/javascript">
 		$(document).ready(function() {
 			
 			/*소연수정*/
-			if(${info.report.replist_status==1}){
-				$('#r_info_phone').text('신고처리중');
-				$('#r_info_address').text('신고처리중');
-		        $('#r_info_rundate').text('신고');
-		        $('#r_info_runtime').text('처리중');
-		        $('#r_info_menu').text('신고처리중');
-		        $('#r_info_intro').text('신고처리중');
-		        $('#r_info_enjoy').text('신고처리중');
-			}
+			
 			/*소연수정 끝*/
-		
 			
 			//Boot 툴팁
 		    $('[data-toggle="tooltip"]').tooltip();
@@ -549,7 +565,22 @@
 					$('#reportlb').removeClass('off');
 					$('#reportbtn').attr('data-toggle','');
 					$('#modifybtn').attr('data-toggle','');
+					
+				$('#r_info_phone').html('신고처리중');
+				$('#r_info_address').html('신고처리중');
+		        $('#r_info_rundate').html('신고');
+		        $('#r_info_runtime').html('처리중');
+		        $('#r_info_menu').html('신고처리중');
+		        $('#r_info_intro').html('신고처리중');
+		        $('#r_info_enjoy').html('신고처리중');
 				}
+			}
+			
+			//수정(v2)
+			if(${email.m_num==0}){
+				$('#reportbtn').attr('data-toggle','');
+				$('#modifybtn').attr('data-toggle','');
+				$('.u_img').attr('data-toggle','');
 			}
 			
 			//탭 이동
@@ -564,7 +595,7 @@
 				
 				if(tab_id=="tab-2"){
 					var HOME_PATH = window.HOME_PATH || '.';
-					var cityhall = new naver.maps.LatLng(${info.restaurant.r_lat}, ${info.restaurant.r_lon}),
+					/*var cityhall = new naver.maps.LatLng(${info.restaurant.r_lat}, ${info.restaurant.r_lon}),
 					map = new naver.maps.Map('map', {
 				        center: cityhall,
 				        zoom: 10
@@ -572,7 +603,29 @@
 				    marker = new naver.maps.Marker({
 				        map: map,
 				        position: cityhall
-				    });
+				    });*/
+				    var map = new naver.maps.Map('map');
+					naver.maps.Service.geocode({
+						address : "${info.restaurant.r_address}"
+					}, function(status, response) { // 해당 주소로 네이버 맵 API 서비스 실행
+						if (status !== naver.maps.Service.Status.OK) { // 뭔지모름
+							return alert(myaddress + '의 검색 결과가 없거나 기타 네트워크 에러');
+						}
+						var result = response.result;
+						// 검색 결과 갯수: result.total
+						// 첫번째 결과 결과 주소: result.items[0].address
+						// 첫번째 검색 결과 좌표: result.items[0].point.y, result.items[0].point.x
+						var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y); // 네이버 맵에 x,y좌표 따옴
+						map.setCenter(myaddr); // 검색된 좌표로 지도 이동
+
+						// 마커 표시
+						var marker = new naver.maps.Marker({
+							position : myaddr,
+							map : map
+						});
+						
+					
+					});
 				}
 			})
 			
@@ -581,8 +634,13 @@
 			//이미지경로
 			var path='';
 
+			//수정(v2)시작
 			//좋아요 버튼
 			$('#rv_like').click(function(){
+				if(${email.m_num==0}){
+					$('#MsgModal').modal();
+					return;
+				}
 				var img=document.getElementById('rv_like_img');
 				var like_class = $('#rv_like_img').attr('class');
 				
@@ -612,6 +670,10 @@
 			
 			//즐겨찾기 버튼
 			$('#rv_mark').click(function(){
+				if(${email.m_num==0}){
+					$('#MsgModal').modal();
+					return;
+				}
 				var img=document.getElementById('rv_mark_img');
 				var mark_class = $('#rv_mark_img').attr('class');
 				
@@ -646,6 +708,10 @@
 			
 			//평점 버튼
 			$('.starRev span').click(function() {
+				if(${email.m_num==0}){
+					$('#MsgModal').modal();
+					return;
+				}
 				var grade_val=0;
 				$(this).parent().children('span').removeClass('on');
 				$(this).addClass('on').prevAll('span').addClass('on');
@@ -666,6 +732,10 @@
 			
 			//리뷰쓰기 버튼
 			$('#rv_review').click(function(){
+				if(${email.m_num==0}){
+					$('#MsgModal').modal();
+					return;
+				}
 				//리뷰 페이지 연결
 				location.href='/review?r_num='+${info.restaurant.r_num};
 			})
@@ -678,6 +748,10 @@
 			
 			//편집모달 띄우기
 			$('#modifybtn').click(function(){
+				if(${email.m_num==0}){
+					$('#MsgModal').modal();
+					return;
+				}
 				$.ajax({
 					url:'/r_view_modify_info',
 					data:{'r_num':${info.restaurant.r_num}},
@@ -698,6 +772,10 @@
 			
 			//신고모달 띄우기
 			$('#reportbtn').click(function(){
+				if(${email.m_num==0}){
+					$('#MsgModal').modal();
+					return;
+				}
 				$.ajax({
 					url:'/r_view_report_info',
 					data:{'r_num':${info.restaurant.r_num}},
@@ -734,28 +812,40 @@
 				})
 			})
 			
-			//신고모달 신고버튼
+			 //신고모달 신고버튼
 			$('#report_btn').click(function(){
-				var report = $("form[name=report_info]").serialize() ;
-				
-				$.ajax({
-					url:'/r_view_report',
-					data:report,
-					type : "post",
-		            success:function(){
-		            	$('#reportlb').removeClass('off');
-						$('#reportbtn').attr('data-toggle','');
-						$('#modifybtn').attr('data-toggle','');
-						
-		            },
-		            error : function(){
-						alert('error');
-					}
-				})
-			})
+            var report = $("form[name=report_info]").serialize() ;
+            
+            $.ajax({
+               url:'/r_view_report',
+               data:report,
+               type : "post",
+                  success:function(){
+                     $('#reportlb').removeClass('off');
+                  $('#reportbtn').attr('data-toggle','');
+                  $('#modifybtn').attr('data-toggle','');
+                  
+                  $('#r_info_phone').text('신고처리중');
+                  $('#r_info_address').text('신고처리중');
+                    $('#r_info_rundate').text('신고');
+                    $('#r_info_runtime').text('처리중');
+                    $('#r_info_menu').text('신고처리중');
+                    $('#r_info_intro').text('신고처리중');
+                    $('#r_info_enjoy').text('신고처리중');
+                  
+                  },
+                  error : function(){
+                  alert('error');
+               }
+            })
+         })
 			
 			//유저모달 띄우기
 			$('#tab-3 .u_img').click(function(){
+				if(${email.m_num==0}){
+					$('#MsgModal').modal();
+					return;
+				}
 				$.ajax({
 					url:'/r_view_user_info',
 					data:{'m_num':$(this).attr('id'), 'email':${email.email_num}},
@@ -776,6 +866,7 @@
 					}
 				})
 			})
+			//수정(v2)끝
 			
 			//유저모달 친추버튼
 			$('#u_btn').click(function(){

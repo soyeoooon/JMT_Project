@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.dao.RestaurantDao">
+<!-- /*=============성록=============*/ -->
+<!-- // 레스토랑매퍼추가 -->
+     <select id="selectRestaurantByRNum" resultType="com.example.model.Restaurant">
+        select * from restaurant where r_num = #{r_num}
+     </select>
+
+<!-- /*=============용화(v2)=============*/ -->
+	<update id="countUpdate">
+		update restaurant set r_count=#{r_count} where r_num=#{r_num}
+	</update>
+
+
+
 <!-- /*=============용화(v1)=============*/ -->
     <insert id="insertRestaurant2" useGeneratedKeys="true" keyProperty="r_num">
-      insert into restaurant values(0,#{r_name},#{r_phone},#{r_address},#{r_lat},#{r_lon},#{r_category1},#{r_category2},null,null,null,null,null,null,null)
+      insert into restaurant values(0,#{r_name},#{r_phone},#{r_address},#{r_lat},#{r_lon},#{r_category1},#{r_category2},null,null,null,null,null,null,null,0)
   	</insert>
   	
   	
     <insert id="insertRestaurant">
-      insert into restaurant values(0,#{r_name},#{r_phone},#{r_address},#{r_lat},#{r_lon},#{r_category1},#{r_category2},null,null,null,null,null,null,null)
+      insert into restaurant values(0,#{r_name},#{r_phone},#{r_address},#{r_lat},#{r_lon},#{r_category1},#{r_category2},null,null,null,null,null,null,null,0)
   	</insert>
     <update id="updateRestaurant">
   	</update>

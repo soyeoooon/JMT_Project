@@ -16,19 +16,24 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/favicon.png" />
+  <style type="text/css">
+  #n1, #n2, #n3{
+    background-color: #d9534f;
+  }
+  </style>
 </head>
 <body>
-<nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-      <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
-        <a class="navbar-brand brand-logo" href="index.html">
-          <img src="${pageContext.request.contextPath}/resources/images/logo.svg" alt="logo" />
+<nav id="n2" class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div id="n3" class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
+        <a class="navbar-brand brand-logo" href="/main">
+          <img src="/resources/front_image/logo_jmt.png" alt="logo" />
         </a>
-        <a class="navbar-brand brand-logo-mini" href="index.html">
-          <img src="${pageContext.request.contextPath}/resources/images/logo-mini.svg" alt="logo" />
+        <a class="navbar-brand brand-logo-mini" href="/main">
+          <img src="/resources/front_image/logo.png" alt="logo" />
         </a>
       </div>
-      <div class="navbar-menu-wrapper d-flex align-items-center">
-        <ul class="navbar-nav navbar-nav-left header-links d-none d-md-flex">
+      <div id="n1" class="navbar-menu-wrapper d-flex align-items-center">
+        <!-- <ul class="navbar-nav navbar-nav-left header-links d-none d-md-flex">
           <li class="nav-item">
             <a href="#" class="nav-link">Schedule
               <span class="badge badge-primary ml-1">New</span>
@@ -42,8 +47,8 @@
             <a href="#" class="nav-link">
               <i class="mdi mdi-bookmark-plus-outline"></i>Score</a>
           </li>
-        </ul>
-        <ul class="navbar-nav navbar-nav-right">
+        </ul> -->
+       <%--  <ul class="navbar-nav navbar-nav-right">
           <li class="nav-item dropdown">
             <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
               <i class="mdi mdi-file-document-box"></i>
@@ -187,7 +192,7 @@
               </a>
             </div>
           </li>
-        </ul>
+        </ul> --%>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
           <span class="mdi mdi-menu"></span>
         </button>

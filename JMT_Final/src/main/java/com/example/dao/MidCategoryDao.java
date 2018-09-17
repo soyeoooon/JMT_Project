@@ -12,4 +12,6 @@ public interface MidCategoryDao {
 	public void deleteMidCategory();
 	public List<MidCategory> selectAllMidCategory();
 	public int countMidCategory(HashMap<String,Object> map);
+	
+	public List<MidCategory> selectMidCategory(int big_num);
 }

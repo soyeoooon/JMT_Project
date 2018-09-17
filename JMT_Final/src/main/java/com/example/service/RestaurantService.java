@@ -72,6 +72,19 @@ public class RestaurantService {
 	@Autowired
 	BigCategoryDao bigCategoryDao;
 	
+	//레스토랑서비스 추가
+	   public Restaurant getRestaurantByRNum(int r_num){
+	      return restaurantDao.selectRestaurantByRNum(r_num);
+	   }
+	
+	//수정(v2)
+	public void RestaurantCount(int r_num) {
+		HashMap<String, Object> map=new HashMap<String,Object>();
+		map.put("r_num", r_num);
+		map.put("r_count", restaurantDao.selectOne(r_num).getR_count()+1);
+		restaurantDao.countUpdate(map);
+	}
+	
 	//수정(v1)
 		private static final int RESULT_EXCEED_SIZE = -2;
 	    private static final int RESULT_UNACCEPTED_EXTENSION = -1;
@@ -204,124 +217,125 @@ public class RestaurantService {
 		return restaurantDao.selectRestaurantByMark(m_num);
 	}
 	
-	public List<HashMap<String, Object>> searchRestaurant(String search, int m_num) {
-		List<HashMap<String, Object>> restaurantList = null;
-		if (search == null)
-			search = "";
-		try {
-			String clientID = "4QCwLmDEwWC3Zzb1dCoM";
-			String clientSecret = "Di_Nx6BzME";
-			URL url = new URL("https://openapi.naver.com/v1/search/local.xml?query="
-					+ URLEncoder.encode(search + " 음식점", "" + "UTF-8") + "&display=50&start=1&sort=random");
-			URLConnection urlConn = url.openConnection();
+	//수정(v2)
+		public List<HashMap<String, Object>> searchRestaurant(String search, int m_num) {
+			List<HashMap<String, Object>> restaurantList = null;
+			if (search == null)
+				search = "";
+			try {
+				String clientID = "4QCwLmDEwWC3Zzb1dCoM";
+				String clientSecret = "Di_Nx6BzME";
+				URL url = new URL("https://openapi.naver.com/v1/search/local.xml?query="
+						+ URLEncoder.encode(search + " 음식점", "" + "UTF-8") + "&display=50&start=1&sort=random");
+				URLConnection urlConn = url.openConnection();
 
-			urlConn.setRequestProperty("X-Naver-Client-Id", clientID);
-			urlConn.setRequestProperty("X-Naver-Client-Secret", clientSecret);
+				urlConn.setRequestProperty("X-Naver-Client-Id", clientID);
+				urlConn.setRequestProperty("X-Naver-Client-Secret", clientSecret);
 
-			BufferedReader br = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
-			String msg = null;
-			String data = "";
-			while ((msg = br.readLine()) != null) {
-				data = data + msg;
-			}
-			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-			XmlPullParser parser = factory.newPullParser();
-
-			parser.setInput(new StringReader(data));
-			int eventType = parser.getEventType();
-			HashMap<String, Object> restaurant_map = null;
-
-			while (eventType != XmlPullParser.END_DOCUMENT) {
-				switch (eventType) {
-
-				case XmlPullParser.END_DOCUMENT:
-					break;
-				case XmlPullParser.START_DOCUMENT:
-					restaurantList = new ArrayList<HashMap<String, Object>>();
-					break;
-
-				case XmlPullParser.END_TAG:
-					String tag = parser.getName();
-
-					if (tag.equals("item")) {
-						restaurantList.add(restaurant_map);
-						restaurant_map = null;
-					}
-				case XmlPullParser.START_TAG:
-					String tag1 = parser.getName();
-					switch (tag1) {
-					case "item":
-						restaurant_map = new HashMap<String, Object>();
-						break;
-					case "title":
-						if (restaurant_map != null) {
-							restaurant_map.put("r_name", parser.nextText().replace("<b>", "").replace("</b>", ""));
-						}
-						break;
-					case "category":
-						if (restaurant_map != null) {
-							String cate = parser.nextText();
-							String[] cate2 = null;
-							if (cate.indexOf(">") > 0) {
-								cate2 = cate.split(">");
-								restaurant_map.put("r_category1", cate2[0]);
-								restaurant_map.put("r_category2", cate2[1]);
-							} else {
-								restaurant_map.put("r_category1", cate);
-							}
-						}
-						break;
-					case "description":
-						if (restaurant_map != null)
-							restaurant_map.put("r_intro", parser.nextText());
-						break;
-					case "telephone":
-						if (restaurant_map != null)
-							restaurant_map.put("r_phone",parser.nextText());
-						break;
-					case "address":
-						if (restaurant_map != null)
-							restaurant_map.put("r_address",parser.nextText());
-						break;
-					case "mapx":
-						if (restaurant_map != null)
-							restaurant_map.put("r_lat",Integer.parseInt(parser.nextText()));
-						break;
-					case "mapy":
-						if (restaurant_map != null)
-							restaurant_map.put("r_lon",Integer.parseInt(parser.nextText()));
-						try {
-							int r_num=restaurantDao.countRestaurantNum(restaurant_map);
-							restaurant_map.put("r_num",r_num);
-							restaurant_map.put("m_num",m_num);
-							
-							try {
-								restaurant_map.put("e_grade", evaluationDao.selectOneEvaluation(restaurant_map));
-							} catch (Exception e) {
-								restaurant_map.put("e_grade", 0);
-							}
-						} catch (Exception e) {
-							restaurantDao.insertRestaurant(restaurant_map);
-						}
-						break;
-					}
+				BufferedReader br = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
+				String msg = null;
+				String data = "";
+				while ((msg = br.readLine()) != null) {
+					data = data + msg;
 				}
-				eventType = parser.next();
-			}
+				XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+				XmlPullParser parser = factory.newPullParser();
 
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				parser.setInput(new StringReader(data));
+				int eventType = parser.getEventType();
+				HashMap<String, Object> restaurant_map = null;
+
+				while (eventType != XmlPullParser.END_DOCUMENT) {
+					switch (eventType) {
+
+					case XmlPullParser.END_DOCUMENT:
+						break;
+					case XmlPullParser.START_DOCUMENT:
+						restaurantList = new ArrayList<HashMap<String, Object>>();
+						break;
+
+					case XmlPullParser.END_TAG:
+						String tag = parser.getName();
+
+						if (tag.equals("item")) {
+							restaurantList.add(restaurant_map);
+							restaurant_map = null;
+						}
+					case XmlPullParser.START_TAG:
+						String tag1 = parser.getName();
+						switch (tag1) {
+						case "item":
+							restaurant_map = new HashMap<String, Object>();
+							break;
+						case "title":
+							if (restaurant_map != null) {
+								restaurant_map.put("r_name", parser.nextText().replace("<b>", "").replace("</b>", ""));
+							}
+							break;
+						case "category":
+							if (restaurant_map != null) {
+								String cate = parser.nextText();
+								String[] cate2 = null;
+								if (cate.indexOf(">") > 0) {
+									cate2 = cate.split(">");
+									restaurant_map.put("r_category1", cate2[0]);
+									restaurant_map.put("r_category2", cate2[1]);
+								} else {
+									restaurant_map.put("r_category1", cate);
+								}
+							}
+							break;
+						case "description":
+							if (restaurant_map != null)
+								restaurant_map.put("r_intro", parser.nextText());
+							break;
+						case "telephone":
+							if (restaurant_map != null)
+								restaurant_map.put("r_phone",parser.nextText());
+							break;
+						case "address":
+							if (restaurant_map != null)
+								restaurant_map.put("r_address",parser.nextText());
+							break;
+						case "mapx":
+							if (restaurant_map != null)
+								restaurant_map.put("r_lat",Integer.parseInt(parser.nextText()));
+							break;
+						case "mapy":
+							if (restaurant_map != null)
+								restaurant_map.put("r_lon",Integer.parseInt(parser.nextText()));
+							try {
+								int r_num=restaurantDao.countRestaurantNum(restaurant_map);
+								restaurant_map.put("r_num",r_num);
+								restaurant_map.put("m_num",m_num);
+								
+								try {
+									restaurant_map.put("e_grade", evaluationDao.selectOneEvaluation(restaurant_map));
+								} catch (Exception e) {
+									restaurant_map.put("e_grade", 0);
+								}
+							} catch (Exception e) {
+								restaurantDao.insertRestaurant2(restaurant_map);
+							}
+							break;
+						}
+					}
+					eventType = parser.next();
+				}
+
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (XmlPullParserException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println(restaurantList);
+			return restaurantList;
 		}
-		System.out.println(restaurantList);
-		return restaurantList;
-	}
 
 	/*--------------------소연--------------------*/
 	public Restaurant selectOneRestaurant(String r_name, String r_address) {
@@ -490,56 +504,57 @@ public class RestaurantService {
 	}
 	
 
-	/*--------------------용화--------------------*/
-	// 맛집 상세보기 페이지(기본)
-	public HashMap<String, Object> RestaurantSelect(HashMap<String, String> data) {
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		int r_num = Integer.parseInt(data.get("r_num"));
-		int m_num = Integer.parseInt(data.get("m_num"));
+	//수정(v2)
+		/*--------------------용화--------------------*/
+		// 맛집 상세보기 페이지(기본)
+		public HashMap<String, Object> RestaurantSelect(HashMap<String, String> data) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			int r_num = Integer.parseInt(data.get("r_num"));
+			int m_num = Integer.parseInt(data.get("m_num"));
 
-		try {
-			Restaurant r = restaurantDao.selectOne(r_num);
+			try {
+				Restaurant r = restaurantDao.selectOne(r_num);
 
-			List<HashMap<String, Object>> list = reviewDao.ReviewSelect(r_num);
-			for (int i = 0; i < list.size(); i++) {
-				List<String> imgs = FolderList(list.get(i).get("rev_path").toString());
-				list.get(i).put("rev_path", imgs);
-			}
+				List<HashMap<String, Object>> list = reviewDao.ReviewSelect(r_num);
+				for (int i = 0; i < list.size(); i++) {
+					String path=r_num + "/" + list.get(i).get("rev_num").toString() + "/";
+					List<String> imgs = FolderList(path);
+					list.get(i).put("rev_path", imgs);
+				}
 
-			// 접속한 유저가 내린 음식점 평가
-			map.put("user", evaluationDao.memberSelect(data));
-			// 만약 없으면 null로 들어가 에러가 뜨므로 기본베이스만 만들고 값은 default
-			if (map.get("user") == null) {
-				evaluationDao.insert(new Evaluation(r_num, m_num, 0.0, false, false));
+				// 접속한 유저가 내린 음식점 평가
 				map.put("user", evaluationDao.memberSelect(data));
+				// 만약 없으면 null로 들어가 에러가 뜨므로 기본베이스만 만들고 값은 default
+				if (map.get("user") == null) {
+					evaluationDao.insert(new Evaluation(r_num, m_num, 0.0, false, false));
+					map.put("user", evaluationDao.memberSelect(data));
+				}
+
+				// 슬라이드에 사용되는 랜덤이미지
+				map.put("imgs", ImgList(r_num));
+
+				// 모두보기에 사용되는 이미지
+				map.put("imgs_more", ImgList_More(r_num));
+
+				// 맛집 상세정보 및 위치
+				map.put("restaurant", r);
+
+				// 맛집 총 평가 부분
+				map.put("evaluation", evaluationDao.restaurantSelect(r_num));
+				// 맛집 리뷰 목록
+				map.put("review", list);
+
+				// 신고상태 확인
+				map.put("report", reportDao.selectRestaurant(r_num));
+
+				// 신고모달에 사용되는 신고내용목록
+				map.put("reportlist", reportListDao.selectAll());
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 
-			// 슬라이드에 사용되는 랜덤이미지
-			map.put("imgs", ImgList(r_num));
-
-			// 모두보기에 사용되는 이미지
-			map.put("imgs_more", ImgList_More(r_num));
-
-			// 맛집 상세정보 및 위치
-			map.put("restaurant", r);
-
-			// 맛집 총 평가 부분
-			map.put("evaluation", evaluationDao.restaurantSelect(r_num));
-			// 맛집 리뷰 목록
-			map.put("review", list);
-
-			// 신고상태 확인
-			map.put("report", reportDao.selectRestaurant(r_num));
-
-			// 신고모달에 사용되는 신고내용목록
-			map.put("reportlist", reportListDao.selectAll());
-		} catch (Exception e) {
-			e.printStackTrace();
+			return map;
 		}
-
-		return map;
-	}
-
 	// 폴더안에 이미지 파일들 조회
 		public List<String> FolderList(String path) {
 			String root = System.getProperty("user.dir")+"/target/classes/static/img/" + path;

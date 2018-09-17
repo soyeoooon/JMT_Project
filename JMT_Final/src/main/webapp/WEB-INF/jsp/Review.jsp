@@ -1,20 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="header.jsp"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 
 <link type="text/css" rel="stylesheet" href="css/jquery-te-1.4.0.css">
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 
-<script type="text/javascript"
-	src="http://code.jquery.com/jquery.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="js/jquery-te-1.4.0.min.js"
-	charset="utf-8"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="js/jquery-te-1.4.0.min.js" charset="utf-8"></script>
 
 <style type="text/css">
 #rest_div {
@@ -38,9 +36,10 @@
 	float: right;
 }
 
-#preview{
+#preview {
 	font-size: 0px;
 }
+
 #preview img {
 	width: 130px;
 	height: 100px;
@@ -49,7 +48,7 @@
 #preview p {
 	height: 30px;
 	width: 140px;
-	font-size : 16px;
+	font-size: 16px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
@@ -64,76 +63,76 @@
 	display: inline-block;
 	vertical-align: top;
 }
-
 </style>
 
 </head>
 <body>
-	<form id="fileForm" action="fileUpload" method="post"
-		enctype="multipart/form-data">
-		<input type="hidden" name="r_num" value="${info.restaurant.r_num }">
-		<input type="hidden" name="m_num" value="${email.m_num}"> <input
-			type="hidden" name="grade" id="grade">
 
-		<table width="90%" id="r_table" align="center">
-			<tr>
-				<td rowspan="2" width="30%" valign="top">
-					<div id="rest_div">
-						<div align="center">
-							<img src="${info.imgs[0]}" class="rounded" width="400px">
-						</div>
-						<div id="rest_h_div" align="center">
-							<span id="rest_h1">${info.restaurant.r_name }</span> <span
-								id="rest_h2">${info.evaluation.grade }</span>
-						</div>
+  <div>
+ <br><br><br>
 
-						<!-- º°Á¡ÀÔ·Â -->
-						<table width="100%">
-							<tr>
-								<td></td>
-								<td width="210px"><jsp:include page="grade.jsp"></jsp:include>
-								</td>
-								<td></td>
-							</tr>
-						</table>
-					</div>
-				</td>
-				<td width="60%" valign="top">
-					<div id="rv_div">
-						<textarea name="textarea" class="jqte-test">${review.info.rev_content}</textarea>
-						<div class="body">
-							<!-- Ã·ºÎ ¹öÆ° -->
-							<div id="attach">
-								<label for="uploadInputBox" class="btn btn-outline-dark">»çÁøÃ·ºÎ</label>
-								<input id="uploadInputBox" style="display: none" type="file"
-									name="filedata" multiple />
-							</div>
+    <div>
+      <form id="fileForm" action="fileUpload" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="r_num" value="${info.restaurant.r_num }"> <input type="hidden" name="m_num" value="${email.m_num}"> <input type="hidden" name="grade" id="grade">
 
-							<!-- ¹Ì¸®º¸±â ¿µ¿ª -->
-							<div id="preview" class="content">
-								<c:forEach var="img" items="${review.img}">
-									<div class="preview-box btn btn-outline-secondary" value="${img}">
-										<img class="thumbnail" src="${img}">
-										<p>${img}</p>
-										<button type="button" class="close" aria-label="Close"
-											value="${img}" onclick="deleteImg(this)">
-											<span aria-hidden="true">&times;</span>
-										</button>
-									</div>
-								</c:forEach>
-							</div>
-						</div>
-						<button type="button" class="btn btn-success" id="reviewbtn">ÀÛ¼º</button>
-					</div>
-				</td>
-			</tr>
-		</table>
-	</form>
+        <table width="90%" id="r_table" align="center">
+          <tr>
+            <td rowspan="2" width="30%" valign="top">
+              <div id="rest_div">
+                <div align="center">
+                  <img src="${info.imgs[0]}" class="rounded" width="400px">
+                </div>
+                <div id="rest_h_div" align="center">
+                  <span id="rest_h1">${info.restaurant.r_name }</span> <span id="rest_h2">${info.evaluation.grade }</span>
+                </div>
 
-	<script>
+                <!-- ë³„ì ì…ë ¥ -->
+                <table width="100%">
+                  <tr>
+                    <td></td>
+                    <td width="210px"><jsp:include page="grade.jsp"></jsp:include>
+                    </td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+            <td width="60%" valign="top">
+              <div id="rv_div">
+                <textarea name="textarea" class="jqte-test">${review.info.rev_content}</textarea>
+                <div class="body">
+                  <!-- ì²¨ë¶€ ë²„íŠ¼ -->
+                  <div id="attach">
+                    <label for="uploadInputBox" class="btn btn-outline-dark">ì‚¬ì§„ì²¨ë¶€</label> <input id="uploadInputBox" style="display: none" type="file" name="filedata" multiple />
+                  </div>
+
+                  <!-- ë¯¸ë¦¬ë³´ê¸° ì˜ì—­ -->
+                  <div id="preview" class="content">
+                    <c:forEach var="img" items="${review.img}">
+                      <div class="preview-box btn btn-outline-secondary" value="${img}">
+                        <img class="thumbnail" src="${img}">
+                        <p>${img}</p>
+                        <button type="button" class="close" aria-label="Close" value="${img}" onclick="deleteImg(this)">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                    </c:forEach>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-success" id="reviewbtn">ì‘ì„±</button>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+
+  </div>
+
+  <script>
 		$(".jqte-test").jqte({source: false});
 		
-		//ÆòÁ¡ ±âº»Á¤º¸
+		//í‰ì  ê¸°ë³¸ì •ë³´
 		$(function(){
 			$('#grade').val(${info.user.e_grade});
 			var grade=0;
@@ -146,18 +145,18 @@
 		});
 	</script>
 
-	<script>
-        //ÀÓÀÇÀÇ file object¿µ¿ª
+  <script>
+        //ì„ì˜ì˜ file objectì˜ì—­
         var files = {};
         var delfiles = {};
         var dcnt=0;
         var previewIndex = 0;
  
-        // image preview ±â´É ±¸Çö
+        // image preview ê¸°ëŠ¥ êµ¬í˜„
         // input = file object[]
         function addPreview(input) {
             if (input[0].files) {
-                //ÆÄÀÏ ¼±ÅÃÀÌ ¿©·¯°³¿´À» ½ÃÀÇ ´ëÀÀ
+                //íŒŒì¼ ì„ íƒì´ ì—¬ëŸ¬ê°œì˜€ì„ ì‹œì˜ ëŒ€ì‘
                 for (var fileIndex = 0; fileIndex < input[0].files.length; fileIndex++) {
                 	console.log(input[0].files.length);
                     var file = input[0].files[fileIndex];
@@ -166,14 +165,14 @@
                 }
                 $('#uploadInputBox').val('');
             } else
-                alert('invalid file input'); // Ã·ºÎÅ¬¸¯ ÈÄ Ãë¼Ò½ÃÀÇ ´ëÀÀÃ¥Àº ¼¼¿ìÁö ¾Ê¾Ò´Ù.
+                alert('invalid file input'); // ì²¨ë¶€í´ë¦­ í›„ ì·¨ì†Œì‹œì˜ ëŒ€ì‘ì±…ì€ ì„¸ìš°ì§€ ì•Šì•˜ë‹¤.
         }
         
         function setPreviewForm(file, img){
             var reader = new FileReader();
             
-            //div id="preview" ³»¿¡ µ¿ÀûÄÚµåÃß°¡.
-            //ÀÌ ºÎºĞÀ» ¼öÁ¤ÇØ¼­ ÀÌ¹ÌÁö ¸µÅ© ¿Ü ÆÄÀÏ¸í, »çÀÌÁî µîÀÇ ºÎ°¡¼³¸íÀ» ÇÒ ¼ö ÀÖÀ» °ÍÀÌ´Ù.
+            //div id="preview" ë‚´ì— ë™ì ì½”ë“œì¶”ê°€.
+            //ì´ ë¶€ë¶„ì„ ìˆ˜ì •í•´ì„œ ì´ë¯¸ì§€ ë§í¬ ì™¸ íŒŒì¼ëª…, ì‚¬ì´ì¦ˆ ë“±ì˜ ë¶€ê°€ì„¤ëª…ì„ í•  ìˆ˜ ìˆì„ ê²ƒì´ë‹¤.
             reader.onload = function(img) {
                 var imgNum = previewIndex++;
                 $("#preview").append(
@@ -190,7 +189,7 @@
             reader.readAsDataURL(file);
         }
  
-        //preview ¿µ¿ª¿¡¼­ »èÁ¦ ¹öÆ° Å¬¸¯½Ã ÇØ´ç ¹Ì¸®º¸±âÀÌ¹ÌÁö ¿µ¿ª »èÁ¦
+        //preview ì˜ì—­ì—ì„œ ì‚­ì œ ë²„íŠ¼ í´ë¦­ì‹œ í•´ë‹¹ ë¯¸ë¦¬ë³´ê¸°ì´ë¯¸ì§€ ì˜ì—­ ì‚­ì œ
         function deletePreview(obj) {
             var imgNum = obj.attributes['value'].value;
             delete files[imgNum];
@@ -213,7 +212,7 @@
                     fileNameExtensionIndex, fileName.length);
             if (!((fileNameExtension === 'jpg')
                     || (fileNameExtension === 'gif') || (fileNameExtension === 'png'))) {
-                alert('jpg, gif, png È®ÀåÀÚ¸¸ ¾÷·Îµå °¡´ÉÇÕ´Ï´Ù.');
+                alert('jpg, gif, png í™•ì¥ìë§Œ ì—…ë¡œë“œ ê°€ëŠ¥í•©ë‹ˆë‹¤.');
                 return true;
             } else {
                 return false;
@@ -224,7 +223,7 @@
             $('#reviewbtn').on('click',function() { 
             	var formData = new FormData($("#fileForm")[0]);
                 for (var index = 0; index < previewIndex; index++) {
-                    //formData °ø°£¿¡ files¶ó´Â ÀÌ¸§À¸·Î ÆÄÀÏÀ» Ãß°¡ÇÑ´Ù.
+                    //formData ê³µê°„ì— filesë¼ëŠ” ì´ë¦„ìœ¼ë¡œ íŒŒì¼ì„ ì¶”ê°€í•œë‹¤.
                     if(files[index]!=null){
                     	formData.append('files',files[index]);
                     }
@@ -240,7 +239,7 @@
                 	formData.append('rev_num',${review.info.rev_num});
                 }
                 
-                //ajax Åë½ÅÀ¸·Î multipart formÀ» Àü¼ÛÇÑ´Ù.
+                //ajax í†µì‹ ìœ¼ë¡œ multipart formì„ ì „ì†¡í•œë‹¤.
                 $.ajax({
                     type : 'POST',
                     enctype : 'multipart/form-data',
@@ -252,26 +251,28 @@
                     dataType : 'JSON',
                     data : formData,
                     success : function(result) {
-                        //ÀÌ ºÎºĞÀ» ¼öÁ¤ÇØ¼­ ´Ù¾çÇÑ Çàµ¿À» ÇÒ ¼ö ÀÖÀ¸¸ç,
-                        //¿©±â¼­´Â µ¥ÀÌÅÍ¸¦ Àü¼Û¹Ş¾Ò´Ù¸é ¼ø¼öÇÏ°Ô OK ¸¸À» º¸³»±â·Î ÇÏ¿´´Ù.
-                        //-1 = Àß¸øµÈ È®ÀåÀÚ ¾÷·Îµå, -2 = ¿ë·®ÃÊ°ú, ±×¿Ü = ¼º°ø(1)
+                        //ì´ ë¶€ë¶„ì„ ìˆ˜ì •í•´ì„œ ë‹¤ì–‘í•œ í–‰ë™ì„ í•  ìˆ˜ ìˆìœ¼ë©°,
+                        //ì—¬ê¸°ì„œëŠ” ë°ì´í„°ë¥¼ ì „ì†¡ë°›ì•˜ë‹¤ë©´ ìˆœìˆ˜í•˜ê²Œ OK ë§Œì„ ë³´ë‚´ê¸°ë¡œ í•˜ì˜€ë‹¤.
+                        //-1 = ì˜ëª»ëœ í™•ì¥ì ì—…ë¡œë“œ, -2 = ìš©ëŸ‰ì´ˆê³¼, ê·¸ì™¸ = ì„±ê³µ(1)
                         if (result === -1) {
-                            alert('jpg, gif, png È®ÀåÀÚ¸¸ ¾÷·Îµå °¡´ÉÇÕ´Ï´Ù.');
-                            // ÀÌÈÄ µ¿ÀÛ ...
+                            alert('jpg, gif, png í™•ì¥ìë§Œ ì—…ë¡œë“œ ê°€ëŠ¥í•©ë‹ˆë‹¤.');
+                            // ì´í›„ ë™ì‘ ...
                         } else if (result === -2) {
-                            alert('ÆÄÀÏÀÌ 10MB¸¦ ÃÊ°úÇÏ¿´½À´Ï´Ù.');
-                            // ÀÌÈÄ µ¿ÀÛ ...
+                            alert('íŒŒì¼ì´ 10MBë¥¼ ì´ˆê³¼í•˜ì˜€ìŠµë‹ˆë‹¤.');
+                            // ì´í›„ ë™ì‘ ...
                         } else {
                         	location.href="/RestaurantView?r_num="+${info.restaurant.r_num}
                         }
                     }
                 });
             });
-            // <input type=file> ÅÂ±× ±â´É ±¸Çö
+            // <input type=file> íƒœê·¸ ê¸°ëŠ¥ êµ¬í˜„
             $('#attach input[type=file]').change(function() {
-                addPreview($(this)); //preview form Ãß°¡ÇÏ±â
+                addPreview($(this)); //preview form ì¶”ê°€í•˜ê¸°
             });
         });
     </script>
+   <div><br><br><br><br><br>
+   <jsp:include page="footer.jsp"></jsp:include></div>
 </body>
 </html>

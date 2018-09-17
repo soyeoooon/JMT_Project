@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </head>
 <style>
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
@@ -49,7 +49,7 @@
         text-align: center;
         vertical-align: middle;
         color: aliceblue;
-        padding: 100px;
+        padding: 100px; 
     }
 
     .selectGroup {
@@ -153,13 +153,40 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 }
 /*용화수정끝*/
 
+.carousel-inner img {
+   width: 100%;
+   height: 100%;
+}
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+   height: 100px;
+   width: 100px;
+   outline: black;
+   background-size: 100%, 100%;
+   background-image: none;
+}
+
+.carousel-control-next-icon:after {
+   content: '>';
+   font-weight: bold;
+   font-size: 55px;
+   color: red;
+}
+
+.carousel-control-prev-icon:after {
+   content: '<';
+   font-weight: bold;
+   font-size: 55px;
+   color: red;
+}
+
 </style>
 
-<div class="header" style="text-align: center;">
+<!-- <div class="header" style="text-align: center;">
         <h2>This area is belong to header</h2>
         <hr>
 </div>
-
+ -->
 <body>
 <!-- 검색 영역 -->
     <div id="container">
@@ -196,6 +223,8 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
 
 <!-- 버튼 영역(다음에 할게요)-->
     <div style="text-align: right; margin-bottom: 20px;">
+    <button type="button" class="btn btn-outline-danger"
+         data-toggle="modal" data-target="#MsgModal" id="prefer_btn">모달테스트</button>
         <button type="button" class="btn btn-outline-danger" onclick='location.href="/main"'>다음에 할게요</button>
     </div>
 
@@ -251,7 +280,8 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
             $.ajax({
                url : 'searchRes',
                data : {
-                  search : $('#group1').val()+' '+$('#group2').val()+' '+$('#search').val()
+            	   sigu :  $('#group1').val()+' '+$('#group2').val(),
+                  search : $('#search').val()
                },
                type : 'post',
                success : function(data){
@@ -322,13 +352,162 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
                  url : '/select_save',
                  data : grade_list,
                  success : function(result) {
+                	location.href="/main";
                 	 
                  }
              })
          })
-
+			$('#group1').change();
          search();
+         
+
+         var result = '';
+         var text = [ '삼겹살', '소고기스테이크', '짜장면', '짬뽕', '프라이드치킨', '찜닭', '족발',
+               '닭발', '떡볶이', '순대', '김치찌개', '감자탕', '회', '생선구이', '산채비빔밥',
+               '볶음밥', '샌드위치', '피자', '파스타', '잔치국수' ];
+         var imgs = [];
+         for (var i = 0; i < 20; i++) {
+            if (i == 0) {
+               result += '<div class="carousel-item active" id='+text[i]+'>';
+            } else {
+               result += '<div class="carousel-item" id='+text[i]+'>';
+            }
+            result += '<div align="center">';
+            result += '<img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width: 100%">';
+            result += '<h2>' + text[i] + '</h2>';
+            result += '<table width="100%"><tr><td></td><td width="210px"><div class="starRev2" align="center"><span class="starR1 1">별1_왼쪽</span><span class="starR2 2">별1_오른쪽</span><span class="starR1 3">별2_왼쪽</span><span class="starR2 4">별2_오른쪽</span><span class="starR1 5">별3_왼쪽</span><span class="starR2 6">별3_오른쪽</span><span class="starR1 7">별4_왼쪽</span><span class="starR2 8">별4_오른쪽</span><span class="starR1 9">별5_왼쪽</span><span class="starR2 10">별5_오른쪽</span></div></td><td></td></tr></table><button class="x_btn">X</button></div>';
+            result += '</div>';
+         }
+         $('.carousel-inner').append(result);
+
+         var rank_list = [ '=선택=', '가격', '분위기', '위치', '서비스', '건강' ];
+         var list = [];
+         var rank = [ '=선택=', '가격', '분위기', '위치', '서비스', '건강' ];
+
+         for (var i = 1; i <= 5; i++) {
+            var result = '';
+            for (var j = 0; j < 6; j++) {
+               result += '<option value="'+j+'">' + rank[j] + '</option>';
+            }
+            $('select[name=rank' + i + ']').html(result);
+         }
+
+         $('.rank-item')
+               .on(
+                     'change',
+                     function() {
+                        var val = $(this).val();
+                        if (val != 0) {
+                           var index = list[$(this).attr('name')
+                                 .replace('rank', '')];
+                           rank[index] = rank_list[index];
+                           list[$(this).attr('name').replace('rank',
+                                 '')] = val;
+                           rank[val] = '';
+                        } else {
+                           var index = list[$(this).attr('name')
+                                 .replace('rank', '')];
+                           rank[index] = rank_list[index];
+                           list[$(this).attr('name').replace('rank',
+                                 '')] = 0;
+                        }
+
+                        for (var i = 1; i <= 5; i++) {
+                           var result = '';
+                           for (var j = 0; j < 6; j++) {
+                              if (rank[j] != '') {
+                                 result += '<option value="'+j+'">'
+                                       + rank_list[j]
+                                       + '</option>';
+                              } else {
+                                 if (list[i] == j) {
+                                    result += '<option value="'+j+'" selected>'
+                                          + rank_list[j]
+                                          + '</option>';
+                                 }
+                              }
+                           }
+                           $('select[name=rank' + i + ']')
+                                 .html(result);
+                        }
+                     })
+         
+         var pre_list=[];
+         $('.starRev2 span').click(function() {
+            var grade_val = 0;
+            $(this).parent().children('span').removeClass('on');
+            $(this).addClass('on').prevAll('span').addClass('on');
+            grade_val = $(this).parent().children('.on').length * 0.5;
+
+            var key = $(this).closest('.carousel-item').attr('id');
+            pre_list[key] = grade_val;
+         })
+         
+         $('.x_btn').click(function() {
+            var grade_val = 0;
+            $(this).parent().find('span').removeClass('on');
+
+            var key = $(this).closest('.carousel-item').attr('id');
+            pre_list[key] = grade_val;
+         })
+
+         $('#save_btn').on('click', function() {
+            var formData = new FormData();
+            for (var index = 1; index <= 5; index++) {
+                    if(list[index]==null || list[index]==0){
+                       alert('0');
+                       return;
+                    }else{
+                       formData.append(rank_list[list[index]],index);
+                    }
+                }
+            
+            for (var index = 0; index < 20; index++) {
+                    if(pre_list[text[index]]!=null){
+                       formData.append(text[index],pre_list[text[index]]);
+                    }
+                }
+            
+            $.ajax({
+                    type : 'POST',
+                    url : '/preference_save',
+                    dataType : 'JSON',
+                    data : formData,
+                    contentType: false,
+                    processData: false,
+                    success : function(result) {
+                       
+                    }
+                });
+         })
+         
+         $('#prefer_btn').on('click',function(){
+            $.ajax({
+                    url : '/preference_info',
+                    success : function(data) {
+                       $('select[name=rank1]').val(data.prefer.rank1);
+                       $('select[name=rank1]').change();
+                       $('select[name=rank2]').val(data.prefer.rank2);
+                       $('select[name=rank2]').change();
+                       $('select[name=rank3]').val(data.prefer.rank3);
+                       $('select[name=rank3]').change();
+                       $('select[name=rank4]').val(data.prefer.rank4);
+                       $('select[name=rank4]').change();
+                       $('select[name=rank5]').val(data.prefer.rank5);
+                       $('select[name=rank5]').change();
+                  
+                       for(var i=0; i<data.list.length; i++){
+                          $('#'+data.list[i].choice_food+' .'+data.list[i].choice_score*2).addClass('on').prevAll('span').addClass('on');
+                       }
+                    }
+                });
+         })
       })
+         
+         
+         
+         
+      
       
       /* -----------------------------성록 끝----------------------------- */
    </script>
@@ -358,15 +537,67 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
          </div>
       </div>
    </div>
+<div class="modal fade" id="MsgModal">
+      <div class="modal-dialog">
+         <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+               <h4 class="modal-title">선호도 조사</h4>
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+               <h3>카테고리별 평점</h3>
+
+               <div id="demo" class="carousel slide" data-ride="carousel"
+                  data-interval="false">
+                  <div class="carousel-inner"></div>
+                  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                     <span class="carousel-control-prev-icon"></span>
+                  </a> <a class="carousel-control-next" href="#demo" data-slide="next">
+                     <span class="carousel-control-next-icon"></span>
+                  </a>
+               </div>
+
+               <h3>취향 우선순위</h3>
+               <form id="p_form">
+                  <table>
+                     <tr>
+                        <td>1순위</td>
+                        <td>2순위</td>
+                        <td>3순위</td>
+                        <td>4순위</td>
+                        <td>5순위</td>
+                     </tr>
+                     <tr>
+                        <td><select name="rank1" class="rank-item"></select></td>
+                        <td><select name="rank2" class="rank-item"></select></td>
+                        <td><select name="rank3" class="rank-item"></select></td>
+                        <td><select name="rank4" class="rank-item"></select></td>
+                        <td><select name="rank5" class="rank-item"></select></td>
+                     </tr>
+                  </table>
+               </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+               <button type="button" class="btn btn-success" data-dismiss="modal"
+                  id="save_btn">저장</button>
+            </div>
+         </div>
+      </div>
+   </div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
    <script
       src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </body>
-<div class=footer style="text-align: center">
+<!-- <div class=footer style="text-align: center">
         <hr>
         <hr>
         <h2>This area is belong to footer</h2>
         <hr>
-</div>
+</div> -->
 </html>
