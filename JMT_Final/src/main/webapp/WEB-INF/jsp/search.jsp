@@ -111,10 +111,10 @@
 	                                   type : 'post',
 	                                   async : false,
 	                                   success : function(image){
-	                                    if(data['searchList'][i].r_photo!=null)
-	                                       txt += '<img class="card-img-top" src="${pageContext.request.contextPath}/resources/front_image/food.jpg" alt="Card image cap">';
-	                                    else
-	                                       txt += '<img class="card-img-top" src="'+image+'" alt="Card image cap" style="height: 200px;">'; 
+	                                	   if(data['searchList'][i].r_photo!=null)
+	                                           txt += '<img class="card-img-top" src="'+data['searchList'][i].r_photo+'" alt="Card image cap" style="height: 200px;">';
+	                                        else
+	                                           txt += '<img class="card-img-top saveImg" id = "'+data['searchList'][i].r_num+'" src="'+image+'" alt="Card image cap" style="height: 200px;">'; 
 	                                   }
 	                              })
 
@@ -174,6 +174,24 @@
 						}
 
 						$("#card-deck").append(txt);
+						 function saveImg(r_num,src){
+	                           $.ajax({
+	                              data : {
+	                                 r_num : r_num,
+	                                 src : src
+	                              },
+	                              url : 'saveImg',
+	                              type : 'post',
+	                              success : function(data){
+	                                 console.log(data)
+	                                 alert(data);
+	                              }
+	                           })
+	                        }
+	                        $('.saveImg').click(function(){
+	                           console.log($(this).attr('id'),$(this).attr('src'))
+	                           saveImg($(this).attr('id'),$(this).attr('src'));
+	                        })
 						  function moveMap(map,r_address){
 			                     naver.maps.Service.geocode({address : r_address}, function(status, response) { // 해당 주소로 네이버 맵 API 서비스 실행
 			                        var result = response.result;
@@ -246,10 +264,11 @@
 	                                   type : 'post',
 	                                   async : false,
 	                                   success : function(image){
-	                                    if(data['searchList'][i].r_photo!=null)
-	                                       txt += '<img class="card-img-top" src="${pageContext.request.contextPath}/resources/front_image/food.jpg" alt="Card image cap">';
-	                                    else
-	                                       txt += '<img class="card-img-top" src="'+image+'" alt="Card image cap" style="height: 200px;" >'; 
+	                                	   if(data['searchList'][i].r_photo!=null)
+	                                           txt += '<img class="card-img-top" src="'+data['searchList'][i].r_photo+'" alt="Card image cap" style="height: 200px;">';
+	                                        else
+	                                           txt += '<img class="card-img-top saveImg" id = "'+data['searchList'][i].r_num+'" src="'+image+'" alt="Card image cap" style="height: 200px;">'; 
+	                                       
 	                                   }
 	                              })
 
@@ -308,7 +327,23 @@
 
 							}
 							$('#card-deck').append(txt);
-
+						/* 	 function saveImg(){
+		                           $.ajax({
+		                              data : {
+		                                 r_num : $(this).attr('id'),
+		                                 src : $(this).attr('src')
+		                              },
+		                              url : 'saveImg',
+		                              type : 'post',
+		                              success : function(data){
+		                                 alert(data);
+		                              }
+		                           })
+		                        }
+		                        $('.saveImg').click(function(){
+		                           saveImg();
+		                        })
+ */
 							var el = '';
 							el += '<ul class="pagination pagination-sm" id="ulPage">';
 							if (data['start'] != 1) {

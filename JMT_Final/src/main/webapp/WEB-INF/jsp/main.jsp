@@ -20,8 +20,9 @@
 
     #carouselExampleIndicators{
         text-align: center;
-        height: 100%;
-        width: 99%;
+        height: 450px; 
+        width: 99%; 
+        
         left: 0.5%;
         margin-bottom: 50px;
     }
@@ -41,10 +42,14 @@
     .carousel-inner {
         height: 800px;
         width: 100%;
-    }
+    } 
     .d-block {
         height: 800px;
         width: 100%;
+    }
+    
+    .carousel-item{
+    background-size:cover;
     }
 
 </style>
@@ -63,21 +68,21 @@
             </ol>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img class="d-block w-100" src="https://www.publicdomainpictures.net/pictures/240000/velka/board-with-greek-food-kagyana-pan.jpg" alt="First slide">
+                    <img class="d-block w-100" src="https://www.publicdomainpictures.net/pictures/240000/velka/board-with-greek-food-kagyana-pan.jpg" style="width: auto; height: 406px;" alt="First slide">
                     <div class="carousel-caption d-md-block">
                         <h3>당신의 음식 취향은 무엇인가요?</h3>
                         <p>by 맛있는녀석들</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" src="https://www.publicdomainpictures.net/pictures/240000/velka/board-with-greek-food-kagyana-pan.jpg" alt="Second slide">
+                    <img class="d-block w-100" src="https://www.publicdomainpictures.net/pictures/240000/velka/board-with-greek-food-kagyana-pan.jpg" style="height: 406px;" alt="Second slide">
                     <div class="carousel-caption d-md-block">
                             <h3>기록하고, 검색하고, 추천받으세요!</h3>
                             <p>by 맛있는녀석들</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" src="https://www.publicdomainpictures.net/pictures/240000/velka/board-with-greek-food-kagyana-pan.jpg" alt="Third slide">
+                    <img class="d-block w-100" src="https://www.publicdomainpictures.net/pictures/240000/velka/board-with-greek-food-kagyana-pan.jpg" style="height: 406px;" alt="Third slide">
                     <div class="carousel-caption d-md-block">
                         <h3>당신의 음식 취향을 위해!</h3>
                         <p>by 맛있는녀석들</p>
@@ -239,7 +244,7 @@
       
       function makeList(data){
          if(data.length==0){
-        	$('#message1').hide();
+        	//$('#message1').hide();
             $('.RestList').html('<h1>표시할 데이터가 존재하지 않습니다.</h1><br><button class="btn btn-outline-warning" onclick="location.href='+"'/selectForm'"+'">취향선택하기</button>');
          }else{
             var result = ''
@@ -247,23 +252,24 @@
             result +='<div class="row">';
             for(var i =0;i<data.length;i++){
                result +='<div class="col-sm-3">'
+               result+='<div class="card">';
             	   $.ajax({
                        data : {
                             search : data[i].r_name,
-                            sigu : $('#group1').val()+' '+$('#group2').val()
+                            //sigu : $('#group1').val()+' '+$('#group2').val()
                          },
                          url : 'searchImage',
                          type : 'post',
                          async : false,
                          success : function(image){
                           if(data[i].r_photo!=null)
-                             result += '<img src="'+data[i].r_photo+'" class="img-responsive" style="width:100%" alt="Image">';
+                             result += '<img src="'+data[i].r_photo+'"  class="card-img-top" style="height: 200px;" alt="Image">';
                           else
-                             result += '<img src="'+image+'" class="img-responsive" style="width:100%" alt="Image" style="width:364px; height:243px;">'; 
+                             result += '<img src="'+image+'"  class="card-img-top" style="height: 200px;" alt="Image" style="width:364px; height:243px;">'; 
                          }
                     })
-
-               result +='<h2><a href="/RestaurantView?r_num='+data[i].r_num+'">'+data[i].r_name+'</a></h2>'
+				result += '<div class="card-body">';
+               result +='<h5><a href="/RestaurantView?r_num='+data[i].r_num+'">'+data[i].r_name+'</a></h5>'
                result +='<p>'+data[i].r_address+'</p>'
                $.ajax({
                   url : 'getGrade',
@@ -298,9 +304,12 @@
                       }
                    })
                result +='</div>'
+               
+               result+='</div></div>'
             }
                result +='</div>'
                result +='</div>'
+            	  
             $('.RestList').html(result);
          }
       }

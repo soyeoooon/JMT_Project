@@ -6,6 +6,9 @@
      <select id="selectRestaurantByRNum" resultType="com.example.model.Restaurant">
         select * from restaurant where r_num = #{r_num}
      </select>
+     <update id="updateResImg">
+      update restaurant set r_photo = #{r_photo} where r_num = #{r_num}
+   </update>  
 
 <!-- /*=============용화(v2)=============*/ -->
 	<update id="countUpdate">

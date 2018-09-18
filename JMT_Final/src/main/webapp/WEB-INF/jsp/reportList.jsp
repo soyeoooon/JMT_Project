@@ -39,7 +39,7 @@
 				txt += '<tr>';
 				txt += '<td>' + data['reportList'][i].rep_num + '</td>';
 				//txt += '<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Open modal</button>' + data['reportList'][i].r_name + '</td>';
-				txt+='<td><a target="_blank" href="/RestaurantView?r_num='+data['restaurantList'][test-1].r_num+'">'+data['restaurantList'][test-1].r_name+'</a></td>';
+				txt+='<td><a target="_blank" href="/RestaurantView?r_num='+data['reportList'][i].r_num+'">'+data['reportList'][i].r_name+'</a></td>';
 				txt += '<td>' + data['reportList'][i].req + '</td>';
 				txt += '<td>' + data['reportList'][i].resp + '</td>';
 				txt += '<td>' + data['reportList'][i].replist_content + '</td>';
@@ -58,14 +58,7 @@
 				/* console.log(test);
 				console.log(typeof(test)) */
 
-				//가격, 편의시설, 영업일, 영업시간, 소개글, 대표메뉴, 
-				$('#r_rundate').text('영업일 : ' + data['restaurantList'][test - 1].r_rundate);
-				$('#r_runtime').text('영업시간 : ' + data['restaurantList'][test - 1].r_runtime);
-				$('#r_price').text('가격대 : ' + data['restaurantList'][test - 1].r_price);
-				$('#r_menu').text('대표메뉴 : ' + data['restaurantList'][test - 1].r_menu);
-				$('#r_enjoy').text('편의시설 : ' + data['restaurantList'][test - 1].r_enjoy);
-				$('#r_intro').text('소개글 : ' + data['restaurantList'][test - 1].r_intro);
-
+			
 			}
 
 			$('#reportTable').append(txt);
@@ -127,7 +120,7 @@
 					txt += '<td>' + data['reportList'][i].rep_num + '</td>';
 					//txt += '<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Open modal</button>' + data['reportList'][i].r_name + '</td>';
 					
-					txt+='<td><a target="_blank" href="/RestaurantView?r_num='+data['restaurantList'][test-1].r_num+'">'+data['restaurantList'][test-1].r_name+'</a></td>';
+					txt+='<td><a target="_blank" href="/RestaurantView?r_num='+data['reportList'][i].r_num+'">'+data['reportList'][i].r_name+'</a></td>';
 					txt += '<td>' + data['reportList'][i].req + '</td>';
 					txt += '<td>' + data['reportList'][i].resp + '</td>';
 					txt += '<td>' + data['reportList'][i].replist_content + '</td>';
@@ -145,12 +138,7 @@
 					/* var test = data['reportList'][i].rm_num;
 					console.log(data['reportList'][i].r_name+", "+ test) */
 					//가격, 편의시설, 영업일, 영업시간, 소개글, 대표메뉴, 
-					$('#r_rundate').text('영업일 : ' + data['restaurantList'][test].r_rundate);
-					$('#r_runtime').text('영업시간 : ' + data['restaurantList'][test].r_runtime);
-					$('#r_price').text('가격대 : ' + data['restaurantList'][test].r_price);
-					$('#r_menu').text('대표메뉴 : ' + data['restaurantList'][test].r_menu);
-					$('#r_enjoy').text('편의시설 : ' + data['restaurantList'][test].r_enjoy);
-					$('#r_intro').text('소개글 : ' + data['restaurantList'][test].r_intro);
+				
 
 				}
 				$('#reportTable').append(txt);

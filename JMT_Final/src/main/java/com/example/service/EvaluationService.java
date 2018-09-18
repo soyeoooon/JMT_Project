@@ -26,10 +26,16 @@ public class EvaluationService {
 	public int countEvaluationMarkByNum(int m_num) {
 		return evaluationDao.countEvaluationMarkByNum(m_num);
 	}
-	public double getGrade(int r_num){
-		return evaluationDao.getAllGradeForRestaurant(r_num)/evaluationDao.getCountGradeForRestaurant(r_num);
+
+	public double getGrade(int r_num) {
+		if (evaluationDao.getCountGradeForRestaurant(r_num) > 0) {
+			return evaluationDao.getAllGradeForRestaurant(r_num) / evaluationDao.getCountGradeForRestaurant(r_num);
+		} else {
+			return 0;
+		}
 	}
-	public List<HashMap<String,Object>> getRestaurantByEV(int m_num){
+
+	public List<HashMap<String, Object>> getRestaurantByEV(int m_num) {
 		return evaluationDao.getRestaurantByEV(m_num);
 	}
 
@@ -55,9 +61,9 @@ public class EvaluationService {
 		map.put("m_num", m_num);
 		map.put("r_num", r_num);
 		map.put("e_grade", e_grade);
-		if(getCountEforRByEmail(m_num, r_num)>0){
+		if (getCountEforRByEmail(m_num, r_num) > 0) {
 			evaluationDao.updateEvaluation(map);
-		}else{
+		} else {
 			evaluationDao.insertEvaluation(map);
 		}
 	}

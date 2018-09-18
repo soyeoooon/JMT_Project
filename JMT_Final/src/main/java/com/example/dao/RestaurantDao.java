@@ -25,6 +25,7 @@ public interface RestaurantDao {
 	//public List<Restaurant> selectAllRestaurant();
 	// 레스토랑다오 추가
 	   public Restaurant selectRestaurantByRNum(int r_num);
+	   public void updateResImg(HashMap<String, Object> map);
 
 	
 	

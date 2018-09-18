@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.model.Report;
 import com.example.model.RestModify;
 import com.example.service.MemberListService;
 import com.example.service.ReportService;
@@ -85,40 +87,44 @@ public class AdminController {
 		
 		
 		//음식점 기록 중 가장 최근 데이터(신고처리 받을)를 삭제한다.
-		//여기서 getRm_num은 기록테이블의 기본키임.
-		restaurantService.removeModify(restaurantService.getRestModify(rm_num).getRm_num());
-		int upnum = Integer.parseInt((String) params.get("rep_num"));
-		rService.UpdateReport(upnum);
+	      //여기서 getRm_num은 기록테이블의 기본키임.
+	      RestModify rm = restaurantService.getRestModifyInfo(rm_num);
+	      int r_num = rm.r_num;
+	      restaurantService.removeModify(rm_num);
+	      int upnum = Integer.parseInt((String) params.get("rep_num"));
+	      rService.UpdateReport(upnum);
+	      RestModify rm_after = restaurantService.getRestModify(rm.r_num);
 
-		RestModify rm = restaurantService.getRestModify(rm_num);
-		System.out.println(rm);
-		
-		if (rm != null) { //이전 기록이 있을때 (첫 기록이 아닌경우)
-			restaurantService.updateRestaurnat(rm);
-		}
-		else { //첫 기록이 신고처리 해야되는 경우 -> 음식점 테이블에 있는 상세정보들을 지워버림 
-			RestModify rm_null = new RestModify();
-			rm_null.setRm_price("기록없음");
-			rm_null.setRm_intro("기록없음");
-			rm_null.setRm_enjoy("기록없음");
-			rm_null.setRm_menu("기록없음");
-			rm_null.setRm_rundate("기록없음");
-			rm_null.setRm_runtime("기록없음");
-			
-			//음식점 몇번의 데이터를 업데이트 할건지
-			rm_null.setR_num(rm_num);
-			restaurantService.updateRestaurnat(rm_null);
-			
-			System.out.println("수정완료");
-			
-		}
+	      if(rm_after==null) {
+	         RestModify rm_null = new RestModify();
+	         rm_null.setRm_price("기록없음");
+	         rm_null.setRm_intro("기록없음");
+	         rm_null.setRm_enjoy("기록없음");
+	         rm_null.setRm_menu("기록없음");
+	         rm_null.setRm_rundate("기록없음");
+	         rm_null.setRm_runtime("기록없음");
+	         
+	         //음식점 몇번의 데이터를 업데이트 할건지
+	         rm_null.setR_num(r_num);
+	         restaurantService.updateRestaurnat(rm_null);
+	         System.out.println("수정완료");
+	      }else {
+	          if(rm.rm_num >= rm_after.rm_num) {
+	              restaurantService.updateRestaurnat(rm_after);
+	           }
+	      }
+	      
+	      List<Report> list=rService.getReportList(rm_num);
+	      for (Report r:list) {
+	         rService.deleteReport(r.getRep_num());
+	      }
 		return "redirect:/reportList";
 	}
 
 	@RequestMapping("/reportCancel")
 	public String reportCancel(@RequestParam HashMap<String, Object> params) {
 		int upnum = Integer.parseInt((String) params.get("rep_num"));
-		rService.UpdateReport(upnum);
+		rService.deleteReport(upnum);
 		return "redirect:/reportList";
 
 	}

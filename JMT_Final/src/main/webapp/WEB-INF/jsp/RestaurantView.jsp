@@ -58,7 +58,7 @@
 }
 
 .tabs td.current {
-	background: #ffbdbd;
+	background: #ff9480;
 	font-weight: bold;
 }
 
@@ -160,6 +160,41 @@
 	background: #ff9f40;
 	color: #330000;
 }
+
+/*편집버튼*/
+.btn.btn-outline-info{
+  border-color: #00A178 ;
+  color:#00A178 ;
+}
+
+.btn.btn-outline-info:hover{
+  background-color: #00A178 ;
+  color:#fff;
+}
+
+/*신고버튼*/
+.btn.btn-outline-danger{
+  border-color: #ff9480;
+  color:#ff9480;
+}
+
+.btn.btn-outline-danger:hover{
+  background-color: #ff9480;
+  color:#fff;
+}
+
+/*사진+ 버튼*/
+.btn.btn-outline-primary{
+  border-color: #00A178 ;
+  color:#00A178 ;
+}
+
+.btn.btn-outline-primary:hover{
+  background-color: #00A178 ;
+  color:#fff;
+}
+
+
 </style>
 </head>
 <body>
@@ -381,57 +416,56 @@
     </div>
   </div>
 
-  <!-- 신고 모달 -->
-  <div class="modal fade" id="reportModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">편집자 신고</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
+ <!-- 신고 모달 -->
+   <div class="modal fade" id="reportModal">
+      <div class="modal-dialog">
+         <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+               <h4 class="modal-title">편집자 신고</h4>
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
 
-        <!-- Modal body -->
-        <form name="report_info">
-          <input type="hidden" name="r_num" value="${info.restaurant.r_num}"> <input type="hidden" name="m_mail1" id="report_email"> <input type="hidden" name="m_mail2" value="${email.email_num}">
+            <!-- Modal body -->
+            <form name="report_info">
+               <input type="hidden" name="rm_num" id="report_rm_num">
+               <input type="hidden" name="m_mail1" id="report_email" value="${email.email_num}">
+                <input type="hidden" name="m_mail2" id="report_email2">
 
-          <div class="modal-body">
-            <table width="100%" class="info">
-              <tr>
-                <td height="20px">
-                  <img src="img/restaurant/편의시설.png" data-toggle="tooltip" title="편집자">
-                </td>
-                <td width="100%">
-                  <input type="text" class="form-control" id="report_nick" readonly>
-                </td>
-              </tr>
+               <div class="modal-body">
+                  <table width="100%" class="info">
+                     <tr>
+                        <td height="20px"><img src="img/restaurant/편의시설.png"
+                           data-toggle="tooltip" title="편집자"></td>
+                        <td width="100%"><input type="text" class="form-control"
+                           id="report_nick" readonly></td>
+                     </tr>
 
-              <tr>
-                <td height="20px">
-                  <img src="img/restaurant/편의시설.png" data-toggle="tooltip" title="신고목록">
-                </td>
-                <td width="100%">
-                  <select class="form-control" name="replist_num">
-                    <c:forEach var="list" items="${info.reportlist}">
-                      <option value="${list.replist_num}">${list.replist_content}</option>
-                    </c:forEach>
-                  </select>
-                </td>
-              </tr>
+                     <tr>
+                        <td height="20px"><img src="img/restaurant/편의시설.png"
+                           data-toggle="tooltip" title="신고목록"></td>
+                        <td width="100%"><select class="form-control"
+                           name="replist_num">
+                              <c:forEach var="list" items="${info.reportlist}">
+                                 <option value="${list.replist_num}">${list.replist_content}</option>
+                              </c:forEach>
+                        </select></td>
+                     </tr>
 
 
-            </table>
-          </div>
-        </form>
+                  </table>
+               </div>
+            </form>
 
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-success" data-dismiss="modal" id="report_btn">Report</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+               <button type="button" class="btn btn-success" data-dismiss="modal"
+                  id="report_btn">Report</button>
+               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+         </div>
       </div>
-    </div>
-  </div>
+   </div>
 
   <!-- 유저 모달 -->
   <div class="modal fade" id="UserModal">
@@ -548,28 +582,26 @@
 			//Boot 툴팁
 		    $('[data-toggle="tooltip"]').tooltip();
 			
-			if(${info.report!=null}){
-				if(${info.report.replist_status==1}){
-					$('#reportlb').removeClass('off');
-					$('#reportbtn').attr('data-toggle','');
-					$('#modifybtn').attr('data-toggle','');
-					
-				$('#r_info_phone').html('신고처리중');
-				$('#r_info_address').html('신고처리중');
-		        $('#r_info_rundate').html('신고');
-		        $('#r_info_runtime').html('처리중');
-		        $('#r_info_menu').html('신고처리중');
-		        $('#r_info_intro').html('신고처리중');
-		        $('#r_info_enjoy').html('신고처리중');
-				}
-			}
-			
-			//수정(v2)
-			if(${email.m_num==0}){
-				$('#reportbtn').attr('data-toggle','');
-				$('#modifybtn').attr('data-toggle','');
-				$('.u_img').attr('data-toggle','');
-			}
+		    if(${info.report>=3}){
+	            $('#reportlb').removeClass('off');
+	            $('#reportbtn').attr('data-toggle','');
+	            $('#modifybtn').attr('data-toggle','');
+	            $('#r_info_phone').html('신고처리중');
+	            $('#r_info_address').html('신고처리중');
+	              $('#r_info_rundate').html('신고');
+	              $('#r_info_runtime').html('처리중');
+	              $('#r_info_menu').html('신고처리중');
+	              $('#r_info_intro').html('신고처리중');
+	              $('#r_info_enjoy').html('신고처리중');
+	         }
+	         
+	         //수정(v2)
+	         if(${email.m_num==0}){
+	            $('#reportbtn').attr('data-toggle','');
+	            $('#modifybtn').attr('data-toggle','');
+	            $('.u_img').attr('data-toggle','');
+	            $('#MsgModal h3').text('로그인 후 사용가능합니다.');
+	         }
 			
 			//탭 이동
 			$('.tabs td').click(function() {
@@ -771,24 +803,26 @@
 			})
 			
 			//신고모달 띄우기
-			$('#reportbtn').click(function(){
-				if(${email.m_num==0}){
-					$('#MsgModal').modal();
-					return;
-				}
-				$.ajax({
-					url:'/r_view_report_info',
-					data:{'r_num':${info.restaurant.r_num}},
-					type : "post",
-		            success:function(data){
-		            	$('#report_email').val(data.email_num);
-		            	$('#report_nick').val(data.m_nick);
-		            },
-		            error : function(){
-						alert('error');
-					}
-				})
-			})
+	
+         $('#reportbtn').click(function(){
+            if(${email.m_num==0}){
+               $('#MsgModal').modal();
+               return;
+            }
+            $.ajax({
+               url:'/r_view_report_info',
+               data:{'r_num':${info.restaurant.r_num}},
+               type : "post",
+                  success:function(data){
+                     $('#report_email2').val(data.email_num);
+                     $('#report_nick').val(data.m_nick);
+                     $('#report_rm_num').val(data.rm_num);
+                  },
+                  error : function(){
+                  alert('error');
+               }
+            })
+         })
 			
 			//편집모달 편집버튼
 			$('#modify_btn').click(function(){
@@ -812,33 +846,35 @@
 				})
 			})
 			
-			 //신고모달 신고버튼
-			$('#report_btn').click(function(){
-            var report = $("form[name=report_info]").serialize() ;
-            
-            $.ajax({
-               url:'/r_view_report',
-               data:report,
-               type : "post",
-                  success:function(){
-                     $('#reportlb').removeClass('off');
-                  $('#reportbtn').attr('data-toggle','');
-                  $('#modifybtn').attr('data-toggle','');
-                  
-                  $('#r_info_phone').text('신고처리중');
-                  $('#r_info_address').text('신고처리중');
-                    $('#r_info_rundate').text('신고');
-                    $('#r_info_runtime').text('처리중');
-                    $('#r_info_menu').text('신고처리중');
-                    $('#r_info_intro').text('신고처리중');
-                    $('#r_info_enjoy').text('신고처리중');
-                  
-                  },
-                  error : function(){
-                  alert('error');
-               }
-            })
-         })
+			          //신고모달 신고버튼
+         $('#report_btn').click(function(){
+               var report = $("form[name=report_info]").serialize() ;
+               
+               $.ajax({
+                  url:'/r_view_report',
+                  data:report,
+                  type : "post",
+                     success:function(data){
+                       if(data>=3){
+                         $('#reportlb').removeClass('off');
+                         $('#reportbtn').attr('data-toggle','');
+                         $('#modifybtn').attr('data-toggle','');
+                         $('#r_info_phone').html('신고처리중');
+                         $('#r_info_address').html('신고처리중');
+                           $('#r_info_rundate').html('신고');
+                           $('#r_info_runtime').html('처리중');
+                           $('#r_info_menu').html('신고처리중');
+                           $('#r_info_intro').html('신고처리중');
+                           $('#r_info_enjoy').html('신고처리중');
+                      }else if(data==-1){
+                         $('#MsgModal h3').text('중복신고는 불가능합니다.');
+                         $('#MsgModal').modal();
+                      }
+                     },
+                     error : function(){
+                       }
+                  })
+             })
 			
 			//유저모달 띄우기
 			$('#tab-3 .u_img').click(function(){

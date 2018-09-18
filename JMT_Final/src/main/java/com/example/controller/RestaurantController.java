@@ -51,6 +51,12 @@ public class RestaurantController {
 	@Autowired
 	private MidCategoryService midCategoryService;
 	
+	@RequestMapping("/saveImg")
+	   public @ResponseBody String saveImg(@RequestParam int r_num,@RequestParam String src){
+	      restaurantService.updateResImg(r_num, src);
+	      return "변경되었습니다.";
+	   }
+	
 	@RequestMapping("/review_delete")
 	   public @ResponseBody int review_delete(int rev_num, int r_num) {
 	      return restaurantService.review_delete(rev_num, r_num);
@@ -244,10 +250,13 @@ public class RestaurantController {
 	}
 
 	@RequestMapping("/r_view_report")
-	public @ResponseBody Restaurant r_view_report(@RequestParam HashMap<String, String> map) {
-		restaurantService.View_Report(map);
-		return null;
-	}
+	   public @ResponseBody int r_view_report(@RequestParam HashMap<String, String> map) {
+	      if(restaurantService.View_Report(map)) {
+	         return restaurantService.getReportCount(Integer.parseInt(map.get("rm_num").toString()));
+	      }else {
+	         return -1;
+	      }
+	   }
 
 	@RequestMapping("/r_view_report_info")
 	public @ResponseBody HashMap<String, Object> r_view_report_info(int r_num) {

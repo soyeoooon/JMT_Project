@@ -68,6 +68,7 @@
 					$('#session').text(session);
 					$('#logout').text('로그아웃');
 					$('.img-xs').attr('src','${sessionScope.profile}');
+					console.log("헤더프로필:" +'${sessionScope.profile}')
 					
 					
 				} else if (!session) {

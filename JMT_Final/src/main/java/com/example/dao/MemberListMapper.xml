@@ -3,7 +3,7 @@
 <mapper namespace="com.example.dao.MemberListDao">
 <!-- /*=============수정(v2)==========*/ -->
 	<insert id="insert">
-		insert into memberlist values(#{m_num},#{email_num},#{m_nick},#{m_pwd},"resources/front_image/user.png",#{m_intro},#{m_level},#{m_naver},#{m_kakao},#{m_facebook})
+		insert into memberlist values(#{m_num},#{email_num},#{m_nick},#{m_pwd},"member/${email_num}/profilephoto.jpg",#{m_intro},#{m_level},#{m_naver},#{m_kakao},#{m_facebook})
 	</insert>
 	<select id="naverCheck" resultType="Integer">
 		select email_num from memberlist where m_naver=#{m_naver}
@@ -18,7 +18,7 @@
 <!-- /*=============소연=============*/ -->
     <insert id="insertMemberList" parameterType="com.example.model.MemberList">
     	insert into memberList (m_num,email_num,m_nick,m_pwd,m_photo) 
-    	values(0,#{email_num},#{m_nick},sha(#{m_pwd}),"resources/front_image/user.png");
+    	values(0,#{email_num},#{m_nick},sha(#{m_pwd}),"member/${email_num}/profilephoto.jpg");
   	</insert>
     <!-- /*=============성록=============*/ -->
     <update id="updateMemberList">
@@ -41,8 +41,8 @@
       select m_num from memberlist where email_num = #{email_num}
   	</select>
   	<select id="getAllByNick" resultType="com.example.model.MemberList" parameterType="String">
-      select * from memberlist where m_nick like CONCAT('%',#{search},'%')
-  	</select>
+      select * from memberlist where m_nick like CONCAT('%',#{search},'%') and m_num != 0
+     </select>
     
     <!--  소연 : parameterType int 추가 -->
     <select id="selectOneMemberList" parameterType="int" resultType="com.example.model.MemberList">
@@ -51,9 +51,9 @@
   	
   	<select id="selectAllMemberList" resultType="com.example.model.MemberList">
   	</select>
-  	<select id="selectOneMemberListByNum" resultType="com.example.model.MemberList">
-      select * from memberlist where email_num = #{email_num}
-  	</select>
+  	   <select id="selectOneMemberListByNum" resultType="com.example.model.MemberList">
+      select * from memberlist where email_num = #{email_num} and email_num != 0
+     </select>
   	
   	<!-- 소연 추가  -->
   	<select id="selectOneMemberListByPwd" parameterType="com.example.model.MemberList" resultType="com.example.model.MemberList">

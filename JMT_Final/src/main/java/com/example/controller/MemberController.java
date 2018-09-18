@@ -92,92 +92,99 @@ public class MemberController {
 	   FoodChoiceService foodChoiceService;
 	   
 	   @RequestMapping("/preference_info")
-	   public @ResponseBody HashMap<String, Object> preference_info(HttpSession session) {
-	      String email = (String) session.getAttribute("email");
-	      MemberList ml = memberListService.getOneMember(email);
-	      int m_num=ml.getM_num();
-	      
-	      Preference preference=preferenceService.preferenceSelect(m_num);
-	      List<FoodChoice> list=foodChoiceService.foodChoiceSelect(m_num);
-	      HashMap<String, Object> map=new HashMap<String, Object>();
-	      HashMap<String, Object> prefer=new HashMap<String, Object>();
-	      prefer.put("rank"+preference.getPrefer_price(), "1");
-	      prefer.put("rank"+preference.getPrefer_mood(), "2");
-	      prefer.put("rank"+preference.getPrefer_distance(), "3");
-	      prefer.put("rank"+preference.getPrefer_service(), "4");
-	      prefer.put("rank"+preference.getPrefer_health(), "5");
-	      map.put("prefer", prefer);
-	      map.put("list", list);
-	      return map;
-	   }
+	      public @ResponseBody HashMap<String, Object> preference_info(HttpSession session) {
+	         String email = (String) session.getAttribute("email");
+	         MemberList ml = memberListService.getOneMember(email);
+	         int m_num=ml.getM_num();
+	         
+	         Preference preference=preferenceService.preferenceSelect(m_num);
+	         List<FoodChoice> list=foodChoiceService.foodChoiceSelect(m_num);
+	         HashMap<String, Object> map=new HashMap<String, Object>();
+	         HashMap<String, Object> prefer=new HashMap<String, Object>();
+	         if(preference!=null) {
+	            prefer.put("rank"+preference.getPrefer_price(), "1");
+	            prefer.put("rank"+preference.getPrefer_mood(), "2");
+	            prefer.put("rank"+preference.getPrefer_distance(), "3");
+	            prefer.put("rank"+preference.getPrefer_service(), "4");
+	            prefer.put("rank"+preference.getPrefer_health(), "5");
+	         }
+	         map.put("prefer", prefer);
+	         map.put("list", list);
+	         return map;
+	      }
+
 	   
 	   @RequestMapping("/preference_save")
-	   public @ResponseBody String preference_save(@RequestParam HashMap<String, Object> map, HttpSession session) {
-	      String email = (String) session.getAttribute("email");
-	      MemberList ml = memberListService.getOneMember(email);
-	      int m_num=ml.getM_num();
-	      
-	      int price=Integer.parseInt(map.get("가격").toString());
-	      map.remove("가격");
-	      int mood=Integer.parseInt(map.get("분위기").toString());
-	      map.remove("분위기");
-	      int distance=Integer.parseInt(map.get("위치").toString());
-	      map.remove("위치");
-	      int service=Integer.parseInt(map.get("서비스").toString());
-	      map.remove("서비스");
-	      int health=Integer.parseInt(map.get("건강").toString());
-	      map.remove("건강");
-	      
-	      if(preferenceService.preferenceSelect(m_num)==null) {
-	         preferenceService.preferenceInsert(new Preference(m_num,price,mood,distance,service,health));
-	      }else {
-	         preferenceService.preferenceUpdate(new Preference(m_num,price,mood,distance,service,health));
-	      }
-	      
-	      for(String key:map.keySet()) {
-	         HashMap<String, String> c_map=new HashMap<String,String>();
-	         c_map.put("m_num", m_num+"");
-	         c_map.put("choice_food", key);
-	         if(foodChoiceService.foodChoiceSelectOne(c_map)==null) {
-	            foodChoiceService.foodChoiceInsert(new FoodChoice(m_num, key, Double.parseDouble(map.get(key).toString())));
+	      public @ResponseBody String preference_save(@RequestParam HashMap<String, Object> map, HttpSession session) {
+	         String email = (String) session.getAttribute("email");
+	         MemberList ml = memberListService.getOneMember(email);
+	         int m_num=ml.getM_num();
+	         
+	         int price=Integer.parseInt(map.get("가격").toString());
+	         map.remove("가격");
+	         int mood=Integer.parseInt(map.get("분위기").toString());
+	         map.remove("분위기");
+	         int distance=Integer.parseInt(map.get("위치").toString());
+	         map.remove("위치");
+	         int service=Integer.parseInt(map.get("서비스").toString());
+	         map.remove("서비스");
+	         int health=Integer.parseInt(map.get("건강").toString());
+	         map.remove("건강");
+	         
+	         if(preferenceService.preferenceSelect(m_num)==null) {
+	            preferenceService.preferenceInsert(new Preference(m_num,price,mood,distance,service,health));
 	         }else {
-	            foodChoiceService.foodChoiceUpdate(new FoodChoice(m_num, key, Double.parseDouble(map.get(key).toString())));
+	            preferenceService.preferenceUpdate(new Preference(m_num,price,mood,distance,service,health));
 	         }
-	      }
-	      return null;
-	   }
-	
-	   @RequestMapping("/getRecommend")
-	   public @ResponseBody List<Restaurant> getRecommend(HttpSession session,@RequestParam (required = false)String filter){
-	      List<Restaurant> favorlist = new ArrayList<Restaurant>();
-	      List<Restaurant> favorlistwithFilter = new ArrayList<Restaurant>();
-	      for(Recommend r : recommendService.getRecommend(getM_NumByEmailNum(emailNumBySession(session)))){
-	         favorlist.add(restaurantService.getRestaurantByRNum(r.getR_num_final()));
-	      }
-	      if(filter!=null&&!filter.equals("")){
-	         String[] filterList = filter.split("@");
-	         for(int i=1;i<filterList.length;i++){
-	            String[] detailFilter = filterList[i].split("-");
-	            int big_num = Integer.parseInt(detailFilter[0]);
-	            String category1 = bigCategoryService.getBigcategoryName(big_num);
-	            String category2 = detailFilter[1];
-	            for(Restaurant r : favorlist){
-	               if(category2.equals("ALL")){
-	                  if(r.getR_category1().equals(category1)){
-	                     favorlistwithFilter.add(r);
-	                  }
-	               }else{
-	                  if(r.getR_category1().equals(category1)&&r.getR_category2().equals(category2)){
-	                     favorlistwithFilter.add(r);
-	                  }
-	               }
+	         
+	         for(String key:map.keySet()) {
+	            HashMap<String, String> c_map=new HashMap<String,String>();
+	            c_map.put("m_num", m_num+"");
+	            c_map.put("choice_food", key);
+	            if(foodChoiceService.foodChoiceSelectOne(c_map)==null) {
+	               foodChoiceService.foodChoiceInsert(new FoodChoice(m_num, key, Double.parseDouble(map.get(key).toString())));
+	            }else {
+	               foodChoiceService.foodChoiceUpdate(new FoodChoice(m_num, key, Double.parseDouble(map.get(key).toString())));
 	            }
 	         }
-	         return favorlistwithFilter;
-	      }else{
-	         return favorlist;
+	         return null;
 	      }
-	   }
+	
+	   @RequestMapping("/getRecommend")
+	      public @ResponseBody List<Restaurant> getRecommend(HttpSession session,@RequestParam (required = false)String filter){
+	         List<Restaurant> favorlist = new ArrayList<Restaurant>();
+	         List<Restaurant> favorlistwithFilter = new ArrayList<Restaurant>();
+	         if(session.getAttribute("email")!=null){
+	            for(Recommend r : recommendService.getRecommend(getM_NumByEmailNum(emailNumBySession(session)))){
+	               favorlist.add(restaurantService.getRestaurantByRNum(r.getR_num_final()));
+	            }
+	            if(filter!=null&&!filter.equals("")){
+	               String[] filterList = filter.split("@");
+	               for(int i=1;i<filterList.length;i++){
+	                  String[] detailFilter = filterList[i].split("-");
+	                  int big_num = Integer.parseInt(detailFilter[0]);
+	                  String category1 = bigCategoryService.getBigcategoryName(big_num);
+	                  String category2 = detailFilter[1];
+	                  for(Restaurant r : favorlist){
+	                     if(category2.equals("ALL")){
+	                        if(r.getR_category1().equals(category1)){
+	                           favorlistwithFilter.add(r);
+	                        }
+	                     }else{
+	                        if(r.getR_category1().equals(category1)&&r.getR_category2().equals(category2)){
+	                           favorlistwithFilter.add(r);
+	                        }
+	                     }
+	                  }
+	               }
+	               return favorlistwithFilter;
+	            }else{
+	               return favorlist;
+	            }
+	         }else{
+	           return null; 
+	         }
+	      }
 	
 	//수정(v2)시작---------------------------------------------------
 		//이메일 보내기
@@ -340,7 +347,17 @@ public class MemberController {
 		session.getAttribute("email");
 		/* 소연 부분 수정 끝*/
 		
-		mav.addObject("memberList", memberListService.selectOneMemberListByNum(getM_NumByEmailNum(emailNumBySession(session))));
+		MemberList memberlist =  memberListService.selectOneMemberListByNum(emailNumBySession(session));
+	      String uri = System.getProperty("user.dir") + "/target/classes/static/member/" + emailNumBySession(session) + "/";
+	      File folder = new File(uri);
+	      File[] filelist = folder.listFiles();
+	      System.out.println(filelist);
+	      System.out.println(memberlist);
+	      if(filelist==null){
+	         memberlist.setM_photo("resources/front_image/user.png");
+	      }
+	      mav.addObject("memberList", memberlist);
+		
 		mav.addObject("countLike", evaluationService.countEvaluationLikeByNum(getM_NumByEmailNum(emailNumBySession(session))));
 		mav.addObject("countMark", evaluationService.countEvaluationMarkByNum(getM_NumByEmailNum(emailNumBySession(session))));
 		mav.addObject("countDiary", 0);
@@ -594,7 +611,7 @@ public class MemberController {
 		// 저장 경로 설정
 		String result = "";
 		if (multi != null) {
-			String path = System.getProperty("user.dir") + "/target/classes/static/member/" + session.getAttribute("id")
+			String path = System.getProperty("user.dir") + "/target/classes/static/member/" + emailNumBySession(session)
 					+ "/";
 			File dir = new File(path);
 			if (!dir.isDirectory()) {
@@ -617,6 +634,7 @@ public class MemberController {
 						e.printStackTrace();
 					}
 					result = "파일 업로드하였습니다.";
+					session.setAttribute("profile", memberListService.getOneMember((String)session.getAttribute("email")).getM_photo());
 				}
 			}
 		} else {
@@ -715,6 +733,7 @@ public class MemberController {
 
 	@RequestMapping("/myPageTab5") // 다섯번째 탭 불러오기
 	public @ResponseBody MemberList myPageTab5(HttpSession session) {
+		
 		return memberListService.selectOneMemberListByNum(emailNumBySession(session));
 	}
 
@@ -763,13 +782,14 @@ public class MemberController {
 	}
 
 	@RequestMapping("/main")
-	public ModelAndView main(HttpSession session) {
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("member", memberListService.getOneMember((String) session.getAttribute("email")));
-		mav.setViewName("main");
+	   public ModelAndView main(HttpSession session) {
+	      ModelAndView mav = new ModelAndView();
+	      if(session.getAttribute("email")!=null)
+	         mav.addObject("member", memberListService.getOneMember((String) session.getAttribute("email")));
+	      mav.setViewName("main");
 
-		return mav;
-	}
+	      return mav;
+	   }
 
 	@RequestMapping("/join")
 	public String join(@RequestParam HashMap<String, Object> params, HttpSession session) {
@@ -785,26 +805,34 @@ public class MemberController {
 	}
 
 	// 성록 일부수정
-		@RequestMapping("/login")
-		public @ResponseBody String login(@RequestParam String email, @RequestParam String password, HttpSession session,
-				Model model) {
-			HashMap<String, Object> params = new HashMap<String, Object>();
-			params.put("email", email);
-			params.put("pwd", password);
-			if (memberListService.login(params) == 1) {
-				session.setAttribute("email", email);
-				session.setAttribute("profile", memberListService.getOneMember(email).getM_photo());
-				if (email.equals("admin123@naver.com")) {
-					return "adminIndex";
-				} else {
-					return "main";
-				}
-			} else if (memberListService.login(params) == 0) {
-				return "loginForm";
-			} else {
-				return "loginForm";
-			}
-		}
+	 @RequestMapping("/login")
+     public @ResponseBody String login(@RequestParam String email, @RequestParam String password, HttpSession session,
+           Model model) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("email", email);
+        params.put("pwd", password);
+        if (memberListService.login(params) == 1) {
+           session.setAttribute("email", email);
+           String uri = System.getProperty("user.dir") + "/target/classes/static/member/" + memberListService.getOneMember(email).getEmail_num() + "/";
+           File folder = new File(uri);
+           File[] filelist = folder.listFiles();
+           System.out.println(filelist);
+           if(filelist==null){
+              session.setAttribute("profile", "resources/front_image/user.png");
+           }else{
+              session.setAttribute("profile", memberListService.getOneMember(email).getM_photo());
+           }
+           if (email.equals("admin123@naver.com")) {
+              return "adminIndex";
+           } else {
+              return "main";
+           }
+        } else if (memberListService.login(params) == 0) {
+           return "loginForm";
+        } else {
+           return "loginForm";
+        }
+     }
 	/*
 	 * @RequestMapping("/Login") public String Login() { return "Login"; }
 	 */

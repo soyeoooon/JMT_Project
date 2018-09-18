@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>리뷰작성</title>
 
 <link type="text/css" rel="stylesheet" href="css/jquery-te-1.4.0.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
@@ -63,16 +63,32 @@
 	display: inline-block;
 	vertical-align: top;
 }
+
+.btn.btn-success {
+	background-color: #00A178;
+}
+
+#reviewForm {
+	padding: 1em;
+	font: 80%/1 sans-serif;
+	border: 1px solid #ddd;
+}
 </style>
 
 </head>
 <body>
 
-  <div>
- <br><br><br>
 
-    <div>
-      <form id="fileForm" action="fileUpload" method="post" enctype="multipart/form-data">
+  <br>
+  <br>
+  <br>
+  <br>
+  <div class="container">
+  <h3>다녀온 곳의 리뷰를 작성해주세요!</h3>
+  </div>
+  <div class="container" id="reviewForm">
+    <form id="fileForm" action="fileUpload" method="post" enctype="multipart/form-data">
+      
         <input type="hidden" name="r_num" value="${info.restaurant.r_num }"> <input type="hidden" name="m_num" value="${email.m_num}"> <input type="hidden" name="grade" id="grade">
 
         <table width="90%" id="r_table" align="center">
@@ -124,10 +140,13 @@
             </td>
           </tr>
         </table>
-      </form>
-    </div>
-
+   
+    </form>
   </div>
+
+
+
+
 
   <script>
 		$(".jqte-test").jqte({source: false});
@@ -272,7 +291,8 @@
             });
         });
     </script>
-   <div><br><br><br><br><br>
-   <jsp:include page="footer.jsp"></jsp:include></div>
+  <div>
+    <br> <br> <br> <br> <br>
+    <jsp:include page="footer.jsp"></jsp:include></div>
 </body>
 </html>
