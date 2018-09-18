@@ -17,22 +17,21 @@
   <!-- endinject -->
   <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/favicon.png" />
   <style type="text/css">
-  #n1, #n2, #n3{
-    background-color: #d9534f;
-  }
+ 
   </style>
 </head>
 <body>
-<nav id="n2" class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-      <div id="n3" class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
-        <a class="navbar-brand brand-logo" href="/main">
-          <img src="/resources/front_image/logo_jmt.png" alt="logo" />
-        </a>
-        <a class="navbar-brand brand-logo-mini" href="/main">
+<!-- <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row"> -->
+<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row navbar-light bg-light">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
+      <a class="navbar-brand brand-logo" href="/main">
+          <img src="/resources/front_image/logo_jmt.png" alt="logo" height=50px />
+        </a> 
+        <!-- <a class="navbar-brand brand-logo-mini" href="/main">
           <img src="/resources/front_image/logo.png" alt="logo" />
-        </a>
+        </a> -->
       </div>
-      <div id="n1" class="navbar-menu-wrapper d-flex align-items-center">
+      <div class="navbar-menu-wrapper d-flex align-items-center">
         <!-- <ul class="navbar-nav navbar-nav-left header-links d-none d-md-flex">
           <li class="nav-item">
             <a href="#" class="nav-link">Schedule

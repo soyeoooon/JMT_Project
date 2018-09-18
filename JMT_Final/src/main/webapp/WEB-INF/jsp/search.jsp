@@ -27,8 +27,14 @@
     }
     
     .row .map{
-      left : 800px;
+     
       position: fixed;
+      right: 0;
+    }
+    
+    .row{
+    padding-left: 10px;
+    
     }
 
 </style>
@@ -44,10 +50,7 @@
         <div class="card-deck" id="card-deck"></div>
       </div>
       <div class="row col-md-6 map">
-
         <div id="map" style="width: 100%; height: 400px;"></div>
-   
-  
       </div>
     </div>
   </div>
@@ -58,7 +61,7 @@
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+ <!--  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -100,9 +103,23 @@
 
 							for (var i = 0; i < data['searchList'].length; i++) {
 								txt += '<div class="card">';
-								txt += '<img class="card-img-top" src="${pageContext.request.contextPath}/resources/front_image/food.jpg" alt="Card image cap">';
+								 $.ajax({
+	                                 data : {
+	                                      search : data['searchList'][i].r_name,
+	                                   },
+	                                   url : 'searchImage',
+	                                   type : 'post',
+	                                   async : false,
+	                                   success : function(image){
+	                                    if(data['searchList'][i].r_photo!=null)
+	                                       txt += '<img class="card-img-top" src="${pageContext.request.contextPath}/resources/front_image/food.jpg" alt="Card image cap">';
+	                                    else
+	                                       txt += '<img class="card-img-top" src="'+image+'" alt="Card image cap" style="height: 200px;">'; 
+	                                   }
+	                              })
+
 								txt += '<div class="card-body">';
-								txt += '<h5 class="card-title"><a href="/RestaurantView?r_num=' + data['searchList'][i].r_num +'">' + data['searchList'][i].r_name + '</a></h5>';
+								txt += '<h5 class="card-title"><a href="/RestaurantView?r_num=' + data['searchList'][i].r_num +'">' + data['searchList'][i].r_name + '</a><img class="setCenter" id="'+data['searchList'][i].r_address+'" src="/icons/pin.png"></h5>';
 								txt += '<p class="card-text">' + data['searchList'][i].r_address + '</p>';
 								txt += '<p class="card-text"><small class="text-muted">' + data['searchList'][i].r_category1 + '</small></p>';
 								txt += '<p class="card-text"><small class="text-muted">' + data['searchList'][i].r_category2 + '</small></p>';
@@ -157,6 +174,17 @@
 						}
 
 						$("#card-deck").append(txt);
+						  function moveMap(map,r_address){
+			                     naver.maps.Service.geocode({address : r_address}, function(status, response) { // 해당 주소로 네이버 맵 API 서비스 실행
+			                        var result = response.result;
+			                        var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
+			                        map.setCenter(myaddr);
+			                     })
+			                  }
+			                  $('.setCenter').click(function(){
+			                     moveMap(map,$(this).attr('id'));
+			                  })
+
 
 						var el = '';
 						el += '<ul class="pagination pagination-sm" id="ulPage">';
@@ -210,9 +238,23 @@
 							var txt = '';
 							for (var i = 0; i < data['searchList'].length; i++) {
 								txt += '<div class="card">';
-								txt += '<img class="card-img-top" src="${pageContext.request.contextPath}/resources/front_image/food.jpg" alt="Card image cap">';
+								 $.ajax({
+	                                 data : {
+	                                      search : data['searchList'][i].r_name,
+	                                   },
+	                                   url : 'searchImage',
+	                                   type : 'post',
+	                                   async : false,
+	                                   success : function(image){
+	                                    if(data['searchList'][i].r_photo!=null)
+	                                       txt += '<img class="card-img-top" src="${pageContext.request.contextPath}/resources/front_image/food.jpg" alt="Card image cap">';
+	                                    else
+	                                       txt += '<img class="card-img-top" src="'+image+'" alt="Card image cap" style="height: 200px;" >'; 
+	                                   }
+	                              })
+
 								txt += '<div class="card-body">';
-								txt += '<h5 class="card-title"><a href="/RestaurantView?r_num=' + data['searchList'][i].r_num +'">' + data['searchList'][i].r_name + '</a></h5>';
+								txt += '<h5 class="card-title"><a href="/RestaurantView?r_num=' + data['searchList'][i].r_num +'">' + data['searchList'][i].r_name + '</a><img class="setCenter" id="'+data['searchList'][i].r_address+'" src="/icons/pin.png"></h5>';
 								txt += '<p class="card-text">' + data['searchList'][i].r_address + '</p>';
 								txt += '<p class="card-text"><small class="text-muted">' + data['searchList'][i].r_category1 + '</small></p>';
 								txt += '<p class="card-text"><small class="text-muted">' + data['searchList'][i].r_category2 + '</small></p>';

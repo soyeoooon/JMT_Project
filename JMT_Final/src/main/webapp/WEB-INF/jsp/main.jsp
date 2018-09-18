@@ -31,6 +31,7 @@
         width: 75%
         border: 1px solid black;
         overflow: auto;
+        text-align: center;
     }
 
     div.RestList::-webkit-scrollbar {
@@ -99,7 +100,7 @@
     })
     </script>
 
-    <div style="text-align: center; margin-bottom: 50px;">
+    <div id="message1" style="text-align: center; margin-bottom: 50px;">
         <h3>당신을 위한 추천이 준비되었습니다.</h3><br>
         <button type="button" class="btn btn-outline-danger btn-lg" data-toggle="modal" data-target="#myModal" id="filter">필터적용하기</button>
     </div>
@@ -238,14 +239,30 @@
       
       function makeList(data){
          if(data.length==0){
-            $('.RestList').html('<h1>표시할 데이터가 존재하지 않습니다.</h1>');
+        	$('#message1').hide();
+            $('.RestList').html('<h1>표시할 데이터가 존재하지 않습니다.</h1><br><button class="btn btn-outline-warning" onclick="location.href='+"'/selectForm'"+'">취향선택하기</button>');
          }else{
             var result = ''
             result +='<div class="container-fluid bg-3 text-center">';
             result +='<div class="row">';
             for(var i =0;i<data.length;i++){
                result +='<div class="col-sm-3">'
-               result +='<img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">'
+            	   $.ajax({
+                       data : {
+                            search : data[i].r_name,
+                            sigu : $('#group1').val()+' '+$('#group2').val()
+                         },
+                         url : 'searchImage',
+                         type : 'post',
+                         async : false,
+                         success : function(image){
+                          if(data[i].r_photo!=null)
+                             result += '<img src="'+data[i].r_photo+'" class="img-responsive" style="width:100%" alt="Image">';
+                          else
+                             result += '<img src="'+image+'" class="img-responsive" style="width:100%" alt="Image" style="width:364px; height:243px;">'; 
+                         }
+                    })
+
                result +='<h2><a href="/RestaurantView?r_num='+data[i].r_num+'">'+data[i].r_name+'</a></h2>'
                result +='<p>'+data[i].r_address+'</p>'
                $.ajax({

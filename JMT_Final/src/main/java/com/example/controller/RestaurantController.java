@@ -50,6 +50,20 @@ public class RestaurantController {
 	
 	@Autowired
 	private MidCategoryService midCategoryService;
+	
+	@RequestMapping("/review_delete")
+	   public @ResponseBody int review_delete(int rev_num, int r_num) {
+	      return restaurantService.review_delete(rev_num, r_num);
+	   }
+	
+	 @RequestMapping("/searchImage")
+     public @ResponseBody String searchImage(@RequestParam(required = false) String search,@RequestParam(required = false) String sigu) {
+        if(sigu==null){
+           return restaurantService.searchImage(search);
+        }else{
+           return restaurantService.searchImage(sigu+" "+search);
+        }
+     }
 
 	// --------------------------------추가(v1)----------------------------------------
 	// 파일업로드

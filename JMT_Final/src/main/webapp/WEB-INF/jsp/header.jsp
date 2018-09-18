@@ -11,8 +11,9 @@
 
 <title></title>
 <style type="text/css">
-  .navbar{
-    background-color: rgba(242,242,242,0.5);
+  .navbar.fixed-top{
+    opacity: 0.8;
+    
   
   }
 </style>

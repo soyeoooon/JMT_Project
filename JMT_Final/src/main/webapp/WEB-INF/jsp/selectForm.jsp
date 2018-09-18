@@ -16,13 +16,13 @@
 <style>
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
 
-    h1 {
+    /* h1 {
         font-size: 50px;
     }
 
     p {
         font-size: 25px;
-    }
+    } */
 
     div.RestList{
         height: 700px;
@@ -180,6 +180,10 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
    color: red;
 }
 
+.col-sm-3{
+  margin-bottom: 15px;
+}
+
 </style>
 
 <!-- <div class="header" style="text-align: center;">
@@ -286,14 +290,29 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
                type : 'post',
                success : function(data){
             	   $('.row').html('');
+            	   
                   for(var i = 0;i<data.length;i++){
 	                 var result = '';
+	                
                      result += '<div class="col-sm-3" id="'+data[i].r_num+'">';
-                     if(data[i].r_photo!=null)
-                        result += '<img src="'+data[i].r_photo+'" class="img-responsive" style="width:100%" alt="Image">';
-                     else
-                        result += '<img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width:100%" alt="Image">'; 
-                     result += '<h2>'+data[i].r_name+'</h2>';
+                     result+='<div class="card">';
+                     $.ajax({
+                         data : {
+                              search : data[i].r_name,
+                              sigu : $('#group1').val()+' '+$('#group2').val()
+                           },
+                           url : 'searchImage',
+                           type : 'post',
+                           async : false,
+                           success : function(image){
+                            if(data[i].r_photo!=null)
+                               result += '<img src="${pageContext.request.contextPath}/resources/front_image/food.jpg" class="card-img-top" style="height: 200px;" alt="Image">';
+                            else
+                               result += '<img src="'+image+'" class="card-img-top" style="height: 200px;" alt="Image" style="width:364px; height:182px;">'; 
+                           }
+                      })
+                      result+='<div class="card-body">';
+                     result += '<h5>'+data[i].r_name+'</h5>';
                      result += '<p class="name_p">'+data[i].r_address+'</p>';
                      /*수정(v1)*/
                      $.ajax({
@@ -317,7 +336,8 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ { co
                          }
                       })
                      result += '<table width="100%"><tr><td></td><td width="210px"><div class="starRev" align="center"><span class="starR1 1">별1_왼쪽</span><span class="starR2 2">별1_오른쪽</span><span class="starR1 3">별2_왼쪽</span><span class="starR2 4">별2_오른쪽</span><span class="starR1 5">별3_왼쪽</span><span class="starR2 6">별3_오른쪽</span><span class="starR1 7">별4_왼쪽</span><span class="starR2 8">별4_오른쪽</span><span class="starR1 9">별5_왼쪽</span><span class="starR2 10">별5_오른쪽</span></div></td><td></td></tr></table><button class="x_btn">X</button></div>';
-	                 $('.row').append(result);
+	                 result+='</div></div>';
+                     $('.row').append(result);
 	                 $("#"+data[i].r_num).find('.'+data[i].e_grade*2).addClass('on').prevAll('span').addClass('on');
 	                 $("#"+data[i].r_num).find('.'+grade_list[data[i].r_num]*2).addClass('on').prevAll('span').addClass('on');
 	                 

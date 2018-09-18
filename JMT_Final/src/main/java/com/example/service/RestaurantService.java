@@ -72,6 +72,81 @@ public class RestaurantService {
 	@Autowired
 	BigCategoryDao bigCategoryDao;
 	
+	public int review_delete(int rev_num, int r_num) {
+	      reviewDao.deleteReview(rev_num);
+	      String root = System.getProperty("user.dir")+"/target/classes/static/";
+	      File file=new File(root+r_num+"/"+rev_num+"/");
+	      file.delete();
+	      return rev_num;
+	   }
+	public String searchImage(String search){
+	      String image = null;
+	      if (search == null)
+	         search = "";
+	      try {
+	         String clientID = "B6HduloDTnsDlYyCCTLt";
+	         String clientSecret = "Y7UZakiuN9";
+	         URL url = new URL("https://openapi.naver.com/v1/search/image.xml?query="
+	               + URLEncoder.encode(search, "" + "UTF-8") + "&display=1&start=1");
+	         URLConnection urlConn = url.openConnection();
+
+	         urlConn.setRequestProperty("X-Naver-Client-Id", clientID);
+	         urlConn.setRequestProperty("X-Naver-Client-Secret", clientSecret);
+
+	         BufferedReader br = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
+	         String msg = null;
+	         String data = "";
+	         while ((msg = br.readLine()) != null) {
+	            data = data + msg;
+	         }
+	         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+	         XmlPullParser parser = factory.newPullParser();
+
+	         parser.setInput(new StringReader(data));
+	         int eventType = parser.getEventType();
+	         
+
+	         while (eventType != XmlPullParser.END_DOCUMENT) {
+	            switch (eventType) {
+	            case XmlPullParser.END_DOCUMENT:
+	               break;
+	            case XmlPullParser.START_DOCUMENT:
+	               break;
+
+	            case XmlPullParser.END_TAG:
+	               
+	            case XmlPullParser.START_TAG:
+	               String tag1 = parser.getName();
+	               switch (tag1) {
+	               case "item":
+	                  image = "";
+	                  break;
+	               case "link":
+	                  image = parser.nextText();
+	                  if(!image.equals("http://search.naver.com")){
+	                     System.out.println(image);
+	                     return image;
+	                  }
+	                  break;
+	               }
+	            }
+	            eventType = parser.next();
+	         }
+
+	      } catch (MalformedURLException e) {
+	         // TODO Auto-generated catch block
+	         e.printStackTrace();
+	      } catch (IOException e) {
+	         // TODO Auto-generated catch block
+	         e.printStackTrace();
+	      } catch (XmlPullParserException e) {
+	         // TODO Auto-generated catch block
+	         e.printStackTrace();
+	      }
+	      return image;
+	   }
+
+	
 	//레스토랑서비스 추가
 	   public Restaurant getRestaurantByRNum(int r_num){
 	      return restaurantDao.selectRestaurantByRNum(r_num);

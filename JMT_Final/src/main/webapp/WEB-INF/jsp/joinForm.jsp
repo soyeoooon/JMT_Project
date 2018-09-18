@@ -381,6 +381,7 @@ button[type="button"].login:focus {
               if(data==true){
                 if($('#password1').val()==$('#password2').val()){
                       $('#Modalbtn').attr('data-toggle','modal');
+                      $('#EmailModal').modal();
                       TimerStart();
                     }else{
                       $('#Modalbtn').attr('data-toggle','');

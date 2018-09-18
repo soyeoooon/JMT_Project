@@ -147,16 +147,16 @@ public class MemberController {
 	      return null;
 	   }
 	
-	 @RequestMapping("/getRecommend")
+	   @RequestMapping("/getRecommend")
 	   public @ResponseBody List<Restaurant> getRecommend(HttpSession session,@RequestParam (required = false)String filter){
 	      List<Restaurant> favorlist = new ArrayList<Restaurant>();
 	      List<Restaurant> favorlistwithFilter = new ArrayList<Restaurant>();
 	      for(Recommend r : recommendService.getRecommend(getM_NumByEmailNum(emailNumBySession(session)))){
 	         favorlist.add(restaurantService.getRestaurantByRNum(r.getR_num_final()));
 	      }
-	      if(filter!=null){
+	      if(filter!=null&&!filter.equals("")){
 	         String[] filterList = filter.split("@");
-	         for(int i=0;i<filterList.length;i++){
+	         for(int i=1;i<filterList.length;i++){
 	            String[] detailFilter = filterList[i].split("-");
 	            int big_num = Integer.parseInt(detailFilter[0]);
 	            String category1 = bigCategoryService.getBigcategoryName(big_num);

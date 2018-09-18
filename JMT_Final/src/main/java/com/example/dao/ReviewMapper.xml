@@ -11,8 +11,7 @@
 	<update id="update" parameterType="review">
 		update review set rev_content=#{rev_content},rev_grade=#{rev_grade},rev_date=#{rev_date} where rev_num=#{rev_num}
 	</update>
-    <delete id="deleteReview">
-    </delete>
+    
   	<select id="selectAllReview" resultType="com.example.model.Review">
   	</select>
   	
@@ -20,4 +19,8 @@
   	<select id="ReviewSelect" parameterType="int" resultType="hashMap">
 			SELECT m.m_photo,m.m_nick, m.m_level ,r.* FROM review r, memberlist m where r.m_num=m.m_num and r.r_num=#{r_num};
 		</select>
+		
+		 <delete id="deleteReview">
+       delete from review where rev_num=#{rev_num}
+    </delete>
   </mapper>

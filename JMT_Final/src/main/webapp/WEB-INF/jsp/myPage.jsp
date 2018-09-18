@@ -1,13 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="header.jsp" %>
+<%@ include file="header.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <!-- Bootstrap CSS -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
- integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> 
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/editor/jquery-te-1.4.0.min.js" charset="utf-8"></script>
@@ -20,7 +19,8 @@
 <link type="text/css" rel="stylesheet" href="/editor/jquery-te-1.4.0.css">
 <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous"></script>
 <style type="text/css">
-@import url(https://fonts.googleapis.com/earlyaccess/nanumpenscript.css);
+@import url(https://fonts.googleapis.com/earlyaccess/nanumpenscript.css)
+	;
 
 #diary {
 	font-size: 15px;
@@ -75,12 +75,13 @@
 	cursor: pointer;
 }
 
-#calendar{
-  border : 1px solid #ddd;
+#calendar {
+	border: 1px solid #ddd;
+    padding : 10px;
 }
 
-#diary{
-  padding : 10px;
+#diary {
+	padding: 10px;
 }
 
 #myModal .modal-dialog {
@@ -130,12 +131,12 @@ ul.tabs li {
 	display: inline-block;
 	/* padding: 10px 15px; */
 	/* cursor: pointer; */
-margin: 0 0 -1px;
-  padding: 15px 25px;
-  font-weight: 600;
-  text-align: center;
-  color: #bbb;
-  border: 1px solid transparent;
+	margin: 0 0 -1px;
+	padding: 15px 25px;
+	font-weight: 600;
+	text-align: center;
+	color: #bbb;
+	border: 1px solid transparent;
 	font-family: FontAwesome;
 }
 
@@ -151,11 +152,10 @@ img {
 
 /*선택된 탭 꾸미기*/
 ul.tabs li.current {
-	
 	color: #555;
 	border: 1px solid #ddd;
 	border-top: 2px solid orange;
-  border-bottom: 1px solid #fff;
+	border-bottom: 1px solid #fff;
 }
 
 .tab-content {
@@ -163,11 +163,11 @@ ul.tabs li.current {
 	/* background: #ededed; */
 	padding: 15px;
 	border-top: 1px solid #ddd; /* 검은색 */
+    height: 600px;
 }
 
 .tab-content.current {
-  display: inherit;
-  
+	display: inherit;
 }
 
 #calendar td, th {
@@ -180,6 +180,7 @@ ul.tabs li.current {
 	text-align: center;
 	width: 30px;
 	height: 30px;
+
 }
 
 #anotherDiary td {
@@ -204,6 +205,21 @@ ul.tabs li.current {
 
 #myModal3Image {
 	width: 550px;
+}
+
+#chart1, #chart2{
+
+  height: 500px;
+  width: 500px;
+  border: 1px #ddd;
+}
+
+#chart1{
+  padding: 50px;
+}
+
+#info, #infoImg{
+  margin: 20px;
 }
 </style>
 
@@ -285,13 +301,21 @@ ul.tabs li.current {
     </ul>
 
     <div id="tab-1" class="tab-content current">
-      <div class="graph" style="display: inline-block;"></div>
-      <div id="graphlist" style="display: inline-block;"></div>
-      <div id="wordcloud" style="display: inline-block;"></div>
-    </div>
-  
+      <div class="row">
+        <div id="chart1">
+          <div class="graph" style="display: inline-block;"></div>
+          <div id="graphlist" style="display: inline-block;"></div>
+        </div>
+        <div id="chart2">
+          <div id="wordcloud" style="display: inline-block;"></div>
+        </div>
+      </div>
 
-  <script type="text/javascript">
+
+    </div>
+
+
+    <script type="text/javascript">
 	$(function(){
 		$.get('wordcloud',function(data){
 	         var fill = d3.scale.category20();
@@ -309,7 +333,7 @@ ul.tabs li.current {
 	               }
 	            }
 	         }
-	         var layout = d3.layout.cloud().size([500, 500])
+	         var layout = d3.layout.cloud().size([450, 450])
 	             .words(words.map(function(d) {
 	               return {text: d, size: returnCount(d)*10, test: "haha"};
 	             }))
@@ -348,7 +372,7 @@ ul.tabs li.current {
 				for(var i =0;i<data.length;i++){
 					graphData.push(data[i].count);
 				}
-				var colorData = ["red", "orange", "yellow", "blue", "purple","pink","green"];
+				var colorData = ["#fe4365", "#fc9d9a", "#f9cdad", "#c8c8a9", "#f8ca00","#e97f02","#bd1550"];
 				var pie = d3.pie();
 				var arc = d3.arc().innerRadius(40).outerRadius(150); 
 				var result = '<table>';
@@ -409,86 +433,86 @@ ul.tabs li.current {
 		myPageTab1();
 	})
 	</script>
-  <div id="tab-2" class="tab-content">
-    <table>
-      <tr>
-        <td style="text-align: center;">
-          <button class="btn btn-outline-success" id="ListorCalendar">리스트로보기</button>
-        </td>
-        <td colspan="3" id="deleteD"></td>
-        <td colspan="3" id="writeD"></td>
-      </tr>
-      <tr>
-        <td rowspan="4" id="calendar" style="vertical-align: top;">
-          <!-- <div id="calendar" style="width: 400px; height: 200px;"> -->
+    <div id="tab-2" class="tab-content">
+      <table>
+        <tr>
+          <td style="text-align: center;">
+            <button class="btn btn-outline-success" id="ListorCalendar">리스트로보기</button>
+          </td>
+          <td colspan="3" id="deleteD"></td>
+          <td colspan="3" id="writeD"></td>
+        </tr>
+        <tr>
+          <td rowspan="4" style="vertical-align: top;">
+            <div id="calendar" style="width: 400px; height: 440px;"> 
           <!-- 달력테이블이 만들어지는 자리 -->
 
-          <!-- </div> -->
-        </td>
-        <td colspan="6">
-          <div id="diary" style="width: 350px; height: 200px; padding: 10px;">
-            <!-- 다이어리 제목과 내용이 만들어지는 자리  -->
-          </div>
-        </td>
-      </tr>
-      <tr id="icons">
-      </tr>
-      <tr id="photos">
-      </tr>
-      <tr id="anotherDiary">
+           </div>  
+          </td>
+          <td colspan="6">
+            <div id="diary" style="width: 350px; height: 200px; padding: 10px;">
+              <!-- 다이어리 제목과 내용이 만들어지는 자리  -->
+            </div>
+          </td>
+        </tr>
+        <tr id="icons">
+        </tr>
+        <tr id="photos">
+        </tr>
+        <tr id="anotherDiary">
 
-      </tr>
-    </table>
-    <!-- <table border="2" style="float: right;">
+        </tr>
+      </table>
+      <!-- <table border="2" style="float: right;">
       </table> -->
-  </div>
-
-
-  <div id="tab-3" class="tab-content">
-    <div class="card-deck">
-    <div class="card">
-    <div class="card-header">즐겨찾기 목록을 오른쪽 지도에서 확인하세요</div>
-      <div id="tab3List" style="display: inline-block;"></div>
-  </div>
-      <div class="card">
-      <div class="card-header">
-      
-        <!-- <div style="position: absolute;"> -->
-          <div style="position: relative;">
-            <img id="relateLike" src="/icons/like.png"> <img id="relateMark" src="/icons/star.png">
-          </div>
-        <!-- </div> -->
-      </div>
-      <div class="card-body">
-      <div id="likestarmap" style="width: 400px; height: 300px; position: relative;"></div>
-      </div>
-      
-      </div>
-      
-      
     </div>
-  </div>
 
 
-
-
-
-
-  <div id="tab-4" class="tab-content">
-    친구찾기
-    <button class="btn btn-primary">
-      <img src="/icons/search.png" id="findFriendBtn" data-toggle="modal" data-target="#findFriend">
-    </button>
+    <div id="tab-3" class="tab-content">
       <div class="card-deck">
         <div class="card">
-        <div class="card-header">나의 친구목록</div>
+          <div class="card-header">즐겨찾기 목록을 오른쪽 지도에서 확인하세요</div>
+          <div id="tab3List" style="display: inline-block;"></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+
+            <!-- <div style="position: absolute;"> -->
+            <div style="position: relative;">
+              <img id="relateLike" src="/icons/like.png"> <img id="relateMark" src="/icons/star.png">
+            </div>
+            <!-- </div> -->
+          </div>
+          <div class="card-body">
+            <div id="likestarmap" style="width: 400px; height: 300px; position: relative;"></div>
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
+
+
+
+
+
+    <div id="tab-4" class="tab-content">
+      친구찾기
+      <button class="btn btn-primary">
+        <img src="/icons/search.png" id="findFriendBtn" data-toggle="modal" data-target="#findFriend">
+      </button>
+      <div class="card-deck">
+        <div class="card">
+          <div class="card-header">나의 친구목록</div>
           <div class="card-body">
             <div id="myFriends" style="display: inline-block;"></div>
           </div>
         </div>
 
         <div class="card">
-        <div class="card-header">친구 요청목록</div>
+          <div class="card-header">친구 요청목록</div>
           <div class="card-body">
             <div id="forRespFriends" style="display: inline-block;"></div>
           </div>
@@ -498,68 +522,68 @@ ul.tabs li.current {
 
 
 
-  <div id="tab-5" class="tab-content">
-    <div class="row justify-content-md-center">
-    
-    <div style="display: inline-block;">
-      <table>
-        <tr>
-          <td style="text-align: center; vertical-align: top;">
-            <img id="profilePhoto" src="" style="width: 250px;" />
-          </td>
-        </tr>
-        <tr>
-          <td style="text-align: center;">
-            <button class="btn btn-outline-dark" id="changePP" data-toggle="modal" data-target="#myModal7">사진변경</button>
-          </td>
-        </tr>
-      </table>
+    <div id="tab-5" class="tab-content">
+      <div class="row justify-content-md-center">
+
+        <div style="display: inline-block;" id="infoImg" >
+          <table>
+            <tr>
+              <td style="text-align: center; vertical-align: top;">
+                <img id="profilePhoto" src="" style="width: 250px;" />
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">
+                <button class="btn btn-outline-dark" id="changePP" data-toggle="modal" data-target="#myModal7">사진변경</button>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="card text-center" id="info">
+          <div class="card-body" style="display: inline-block;">
+            <table>
+              <tr>
+                <th>이메일</th>
+              </tr>
+              <tr>
+                <td id="profileEmail"></td>
+              </tr>
+              <tr>
+                <th>닉네임</th>
+              </tr>
+              <tr>
+                <td>
+                  <input type="text" id="profileNickName">
+                </td>
+              </tr>
+              <tr>
+                <th>새 비밀번호 입력</th>
+              </tr>
+              <tr>
+                <td>
+                  <input type="password" id="profileNewPwd1">
+                </td>
+              </tr>
+              <tr>
+                <th>새 비밀번호 확인</th>
+              </tr>
+              <tr>
+                <td>
+                  <input type="password" id="profileNewPwd2">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <button class="btn btn-outline-dark" style="width: 100px; height: 50px;" id="changeID">변경</button>
+                </td>
+              </tr>
+            </table>
+            <div id="checkPwd"></div>
+          </div>
+
+        </div>
+      </div>
     </div>
-    <div class="card text-center">
-    <div class="card-body" style="display: inline-block;">
-      <table>
-        <tr>
-          <th>이메일</th>
-        </tr>
-        <tr>
-          <td id="profileEmail"></td>
-        </tr>
-        <tr>
-          <th>닉네임</th>
-        </tr>
-        <tr>
-          <td>
-            <input type="text" id="profileNickName">
-          </td>
-        </tr>
-        <tr>
-          <th>새 비밀번호 입력</th>
-        </tr>
-        <tr>
-          <td>
-            <input type="password" id="profileNewPwd1">
-          </td>
-        </tr>
-        <tr>
-          <th>새 비밀번호 확인</th>
-        </tr>
-        <tr>
-          <td>
-            <input type="password" id="profileNewPwd2">
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <button class="btn btn-outline-dark" style="width: 100px; height: 50px;" id="changeID">변경</button>
-          </td>
-        </tr>
-      </table>
-      <div id="checkPwd"></div>
-    </div>
-    
-    </div>
-  </div>
-</div>
   </div>
   <br>
   <!-- ///////////////////////////////////////////////// 두번째 탭 ///////////////////////////////////////////////// -->
@@ -2052,7 +2076,7 @@ ul.tabs li.current {
 					$('#diary_weather').attr('src','');
 					$('#deleteD').html('');
 					
-					var result = '<ul style="font-size : 15px; line-height : 200%;">';
+					var result = '<ul style="font-size : 15px; line-height : 200%; height: 350px">';
 					var thispage = page;
 					var startPage = Math.floor(thispage/6)*5+1;
 					var endPage = Math.floor(thispage/6)*5+5;
@@ -2064,7 +2088,7 @@ ul.tabs li.current {
 						result += '</li>';
 					}
 					result += '</ul>';
-					result += '<table class="pagingTable"><tr>';
+					result += '<table class="pagingTable" ><tr>';
 					if(startPage>1){
 						result += '<td><button class="btn btn-warning" id="BePage"><</button></td>';
 					}
@@ -2281,8 +2305,8 @@ ul.tabs li.current {
 			$('#deleteD').html('');
 			$('#writeD').html('');
 			var result='';
-			result+='<div class="card">';
-			result+='<div class="card-body">';
+			//result+='<div class="card">';
+			//result+='<div class="card-body">';
 			
 			result+='<table>';
 			today = new Date(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
@@ -2331,7 +2355,7 @@ ul.tabs li.current {
 					result += '</tr><tr>';
 				}
 			}
-			result += '</tr></table></div></div>';
+			result += '</tr></table>';
 			
 			$('#calendar').html(result);
 			
@@ -2613,12 +2637,10 @@ ul.tabs li.current {
 </script>
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <!-- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
-  
+
   <!-- bootstrap 4 버전 스크립트로 추가 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" 
-  integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" 
-    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
 </body>
 

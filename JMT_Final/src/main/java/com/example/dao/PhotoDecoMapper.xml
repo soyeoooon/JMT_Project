@@ -3,8 +3,8 @@
 <mapper namespace="com.example.dao.PhotoDecoDao">
 
 <!-- 추가(v1) -->
-	<select id="getFoodNameByDiaryNum" resultType="com.example.model.PhotoDeco">
-		select p_foodname from photodeco where substring_index(p_imgname,'/',2)*1 = #{diary_num} order by p_foodname<!-- substring_index에서 p_imgname의 값이 변경되면 숫자도 바꿔줘야됨 -->
+	<select id="getFoodNameByDiaryNum" resultType="String">
+      select p_foodname from photodeco where substring(p_imgname,8,length(substring_index(p_imgname,'/',3))-7) = #{diary_num}
      </select>
      
 <!-- /*=============성록=============*/ -->
