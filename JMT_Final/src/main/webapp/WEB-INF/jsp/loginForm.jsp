@@ -92,6 +92,7 @@ div.form-item {
    position: relative;
    display: block;
    margin-bottom: 40px;
+  
 }
 
 input {
@@ -101,7 +102,7 @@ input {
 input.form-style {
    color: #8a8a8a;
    display: block;
-   width: 90%;
+    width: 100%; 
    height: 44px;
    padding: 5px 5%;
    border: 1px solid #ccc;
@@ -145,7 +146,8 @@ div.form-item p.formLabel {
 }
 
 input[type="button"].login {
-   float: right;
+   /* float: right; */
+   align: center;
    width: 112px;
    height: 37px;
    -moz-border-radius: 19px;
@@ -171,6 +173,10 @@ input[type="button"].login:hover {
 input[type="button"].login:focus {
    outline: none;
 }
+
+#line1, #line2{
+  text-align: center;
+}
 </style>
 </head>
 <body>
@@ -190,19 +196,26 @@ input[type="button"].login:focus {
         <!-- <div class="pw-view"><i class="fa fa-eye"></i></div> -->
         <!-- <p><a href="#" ><small>Forgot Password ?</small></a></p> -->
       </div>
-        <input type="button" class="login pull-right" id="dologin" value="로그인">
-      <div class="form-item" style="width: 50%;">
-        <p class="pull-left">
-          <a href="/joinForm"><small>이메일로 시작하기</small></a>
-        </p>
-        <div class="clear-fix"></div>
+      <div id="line1" >
+        
+          <a href="/joinForm"><small>이메일로 시작하기</small></a> <br><br>
+        
+        <input type="button" class="login" id="dologin" value="로그인">
+        
       </div>
+    
+     
+      
+    <div id="line2">
+    <br><br>
         <!-- 네이버 로그인(숨김) : 스크립트에 사용되는 Div -->
         <div id="naver_id_login" style="display: none;"></div>
         <!-- 네이버 로그인(보임) : 사용자 눈에 보여주는 Img-->
         <a href="#" onclick="document.getElementById('naver_id_login_anchor').click();"> <img src="img/naver_login.PNG" width="38" />
         </a> <a id="custom-login-btn" href="javascript:loginWithKakao()"> <img src="img/kakao_login.png" width="38" />
         </a>
+    </div>
+
     </div>
   </div>
   <div class="container">

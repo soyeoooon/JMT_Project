@@ -7,6 +7,8 @@ import com.example.model.RestModify;
 import com.example.model.Restaurant;
 
 public interface RestaurantDao {
+	public void deleteResImg(int r_num);
+
 	/*--------------------------------추가(v2)-----------------------------------------*/
 	public void countUpdate(HashMap<String, Object> map);
 	/*--------------------------------수정(v2)-----------------------------------------*/

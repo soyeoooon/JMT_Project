@@ -43,13 +43,16 @@
         height: 800px;
         width: 100%;
     } */ 
-    .d-block {
+   /*  .d-block {
         height: 800px;
         width: 100%;
-    }
+    }  */
     
     .carousel-item{
+    height: 400px;
     background-size:cover;
+    background-position: center;
+    background-repeat: no-repeat;
     }
 
 </style>
@@ -68,21 +71,21 @@
             </ol>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img class="d-block w-100" src="https://www.publicdomainpictures.net/pictures/240000/velka/board-with-greek-food-kagyana-pan.jpg" style="width: auto; height: 406px;" alt="First slide">
+                    <img class="d-block w-100" src="https://www.publicdomainpictures.net/pictures/240000/velka/board-with-greek-food-kagyana-pan.jpg" style="width: auto; " alt="First slide">
                     <div class="carousel-caption d-md-block">
                         <h3>당신의 음식 취향은 무엇인가요?</h3>
                         <p>by 맛있는녀석들</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" src="https://www.publicdomainpictures.net/pictures/240000/velka/board-with-greek-food-kagyana-pan.jpg" style="height: 406px;" alt="Second slide">
+                    <img class="d-block w-100" src="https://www.publicdomainpictures.net/pictures/240000/velka/board-with-greek-food-kagyana-pan.jpg" style="width: auto;" alt="Second slide">
                     <div class="carousel-caption d-md-block">
                             <h3>기록하고, 검색하고, 추천받으세요!</h3>
                             <p>by 맛있는녀석들</p>
                     </div>
                 </div>
                 <div class="carousel-item">
-                    <img class="d-block w-100" src="https://www.publicdomainpictures.net/pictures/240000/velka/board-with-greek-food-kagyana-pan.jpg" style="height: 406px;" alt="Third slide">
+                    <img class="d-block w-100" src="https://www.publicdomainpictures.net/pictures/240000/velka/board-with-greek-food-kagyana-pan.jpg" style="width: auto;" alt="Third slide">
                     <div class="carousel-caption d-md-block">
                         <h3>당신의 음식 취향을 위해!</h3>
                         <p>by 맛있는녀석들</p>

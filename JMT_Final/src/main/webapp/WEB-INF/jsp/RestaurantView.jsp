@@ -409,8 +409,8 @@
 
         <!-- Modal footer -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-success" data-dismiss="modal" id="modify_btn">Modify</button>
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" id="modify_btn">수정</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
         </div>
       </div>
     </div>
@@ -461,7 +461,7 @@
             <div class="modal-footer">
                <button type="button" class="btn btn-success" data-dismiss="modal"
                   id="report_btn">Report</button>
-               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+               <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
             </div>
          </div>
       </div>

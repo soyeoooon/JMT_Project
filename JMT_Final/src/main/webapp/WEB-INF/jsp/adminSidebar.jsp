@@ -36,6 +36,8 @@
       </a></li> -->
       <li class="nav-item"><a class="nav-link" href="/restaurantList"> <i class="menu-icon mdi mdi-table"></i> <span class="menu-title">음식점 리스트</span>
       </a></li>
+      <li class="nav-item"><a class="nav-link" href="#"> <i class="menu-icon mdi mdi-table"></i> <span class="menu-title">회원현황</span>
+      </a></li>
     </ul>
   </nav>
 

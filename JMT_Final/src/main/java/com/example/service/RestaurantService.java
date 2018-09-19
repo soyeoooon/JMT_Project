@@ -72,6 +72,11 @@ public class RestaurantService {
 	@Autowired
 	BigCategoryDao bigCategoryDao;
 	
+	public void deleteResImg(int r_num) {
+	      restaurantDao.deleteResImg(r_num);
+	   }
+
+	
 	   public List<String> getRestaurantName(HashMap<String, String> map) {
 		      return restaurantDao.selectAllRestaurantName(map);
 		   }
@@ -99,7 +104,7 @@ public class RestaurantService {
 		return rev_num;
 	}
 
-	public String searchImage(String search) {
+	public String searchImage(String search,String start) {
 		String image = null;
 		if (search == null)
 			search = "";
@@ -107,7 +112,7 @@ public class RestaurantService {
 			String clientID = "B6HduloDTnsDlYyCCTLt";
 			String clientSecret = "Y7UZakiuN9";
 			URL url = new URL("https://openapi.naver.com/v1/search/image.xml?query="
-					+ URLEncoder.encode(search, "" + "UTF-8") + "&display=1&start=1");
+					+ URLEncoder.encode(search, "" + "UTF-8") + "&display=1&start="+start);
 			URLConnection urlConn = url.openConnection();
 
 			urlConn.setRequestProperty("X-Naver-Client-Id", clientID);

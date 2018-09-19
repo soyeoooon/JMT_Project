@@ -51,6 +51,12 @@ public class RestaurantController {
 	@Autowired
 	private MidCategoryService midCategoryService;
 	
+	@RequestMapping("/deleteImg")
+	   public @ResponseBody String deleteImg(@RequestParam int r_num) {
+	      restaurantService.deleteResImg(r_num);
+	      return "삭제되었습니다.";
+	   }
+	
 	@RequestMapping("/testSearch")
     public @ResponseBody List<String> testSearch(String term){
        System.out.println(term);
@@ -71,9 +77,9 @@ public class RestaurantController {
 	}
 
 	@RequestMapping("/searchImage")
-	public @ResponseBody String searchImage(@RequestParam(required = false) String search) {
+	public @ResponseBody String searchImage(@RequestParam(required = false) String search, @RequestParam(defaultValue="1") String start) {
 
-		return restaurantService.searchImage(search);
+		return restaurantService.searchImage(search,start);
 
 	}
 

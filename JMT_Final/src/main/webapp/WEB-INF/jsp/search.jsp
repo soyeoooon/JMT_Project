@@ -109,20 +109,22 @@
 
 							for (var i = 0; i < data['searchList'].length; i++) {
 								txt += '<div class="card">';
-								$.ajax({
-									data : {
-										search : data['searchList'][i].r_name,
-									},
-									url : 'searchImage',
-									type : 'post',
-									async : false,
-									success : function(image) {
-										if (data['searchList'][i].r_photo != null)
-											txt += '<img class="card-img-top" src="'+data['searchList'][i].r_photo+'" alt="Card image cap" style="height: 200px;">';
-										else
+								if (data['searchList'][i].r_photo != null)
+									txt += '<img class="card-img-top savedImg" id = "'+data['searchList'][i].r_num+'" src="'+data['searchList'][i].r_photo+'" alt="Card image cap" style="height: 200px;"><img src="/icons/star.png" style="width : 32px;">';
+								else {
+									$.ajax({
+										data : {
+											search : data['searchList'][i].r_name,
+										},
+										url : 'searchImage',
+										type : 'post',
+										async : false,
+										success : function(image) {
 											txt += '<img class="card-img-top saveImg" id = "'+data['searchList'][i].r_num+'" src="'+image+'" alt="Card image cap" style="height: 200px;">';
-									}
-								})
+										}
+
+									})
+								}
 
 								txt += '<div class="card-body">';
 								txt += '<h5 class="card-title"><a href="/RestaurantView?r_num=' + data['searchList'][i].r_num + '">' + data['searchList'][i].r_name + '</a><img class="setCenter" id="'+data['searchList'][i].r_address+'" src="/icons/pin.png"></h5>';
@@ -156,7 +158,13 @@
 									// 마커 표시
 									var marker = new naver.maps.Marker({
 										position : myaddr,
-										map : map
+										map : map,
+										icon : {
+											url : '/icons/pin.png',
+											size : new naver.maps.Size(30, 32),
+											origin : new naver.maps.Point(0, 0),
+											anchor : new naver.maps.Point(15, 16)
+										}
 									});
 									markers[result.userquery] = marker;
 
@@ -220,39 +228,56 @@
 							console.log($(this).attr('id'), $(this).attr('src'))
 							saveImg($(this).attr('id'), $(this).attr('src'));
 						})
-							function moveMap(map, r_address) {
-								naver.maps.Service.geocode({
-									address : r_address
-								}, function(status, response) { // 해당 주소로 네이버 맵 API 서비스 실행
-									var result = response.result;
-									var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
-									map.setCenter(myaddr);
-									for (var i = 0; i < list.length; i++) {
-										if (list[i] == result.userquery) {
-											markers[list[i]].setAnimation(naver.maps.Animation.BOUNCE);
-											infowindows[list[i]].open(map, markers[list[i]]);
-											var x = markers[list[i]].getPosition().x;
-											var y = markers[list[i]].getPosition().y;
-											console.log(x, y)
-											var panoramaOptions = {
-												position : new naver.maps.LatLng(y, x),
-												pov : {
-													pan : -135,
-													tilt : 29,
-													fov : 100
-												}
-											};
-											var pano = new naver.maps.Panorama("pano", {
-												position : new naver.maps.LatLng(y, x)
-											});
-										} else {
-											markers[list[i]].setAnimation(null);
-											infowindows[list[i]].close();
-										}
-									}
 
-								})
-							}
+						function savedImg(r_num) {
+							$.ajax({
+								data : {
+									r_num : r_num
+								},
+								url : 'deleteImg',
+								type : 'post',
+								success : function(data) {
+									alert(data);
+								}
+							})
+						}
+						$('.savedImg').click(function() {
+							savedImg($(this).attr('id'));
+						})
+
+						function moveMap(map, r_address) {
+							naver.maps.Service.geocode({
+								address : r_address
+							}, function(status, response) { // 해당 주소로 네이버 맵 API 서비스 실행
+								var result = response.result;
+								var myaddr = new naver.maps.Point(result.items[0].point.x, result.items[0].point.y);
+								map.setCenter(myaddr);
+								for (var i = 0; i < list.length; i++) {
+									if (list[i] == result.userquery) {
+										markers[list[i]].setAnimation(naver.maps.Animation.BOUNCE);
+										infowindows[list[i]].open(map, markers[list[i]]);
+										var x = markers[list[i]].getPosition().x;
+										var y = markers[list[i]].getPosition().y;
+										console.log(x, y)
+										var panoramaOptions = {
+											position : new naver.maps.LatLng(y, x),
+											pov : {
+												pan : -135,
+												tilt : 29,
+												fov : 100
+											}
+										};
+										var pano = new naver.maps.Panorama("pano", {
+											position : new naver.maps.LatLng(y, x)
+										});
+									} else {
+										markers[list[i]].setAnimation(null);
+										infowindows[list[i]].close();
+									}
+								}
+
+							})
+						}
 						$('.setCenter').click(function() {
 							moveMap(map, $(this).attr('id'));
 						})
@@ -309,21 +334,22 @@
 							var txt = '';
 							for (var i = 0; i < data['searchList'].length; i++) {
 								txt += '<div class="card">';
-								$.ajax({
-									data : {
-										search : data['searchList'][i].r_name,
-									},
-									url : 'searchImage',
-									type : 'post',
-									async : false,
-									success : function(image) {
-										if (data['searchList'][i].r_photo != null)
-											txt += '<img class="card-img-top" src="'+data['searchList'][i].r_photo+'" alt="Card image cap" style="height: 200px;">';
-										else
+								if (data['searchList'][i].r_photo != null)
+									txt += '<img class="card-img-top savedImg" id = "'+data['searchList'][i].r_num+'" src="'+data['searchList'][i].r_photo+'" alt="Card image cap" style="height: 200px;"><img src="/icons/star.png" style="width : 32px;">';
+								else {
+									$.ajax({
+										data : {
+											search : data['searchList'][i].r_name,
+										},
+										url : 'searchImage',
+										type : 'post',
+										async : false,
+										success : function(image) {
 											txt += '<img class="card-img-top saveImg" id = "'+data['searchList'][i].r_num+'" src="'+image+'" alt="Card image cap" style="height: 200px;">';
+										}
 
-									}
-								})
+									})
+								}
 
 								txt += '<div class="card-body">';
 								txt += '<h5 class="card-title"><a href="/RestaurantView?r_num=' + data['searchList'][i].r_num + '">' + data['searchList'][i].r_name + '</a><img class="setCenter" id="'+data['searchList'][i].r_address+'" src="/icons/pin.png"></h5>';
@@ -357,7 +383,13 @@
 									// 마커 표시
 									var marker = new naver.maps.Marker({
 										position : myaddr,
-										map : map
+										map : map,
+										icon : {
+											url : '/icons/pin.png',
+											size : new naver.maps.Size(30, 32),
+											origin : new naver.maps.Point(0, 0),
+											anchor : new naver.maps.Point(15, 16)
+										}
 									});
 									markers[result.userquery] = marker;
 									var key = 0;
@@ -418,6 +450,22 @@
 							$('.saveImg').click(function() {
 								console.log($(this).attr('id'), $(this).attr('src'))
 								saveImg($(this).attr('id'), $(this).attr('src'));
+							})
+
+							function savedImg(r_num) {
+								$.ajax({
+									data : {
+										r_num : r_num
+									},
+									url : 'deleteImg',
+									type : 'post',
+									success : function(data) {
+										alert(data);
+									}
+								})
+							}
+							$('.savedImg').click(function() {
+								savedImg($(this).attr('id'));
 							})
 							function moveMap(map, r_address) {
 								naver.maps.Service.geocode({

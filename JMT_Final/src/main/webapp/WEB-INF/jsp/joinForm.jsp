@@ -107,7 +107,7 @@ input {
 input.form-style {
   color: #8a8a8a;
   display: block;
-  width: 90%;
+  width: 100%;
   height: 44px;
   padding: 5px 5%;
   border: 1px solid #ccc;
@@ -151,7 +151,8 @@ div.form-item p.formLabel {
 }
 
 button[type="button"].login {
-  float: right;
+  /* float: right; */
+  align: center;
   width: 112px;
   height: 37px;
   -moz-border-radius: 19px;
@@ -176,6 +177,10 @@ button[type="button"].login:hover {
 
 button[type="button"].login:focus {
   outline: none;
+}
+
+#line1{
+  text-align: center;
 }
 </style>
 </head>
@@ -267,8 +272,8 @@ button[type="button"].login:focus {
           <p class="formLabel">비밀번호 확인</p>
           <input type="password" name="pwd" id="password2" class="form-style" />
         </div>
-        <div class="form-item">
-          <button type="button" id="Modalbtn" class="login pull-right" class="close" data-target="#EmailModal" >가입하기</button>
+        <div id="line1">
+          <button type="button" id="Modalbtn" class="login" class="close" data-target="#EmailModal" >가입하기</button>
           <div class="clear-fix"></div>
         </div>
       </form>

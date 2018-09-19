@@ -207,14 +207,15 @@ ul.tabs li.current {
 }
 
 #chart1, #chart2 {
-	height: 500px;
+	height: 550px;
 	width: 500px;
 	margin: 5px;
   border: 1px solid #ddd;
 }
 
-#chart1 {
+#chart1, #chart2{
 	padding: 50px;
+    
 }
 
 #info, #infoImg {
@@ -240,6 +241,16 @@ color: #888;
   font-size: 12px;
   color: #fff;
 }
+#div_res_search{
+margin: 10px;
+}
+
+#res_searchBtn{
+  margin-left: 10px;
+  background-color: #2C656B;
+  color: #fff;
+}
+
 </style>
 
 </head>
@@ -320,15 +331,18 @@ color: #888;
     </ul>
 
     <div id="tab-1" class="tab-content current">
-      <h5>나의 음식취향과 기록들을 그림으로 확인해보세요.</h5>
+     
       <div class="row">
-        <div id="chart1">
+        <fieldset id="chart1">
+        <legend> 나의 음식 카테고리</legend>
           <div class="graph" style="display: inline-block;"></div>
           <div id="graphlist" style="display: inline-block;"></div>
-        </div>
-        <div id="chart2">
+        </fieldset>
+        
+        <fieldset id="chart2">
+        <legend>내가 기록한 음식들</legend>
           <div id="wordcloud" style="display: inline-block;"></div>
-        </div>
+        </fieldset>
       </div>
 
 
@@ -353,7 +367,7 @@ color: #888;
 	               }
 	            }
 	         }
-	         var layout = d3.layout.cloud().size([450, 450])
+	         var layout = d3.layout.cloud().size([400, 400])
 	             .words(words.map(function(d) {
 	               return {text: d, size: returnCount(d)*10, test: "haha"};
 	             }))
@@ -628,11 +642,11 @@ color: #888;
     <!-- 모달 팝업 -->
     <div class="modal fade" id="myModal2">
       <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" style="width:600px">
           <div class="modal-body" id="myModal2Body"></div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal" id="deleteImageBtn" data-toggle="modal" data-target="#confirmModal">Delete</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">확인</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" id="deleteImageBtn" data-toggle="modal" data-target="#confirmModal">삭제</button>
           </div>
         </div>
       </div>
@@ -723,8 +737,10 @@ color: #888;
     <div class="modal fade" id="myModal5">
       <div class="modal-dialog" style="width: 500px; height: 500px;">
         <div class="modal-content">
+          <div class="row" id="div_res_search">
           <input type="text" id="res_searchText" style="width: 250px;">
           <button id="res_searchBtn" class="btn">검색</button>
+          </div>
           <div class="modal-body" id="myModal5Body" style="width: 495px; height: 300px;"></div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
@@ -750,8 +766,8 @@ color: #888;
         <div class="modal-content">
           <div class="modal-body" id="confirmModalBody"></div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-            <button type="button" class="btn btn-primary" id="confirmYes" data-dismiss="modal">Yes</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">아니오</button>
+            <button type="button" class="btn btn-primary" id="confirmYes" data-dismiss="modal">네</button>
           </div>
         </div>
       </div>
@@ -781,7 +797,7 @@ color: #888;
     <!-- 업로드 모달 팝업 -->
     <div class="modal fade" id="myModal6">
       <div class="modal-dialog" style="width: 600px;">
-        <div class="modal-content">
+        <div class="modal-content" style="width: 600px;">
           <form action="uploadDiaryImage" id="diaryImageForm" enctype="multipart/form-data">
             <input type="hidden" id="diaryImageNum">
             <div class="modal-body" id="myModal6Body">
@@ -1139,7 +1155,7 @@ color: #888;
 		          '<span class="starR2" id="4">별4_오른쪽</span>'+
 		          '<span class="starR1" id="4.5">별5_왼쪽</span>'+
 		          '<span class="starR2" id="5">별5_오른쪽</span>'+
-		       	  '<button id="starbtn">별점주기</button></div>'
+		       	  '<button class="btn" id="starbtn">선택하기</button></div>'
 	        });
 	      	
 	     	// 마커 클릭 이벤트 처리
@@ -1182,7 +1198,7 @@ color: #888;
 	               		totaldom += '<span class="starR1 '+on1+'" id="'+(i-0.5)+'"></span>'
 	               		totaldom += '<span class="starR2 '+on2+'" id="'+i+'"></span>'
 	               	}
-	               	totaldom += '<button id="starbtn">별점주기</button></div>';
+	               	totaldom += '<button class="btn" id="starbtn">선택하기</button></div>';
 	               	
 	               	if(juststar==null||juststar==0.5){}
 	               	else{
@@ -1249,15 +1265,15 @@ color: #888;
 					like : $('#relateLike').attr('src'),
 					mark : $('#relateMark').attr('src')
 				},
-				type : 'post',
+				type : 'post', //gggg
 				success : function(data){
 					if(pageNum!=null)
 						Tab3Page = pageNum;
-					var startPage = (Math.floor((Tab3Page-1)/5))*5+1;
-					var endPage = (Math.floor((Tab3Page-1)/5))*5+5;
-					var lastPage = Math.floor((data.length-1)/5)+1;
+					var startPage = (Math.floor((Tab3Page-1)/3))*3+1;
+					var endPage = (Math.floor((Tab3Page-1)/3))*3+3;
+					var lastPage = Math.floor((data.length-1)/3)+1;
 					var result = '<table>';
-					for(var i =(Tab3Page-1)*5;i<(Tab3Page-1)*5+5;i++){
+					for(var i =(Tab3Page-1)*3;i<(Tab3Page-1)*3+3;i++){
 						if(i<data.length){
 							result += '<tr><td rowspan="4">';
 							$.ajax({
@@ -1568,7 +1584,7 @@ color: #888;
 					result += '<tr>'
 						result += '<td rowspan="2" style="width : 50px;"><img src="'+data[i].m_photo+'" style="width : 40px;" /></td>';
 					
-					result += '<td style="width: 220px;"><h3> '+data[i].m_nick+'</h3></td><td rowspan="2"><button class="btn btn-success applyFriend" id="'+data[i].email_num+'">수락</button><button class="btn btn-danger deleteFriend2" id="'+data[i].email_num+'">거절</button></td>';
+					result += '<td style="width: 220px;"><h3> '+data[i].m_nick+'</h3></td><td rowspan="2"><button class="btn btn-outline-success applyFriend" id="'+data[i].email_num+'">수락</button><button class="btn btn-outline-danger deleteFriend2" id="'+data[i].email_num+'">거절</button></td>';
 					result += '</tr>'
 					result += '<tr>'
 					result += '<td> '+data[i].m_intro+'</td>';
@@ -1577,7 +1593,7 @@ color: #888;
 				result += '</table>'
 				result += '<table><tr>'
 				for(var i =1;i<data.length/5+1;i++){
-					result += '<td><button class="btn btn-info getReqF" id="'+i+'">'+i+'</button></td>'
+					result += '<td><button class="btn btn-warning getReqF" id="'+i+'">'+i+'</button></td>'
 				}
 				result += '</tr></table>'
 				$('#forRespFriends').html(result);
@@ -1842,7 +1858,7 @@ color: #888;
 		}
 		function deleteDiary(diary_num){
 			$('#deleteDiaryBtn').off().on('click',function(){
-				$('#confirmModalBody').html('<h3>정말 삭제 하시겠습니까?</h3>');
+				$('#confirmModalBody').html('<h5>정말 삭제 하시겠습니까?</h5>');
 				$('#confirmYes').off().on('click',function(){
 					$.ajax({
 						url : "deleteDiary",
@@ -1880,7 +1896,7 @@ color: #888;
 		}
 		function deleteImage(imgname){
 			$('#deleteImageBtn').off().on('click',function(){
-				$('#confirmModalBody').html('<h3>정말 삭제 하시겠습니까?</h3>');
+				$('#confirmModalBody').html('<h5>정말 삭제 하시겠습니까?</h5>');
 				
 				$('#confirmYes').off().on('click',function(){
 					console.log($('#myModal3Image').attr('src'));
@@ -1902,7 +1918,7 @@ color: #888;
 				var pimgname = $(this).attr('id').split(',.')[0];
 				var plat = $(this).attr('id').split(',.')[1];
 				var plon = $(this).attr('id').split(',.')[2];
-				$('#tagSaveBtn').text('Modify');
+				$('#tagSaveBtn').text('저장');
 				var clix = event.clientX;
 				var cliy = event.clientY-25;
 				$.ajax({
@@ -1983,7 +1999,7 @@ color: #888;
 		
 		function writeFormPhotoDeco(diary_num){
 			$('#myModal3Image').off().on('click',function(){
-				$('#tagSaveBtn').text('Save');
+				$('#tagSaveBtn').text('저장');
 				var clix = event.clientX;
 				var cliy = event.clientY-25;
 				$('#myModal3 .modal-dialog').attr('style','left : ' + clix + 'px; top : '+ cliy + 'px;');
@@ -2578,7 +2594,7 @@ color: #888;
 									            async : false,
 									            data : {diary_num : diary_num},
 									            success : function() {
-									                alert("ㅇㅋ.");
+									                alert("업로드 완료.");
 									            }
 										      });
 								        	$('#diaryImageNum').val(diary_num);

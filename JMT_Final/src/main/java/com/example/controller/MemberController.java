@@ -492,7 +492,7 @@ public class MemberController {
 	@RequestMapping("/givegrade")
 	public @ResponseBody String givegrade(HttpSession session, @RequestParam String point, @RequestParam String place) {
 		double e_grade = Double.parseDouble(point);
-		evaluationService.setEforRByEmail(emailNumBySession(session), restaurantService.searchResNum(place), e_grade);
+		evaluationService.setEforRByEmail(getM_NumByEmailNum(emailNumBySession(session)), restaurantService.searchResNum(place), e_grade);
 		return "myPage";
 	}
 
@@ -823,6 +823,7 @@ public class MemberController {
 	public String join(@RequestParam HashMap<String, Object> params, HttpSession session) {
 		if (memberListService.join(params) == 1) {
 			session.setAttribute("email", (String) params.get("email"));
+			session.setAttribute("profile", "resources/front_image/user.png");
 			return "redirect:/selectForm";
 		}
 		return "redirect:/joinForm";

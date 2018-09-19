@@ -55,7 +55,7 @@
 				txt += '<td>' + data['restaurantList'][i].r_address + '</td>';
 				txt += '<td>' + data['restaurantList'][i].r_category1 + '</td>';
 				txt += '<td>' + data['restaurantList'][i].r_category2 + '</td>';
-				txt += '<td>' + data['restaurantList'][i].r_price + '</td>';
+				
 				txt += '<td>' + data['restaurantList'][i].r_rundate + '</td>';
 				txt += '<td>' + data['restaurantList'][i].r_runtime + '</td>';
 				txt += '<td>' + data['restaurantList'][i].r_menu + '</td>';
@@ -124,7 +124,7 @@
 					txt += '<td>' + data['restaurantList'][i].r_address + '</td>';
 					txt += '<td>' + data['restaurantList'][i].r_category1 + '</td>';
 					txt += '<td>' + data['restaurantList'][i].r_category2 + '</td>';
-					txt += '<td>' + data['restaurantList'][i].r_price + '</td>';
+					
 					txt += '<td>' + data['restaurantList'][i].r_rundate + '</td>';
 					txt += '<td>' + data['restaurantList'][i].r_runtime + '</td>';
 					txt += '<td>' + data['restaurantList'][i].r_menu + '</td>';
@@ -194,7 +194,7 @@
 					txt += '<td>' + data['restaurantList'][i].r_address + '</td>';
 					txt += '<td>' + data['restaurantList'][i].r_category1 + '</td>';
 					txt += '<td>' + data['restaurantList'][i].r_category2 + '</td>';
-					txt += '<td>' + data['restaurantList'][i].r_price + '</td>';
+					
 					txt += '<td>' + data['restaurantList'][i].r_rundate + '</td>';
 					txt += '<td>' + data['restaurantList'][i].r_runtime + '</td>';
 					txt += '<td>' + data['restaurantList'][i].r_menu + '</td>';
@@ -263,7 +263,7 @@
 						txt += '<td>' + data['restaurantList'][i].r_address + '</td>';
 						txt += '<td>' + data['restaurantList'][i].r_category1 + '</td>';
 						txt += '<td>' + data['restaurantList'][i].r_category2 + '</td>';
-						txt += '<td>' + data['restaurantList'][i].r_price + '</td>';
+						
 						txt += '<td>' + data['restaurantList'][i].r_rundate + '</td>';
 						txt += '<td>' + data['restaurantList'][i].r_runtime + '</td>';
 						txt += '<td>' + data['restaurantList'][i].r_menu + '</td>';
@@ -344,7 +344,7 @@
                           <th>주소</th>
                           <th>대분류</th>
                           <th>중분류</th>
-                          <th>가격</th>
+                       
                           <th>영업일</th>
                           <th>영업시간</th>
                           <th>대표메뉴</th>
