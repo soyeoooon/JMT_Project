@@ -18,7 +18,7 @@
   }
 </style>
 
-
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
   <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
@@ -28,12 +28,12 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <form class="form-inline my-2" action="/search">
-        <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="맛집 검색!" aria-label="Search">
+        <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="맛집 검색!"  id="search" aria-label="Search">
         <button class="btn btn-warning my-2 my-sm-0" type="submit">
           <img src="${pageContext.request.contextPath}/resources/front_image/find.png"> 찾기!
         </button>
       </form>
-      <p id="session"></p>
+      <!-- <p id="session"></p> -->
     </div>
     <ul class="navbar-nav">
       <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
@@ -82,5 +82,32 @@
 
 			})
 		</script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+      <script>
+        var hs = jQuery.noConflict();
+      </script>
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      <script type="text/javascript">
+         hs(function() {
+            hs("#search").autocomplete({
+                 source: "testSearch",
+                 minLength: 2,
+                 response: function(event, ui) {
+                     console.log(ui);
+                 },
+                 select: function(event, ui) {
+                     console.log("Selected:" + ui.item.value);
+                 },
+                 focus: function(event, ui) {
+                     return false;
+                 },
+                 open: function(){
+                    setTimeout(function () {
+                        $('.ui-autocomplete').css('z-index', 99999999999999);
+                    }, 0);
+                }
+             });
+         });
+      </script>
 </body>
 </html>

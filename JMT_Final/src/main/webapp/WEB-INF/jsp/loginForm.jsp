@@ -181,16 +181,16 @@ input[type="button"].login:focus {
         <h1 class="text-center head">로그인</h1>
       </div>
       <div class="form-item">
-        <p class="formLabel">Email</p>
+        <p class="formLabel">이메일</p>
         <input type="email" name="email" id="email" class="form-style" autocomplete="off" />
       </div>
       <div class="form-item">
-        <p class="formLabel">Password</p>
+        <p class="formLabel">비밀번호</p>
         <input type="password" name="pwd" id="password" class="form-style" />
         <!-- <div class="pw-view"><i class="fa fa-eye"></i></div> -->
         <!-- <p><a href="#" ><small>Forgot Password ?</small></a></p> -->
       </div>
-        <input type="button" class="login pull-right" id="dologin" value="Log In">
+        <input type="button" class="login pull-right" id="dologin" value="로그인">
       <div class="form-item" style="width: 50%;">
         <p class="pull-left">
           <a href="/joinForm"><small>이메일로 시작하기</small></a>
@@ -210,16 +210,17 @@ input[type="button"].login:focus {
       <div class="modal fade" id="myModal">
          <div class="modal-dialog">
             <div class="modal-content">
-               <div class="modal-header">
+              <!--  <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">
                      <span aria-hidden="true">×</span><span class="sr-only"></span>
                   </button>
                   <h4 class="modal-title" id="myModalLabel"></h4>
-               </div>
+               </div>  -->
                <div class="modal-body" id="myModalBody">
+               
                </div>
                <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
                </div>
             </div>
          </div>
@@ -267,7 +268,7 @@ input[type="button"].login:focus {
               type : 'post',
               success : function(data){
                  if(data=='loginForm'){
-                    $('#myModalBody').html('<h4>아이디/비밀번호를 확인하여 주시기 바랍니다.</h4>');
+                    $('#myModalBody').html('아이디/비밀번호를 확인하여 주시기 바랍니다.');
                     $('#myModal').modal()
                  }else{
                     location.href=data;

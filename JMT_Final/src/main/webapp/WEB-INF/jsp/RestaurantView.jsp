@@ -157,7 +157,7 @@
 }
 
 .modal-header {
-	background: #ff9f40;
+	background: #FFEFA3;
 	color: #330000;
 }
 

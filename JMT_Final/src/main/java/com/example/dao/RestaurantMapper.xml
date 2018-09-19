@@ -98,4 +98,8 @@
 		<update id="updateInfo" parameterType="com.example.model.RestModify">
 			update restaurant set r_phone=#{rm_phone},r_runtime=#{rm_runtime},r_rundate=#{rm_rundate},r_menu=#{rm_menu},r_intro=#{rm_intro},r_enjoy=#{rm_enjoy} where r_num=#{r_num}	
 		</update>	
+		
+	<select id="selectAllRestaurantName" resultType="string" parameterType="java.util.HashMap">
+      select r_name from restaurant  where r_name like CONCAT( '%', #{keyword} ,'%') limit 8
+   </select>
   </mapper>

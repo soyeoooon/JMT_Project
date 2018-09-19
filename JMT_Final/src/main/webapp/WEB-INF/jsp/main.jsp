@@ -39,10 +39,10 @@
         display: none;
     }
 
-    .carousel-inner {
+  /*   .carousel-inner {
         height: 800px;
         width: 100%;
-    } 
+    } */ 
     .d-block {
         height: 800px;
         width: 100%;
@@ -240,7 +240,11 @@
       })
       $('#reset').on('click',function(){
          filterInitialize();
+         
       });
+      $('#myModal').on('hidden.bs.modal', function () {
+          filterInitialize();
+      })
       
       function makeList(data){
          if(data.length==0){

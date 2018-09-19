@@ -56,4 +56,6 @@ public interface RestaurantDao {
 		
 	//맛집 정보 수정
 	public void updateInfo(RestModify restModify);
+	
+	public List<String> selectAllRestaurantName(HashMap<String, String> map);
 }

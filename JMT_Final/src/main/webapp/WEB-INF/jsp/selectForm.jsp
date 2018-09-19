@@ -11,6 +11,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <style>
 @import
@@ -46,7 +47,7 @@
    text-align: center;
 }
 option:checked {
-   box-shadow: 0 0 10px 100px #FF7F00 inset;
+   box-shadow: 0 0 10px 100px #ff9480 inset;
 }
 
 /*------------------------------------------*/
@@ -179,8 +180,12 @@ input:checked+label:hover, input:checked ~ label:hover,
 }
 
 .x_btn {
-	border-radius: 30px;
-	align: center;
+    
+    font-size: 5px;
+    padding: 0;
+	/* border-radius: 30px;
+	align: center; */
+   
 	/* background: rgba(100,100,100,0.4); */
 	/* margin-bottom: 10px; */
 }
@@ -221,6 +226,9 @@ input:checked+label:hover, input:checked ~ label:hover,
 	background-color: #E85349;
 }
 
+.btn.btn-info{
+  background-color: #2C656B;
+}
 
 
 .btn.btn-outline-danger:hover {
@@ -400,7 +408,7 @@ opacity: 0.9;
 										}
 									}
 								})
-								result += '<table width="100%"><tr><td></td><td width="210px"><div class="starRev" align="center"><span class="starR1 1">별1_왼쪽</span><span class="starR2 2">별1_오른쪽</span><span class="starR1 3">별2_왼쪽</span><span class="starR2 4">별2_오른쪽</span><span class="starR1 5">별3_왼쪽</span><span class="starR2 6">별3_오른쪽</span><span class="starR1 7">별4_왼쪽</span><span class="starR2 8">별4_오른쪽</span><span class="starR1 9">별5_왼쪽</span><span class="starR2 10">별5_오른쪽</span></div></td><td></td></tr></table><button class="btn btn-outline-danger x_btn">X</button></div>';
+								result += '<table width="100%"><tr><td></td><td width="210px"><div class="starRev" align="center"><span class="starR1 1">별1_왼쪽</span><span class="starR2 2">별1_오른쪽</span><span class="starR1 3">별2_왼쪽</span><span class="starR2 4">별2_오른쪽</span><span class="starR1 5">별3_왼쪽</span><span class="starR2 6">별3_오른쪽</span><span class="starR1 7">별4_왼쪽</span><span class="starR2 8">별4_오른쪽</span><span class="starR1 9">별5_왼쪽</span><span class="starR2 10">별5_오른쪽</span></div></td><td></td></tr></table><div align= "center"><button class="btn btn-outline-danger x_btn">별점초기화</button></div></div>';
 								result += '</div></div>';
 								$('.row').append(result);
 								$("#" + data[i].r_num).find('.' + data[i].e_grade * 2).addClass('on').prevAll('span').addClass('on');
@@ -464,8 +472,8 @@ opacity: 0.9;
 		                  result += '<td>';
 		                    result += '<div align="center">';
 		                    result += '<img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width: 100%">';
-		                    result += '<h2>' + text[n] + '</h2>';
-		                    result += '<table width="100%"><tr><td></td><td width="210px"><div class="starRev2" align="center"><span class="starR1 1">별1_왼쪽</span><span class="starR2 2">별1_오른쪽</span><span class="starR1 3">별2_왼쪽</span><span class="starR2 4">별2_오른쪽</span><span class="starR1 5">별3_왼쪽</span><span class="starR2 6">별3_오른쪽</span><span class="starR1 7">별4_왼쪽</span><span class="starR2 8">별4_오른쪽</span><span class="starR1 9">별5_왼쪽</span><span class="starR2 10">별5_오른쪽</span></div></td><td></td></tr></table><button class="x_btn">X</button></div>';
+		                    result += '<h4>' + text[n] + '</h4>';
+		                    result += '<table width="100%"><tr><td></td><td width="210px"><div class="starRev2" align="center"><span class="starR1 1">별1_왼쪽</span><span class="starR2 2">별1_오른쪽</span><span class="starR1 3">별2_왼쪽</span><span class="starR2 4">별2_오른쪽</span><span class="starR1 5">별3_왼쪽</span><span class="starR2 6">별3_오른쪽</span><span class="starR1 7">별4_왼쪽</span><span class="starR2 8">별4_오른쪽</span><span class="starR1 9">별5_왼쪽</span><span class="starR2 10">별5_오른쪽</span></div></td><td></td></tr></table><div align= "center"><button class="btn btn-outline-danger x_btn">별점초기화</button></div></div>';
 		                  result += "</td>";
 		                  n++;
 		            }
@@ -693,6 +701,28 @@ opacity: 0.9;
          </div>
       </div>
    </div>
+   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+   <script>
+     var hs = jQuery.noConflict();
+   </script>
+   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   <script type="text/javascript">
+      hs(function() {
+         hs("#search").autocomplete({
+              source: "testSearch",
+              minLength: 2,
+              response: function(event, ui) {
+                  console.log(ui);
+              },
+              select: function(event, ui) {
+                  console.log("Selected:" + ui.item.value);
+              },
+              focus: function(event, ui) {
+                  return false;
+              }
+          });
+      });
+   </script>
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </body>

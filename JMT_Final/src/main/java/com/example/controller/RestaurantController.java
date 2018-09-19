@@ -44,32 +44,38 @@ public class RestaurantController {
 
 	@Autowired
 	private PhotoDecoService photoDecoService;
-	
+
 	@Autowired
 	private BigCategoryService bigCategoryService;
-	
+
 	@Autowired
 	private MidCategoryService midCategoryService;
 	
+	@RequestMapping("/testSearch")
+    public @ResponseBody List<String> testSearch(String term){
+       System.out.println(term);
+       HashMap<String, String> map = new HashMap<String,String>();
+       map.put("keyword", term);
+        return restaurantService.getRestaurantName(map);
+    }
+
 	@RequestMapping("/saveImg")
-	   public @ResponseBody String saveImg(@RequestParam int r_num,@RequestParam String src){
-	      restaurantService.updateResImg(r_num, src);
-	      return "변경되었습니다.";
-	   }
-	
+	public @ResponseBody String saveImg(@RequestParam int r_num, @RequestParam String src) {
+		restaurantService.updateResImg(r_num, src);
+		return "변경되었습니다.";
+	}
+
 	@RequestMapping("/review_delete")
-	   public @ResponseBody int review_delete(int rev_num, int r_num) {
-	      return restaurantService.review_delete(rev_num, r_num);
-	   }
-	
-	 @RequestMapping("/searchImage")
-     public @ResponseBody String searchImage(@RequestParam(required = false) String search,@RequestParam(required = false) String sigu) {
-        if(sigu==null){
-           return restaurantService.searchImage(search);
-        }else{
-           return restaurantService.searchImage(sigu+" "+search);
-        }
-     }
+	public @ResponseBody int review_delete(int rev_num, int r_num) {
+		return restaurantService.review_delete(rev_num, r_num);
+	}
+
+	@RequestMapping("/searchImage")
+	public @ResponseBody String searchImage(@RequestParam(required = false) String search) {
+
+		return restaurantService.searchImage(search);
+
+	}
 
 	// --------------------------------추가(v1)----------------------------------------
 	// 파일업로드
@@ -156,27 +162,28 @@ public class RestaurantController {
 	}
 
 	@RequestMapping("/searchRes")
-    public @ResponseBody List<HashMap<String, Object>> searchRes(@RequestParam(required = false) String search,@RequestParam(required = false) String sigu, HttpSession session) {
-       String email = (String) session.getAttribute("email");
-       MemberList ml = memberListService.getOneMember(email);
-       if(sigu.equals("시/도 구/군/동")){
-    	   System.out.println(sigu);
-          return restaurantService.searchRestaurant(search,ml.getM_num());
-       }else{
-    	   System.out.println(sigu);
-          return restaurantService.searchRestaurant(sigu+" "+search,ml.getM_num());
-       }
-    }
-	
+	public @ResponseBody List<HashMap<String, Object>> searchRes(@RequestParam(required = false) String search,
+			@RequestParam(required = false) String sigu, HttpSession session) {
+		String email = (String) session.getAttribute("email");
+		MemberList ml = memberListService.getOneMember(email);
+		if (sigu.equals("시/도 구/군/동")) {
+			System.out.println(sigu);
+			return restaurantService.searchRestaurant(search, ml.getM_num());
+		} else {
+			System.out.println(sigu);
+			return restaurantService.searchRestaurant(sigu + " " + search, ml.getM_num());
+		}
+	}
+
 	@RequestMapping("/getBigCate")
-	   public @ResponseBody List<BigCategory> getBigCate(){
-	      return bigCategoryService.selectAllBigCategory();
-	   }
-	   
-	   @RequestMapping("/getMidCate")
-	   public @ResponseBody List<MidCategory> getMidCate(@RequestParam int big_num){
-	      return midCategoryService.selectMidCategory(big_num);
-	   }
+	public @ResponseBody List<BigCategory> getBigCate() {
+		return bigCategoryService.selectAllBigCategory();
+	}
+
+	@RequestMapping("/getMidCate")
+	public @ResponseBody List<MidCategory> getMidCate(@RequestParam int big_num) {
+		return midCategoryService.selectMidCategory(big_num);
+	}
 	// --------------------추가끝----------------------------
 
 	// 수정(v2)
@@ -250,13 +257,13 @@ public class RestaurantController {
 	}
 
 	@RequestMapping("/r_view_report")
-	   public @ResponseBody int r_view_report(@RequestParam HashMap<String, String> map) {
-	      if(restaurantService.View_Report(map)) {
-	         return restaurantService.getReportCount(Integer.parseInt(map.get("rm_num").toString()));
-	      }else {
-	         return -1;
-	      }
-	   }
+	public @ResponseBody int r_view_report(@RequestParam HashMap<String, String> map) {
+		if (restaurantService.View_Report(map)) {
+			return restaurantService.getReportCount(Integer.parseInt(map.get("rm_num").toString()));
+		} else {
+			return -1;
+		}
+	}
 
 	@RequestMapping("/r_view_report_info")
 	public @ResponseBody HashMap<String, Object> r_view_report_info(int r_num) {

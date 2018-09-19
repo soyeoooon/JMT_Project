@@ -140,6 +140,11 @@ public class MemberListService {
 	public int getCountMember() {
 		return memberListDao.getCountMember();
 	}
+	public void updateProfileImg(int email_num) {
+		// TODO Auto-generated method stub
+		memberListDao.updateProfileImg(email_num);
+		
+	}
 
 
 }

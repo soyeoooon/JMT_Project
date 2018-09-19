@@ -251,24 +251,24 @@ button[type="button"].login:focus {
 </div>
       <form id="joinform" action="/join">
         <div class="form-item">
-          <p class="formLabel">Email</p>
+          <p class="formLabel">이메일</p>
           <input type="email" name="email" id="email" class="form-style" autocomplete="off" />
         </div>
         <div class="form-item">
-          <p class="formLabel">Name</p>
+          <p class="formLabel">이름 및 닉네임</p>
           <input type="text" name="name" id="name" class="form-style" autocomplete="off" />
         </div>
         <div class="form-item">
-          <p class="formLabel">Password</p>
+          <p class="formLabel">비밀번호 입력</p>
           <input type="password" name="pwd" id="password1" class="form-style" />
           <!-- <div class="pw-view"><i class="fa fa-eye"></i></div> -->
         </div>
         <div class="form-item">
-          <p class="formLabel">Password</p>
+          <p class="formLabel">비밀번호 확인</p>
           <input type="password" name="pwd" id="password2" class="form-style" />
         </div>
         <div class="form-item">
-          <button type="button" id="Modalbtn" class="login pull-right" class="close" data-target="#EmailModal" >Sign up</button>
+          <button type="button" id="Modalbtn" class="login pull-right" class="close" data-target="#EmailModal" >가입하기</button>
           <div class="clear-fix"></div>
         </div>
       </form>

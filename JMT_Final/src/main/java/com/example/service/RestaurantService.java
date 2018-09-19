@@ -71,6 +71,10 @@ public class RestaurantService {
 
 	@Autowired
 	BigCategoryDao bigCategoryDao;
+	
+	   public List<String> getRestaurantName(HashMap<String, String> map) {
+		      return restaurantDao.selectAllRestaurantName(map);
+		   }
 
 	public RestModify getRestModifyInfo(int rm_num) {
 		return restModifyDao.selectInfo(rm_num);

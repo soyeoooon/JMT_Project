@@ -91,6 +91,19 @@ public class MemberController {
 	   @Autowired
 	   FoodChoiceService foodChoiceService;
 	   
+	   @RequestMapping("/fileExist")
+	   public @ResponseBody boolean localpath(@RequestParam String m_photo){
+	      String uri = System.getProperty("user.dir") + "/target/classes/static/"+m_photo;
+	      File folder = new File(uri);
+	      File[] filelist = folder.listFiles();
+	      System.out.println(filelist);
+	      if (filelist == null) {
+	         return false;
+	      }else{
+	         return true;
+	      }
+	   }
+	   
 	   @RequestMapping("/preference_info")
 	      public @ResponseBody HashMap<String, Object> preference_info(HttpSession session) {
 	         String email = (String) session.getAttribute("email");
@@ -291,6 +304,16 @@ public class MemberController {
 		@RequestMapping("/sns_login")
 		public String sns_login(String email, HttpSession session) {
 			session.setAttribute("email", email);
+			String uri = System.getProperty("user.dir") + "/target/classes/static/member/" + memberListService.getOneMember(email).getEmail_num() + "/";
+	           File folder = new File(uri);
+	           File[] filelist = folder.listFiles();
+	           System.out.println(filelist);
+	           if(filelist==null){
+	              session.setAttribute("profile", "resources/front_image/user.png");
+	           }else{
+	              session.setAttribute("profile", memberListService.getOneMember(email).getM_photo());
+	              System.out.println("세션테스트:"+memberListService.getOneMember(email).getM_photo());
+	           }
 			return "main";
 		}
 		//수정(v2)끝---------------------------------------------------
@@ -624,19 +647,24 @@ public class MemberController {
 				MultipartFile mFile = multi.getFile(uploadFile);
 				String fileName = mFile.getOriginalFilename();
 				File file = new File(path + fileName);
-				boolean fileExist = file.exists();
+				/*boolean fileExist = file.exists();
 				if (fileExist) {
 					result = "같은이름의 파일이 있습니다. 다시 저장해주세요";
-				} else {
+				} else {*/
 					try {
 						mFile.transferTo(new File(path + "profilephoto.jpg"));
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 					result = "파일 업로드하였습니다.";
+					memberListService.updateProfileImg(emailNumBySession(session));
+					System.out.println("세션확인: "+emailNumBySession(session));
 					session.setAttribute("profile", memberListService.getOneMember((String)session.getAttribute("email")).getM_photo());
+					System.out.println(memberListService.getOneMember((String)session.getAttribute("email")).getM_photo());
+			
 				}
-			}
+			//}
 		} else {
 			result = "이미지없음";
 		}
@@ -821,6 +849,7 @@ public class MemberController {
               session.setAttribute("profile", "resources/front_image/user.png");
            }else{
               session.setAttribute("profile", memberListService.getOneMember(email).getM_photo());
+              System.out.println("세션테스트:"+memberListService.getOneMember(email).getM_photo());
            }
            if (email.equals("admin123@naver.com")) {
               return "adminIndex";
@@ -844,6 +873,7 @@ public class MemberController {
 	@RequestMapping("/logout")
 	public String logout(HttpSession session) {
 		session.removeAttribute("email");
+		session.removeAttribute("profile");
 		return "redirect:/main";
 
 	}

@@ -37,4 +37,5 @@ public interface MemberListDao {
 		
 	//다른사람 프로필 가져오기(유저정보, 평가정보들)
 	public HashMap<String, Object> OthersSelect(int m_num);
+	public void updateProfileImg(int email_num);
 }

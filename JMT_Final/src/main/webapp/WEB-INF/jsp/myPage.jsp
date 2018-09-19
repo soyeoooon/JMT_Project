@@ -77,7 +77,7 @@
 
 #calendar {
 	border: 1px solid #ddd;
-    padding : 10px;
+	padding: 10px;
 }
 
 #diary {
@@ -163,7 +163,7 @@ ul.tabs li.current {
 	/* background: #ededed; */
 	padding: 15px;
 	border-top: 1px solid #ddd; /* 검은색 */
-    height: 600px;
+	height: 600px;
 }
 
 .tab-content.current {
@@ -180,7 +180,6 @@ ul.tabs li.current {
 	text-align: center;
 	width: 30px;
 	height: 30px;
-
 }
 
 #anotherDiary td {
@@ -207,19 +206,39 @@ ul.tabs li.current {
 	width: 550px;
 }
 
-#chart1, #chart2{
-
-  height: 500px;
-  width: 500px;
-  border: 1px #ddd;
+#chart1, #chart2 {
+	height: 500px;
+	width: 500px;
+	margin: 5px;
+  border: 1px solid #ddd;
 }
 
-#chart1{
-  padding: 50px;
+#chart1 {
+	padding: 50px;
 }
 
-#info, #infoImg{
-  margin: 20px;
+#info, #infoImg {
+	margin: 20px;
+}
+
+#info{
+  width: 300px;
+}
+
+.btn.btn-outline-light{
+color: #888;
+}
+
+#preYear, #preMonth, #nextYear, #nextMonth{
+  background-color: #FFEFA3;
+}
+
+#fri_searchBtn, #searchResDiary{
+  background-color: #2C656B;
+  width: 75px;
+  padding:0;
+  font-size: 12px;
+  color: #fff;
 }
 </style>
 
@@ -267,7 +286,7 @@ ul.tabs li.current {
               </td>
             </tr>
             <tr>
-              <td colspan="6" align="center">${memberList.m_level }</td>
+              <td colspan="6" align="center">${memberList.m_intro }</td>
             </tr>
             <tr class="width50">
               <td>
@@ -301,6 +320,7 @@ ul.tabs li.current {
     </ul>
 
     <div id="tab-1" class="tab-content current">
+      <h5>나의 음식취향과 기록들을 그림으로 확인해보세요.</h5>
       <div class="row">
         <div id="chart1">
           <div class="graph" style="display: inline-block;"></div>
@@ -437,17 +457,17 @@ ul.tabs li.current {
       <table>
         <tr>
           <td style="text-align: center;">
-            <button class="btn btn-outline-success" id="ListorCalendar">리스트로보기</button>
+            <button class="btn btn-outline-light" id="ListorCalendar">리스트로보기</button>
           </td>
           <td colspan="3" id="deleteD"></td>
           <td colspan="3" id="writeD"></td>
         </tr>
         <tr>
           <td rowspan="4" style="vertical-align: top;">
-            <div id="calendar" style="width: 400px; height: 440px;"> 
-          <!-- 달력테이블이 만들어지는 자리 -->
+            <div id="calendar" style="width: 400px; height: 440px;">
+              <!-- 달력테이블이 만들어지는 자리 -->
 
-           </div>  
+            </div>
           </td>
           <td colspan="6">
             <div id="diary" style="width: 350px; height: 200px; padding: 10px;">
@@ -500,7 +520,7 @@ ul.tabs li.current {
 
     <div id="tab-4" class="tab-content">
       친구찾기
-      <button class="btn btn-primary">
+      <button class="btn btn-outline-info">
         <img src="/icons/search.png" id="findFriendBtn" data-toggle="modal" data-target="#findFriend">
       </button>
       <div class="card-deck">
@@ -525,7 +545,7 @@ ul.tabs li.current {
     <div id="tab-5" class="tab-content">
       <div class="row justify-content-md-center">
 
-        <div style="display: inline-block;" id="infoImg" >
+        <div style="display: inline-block;" id="infoImg">
           <table>
             <tr>
               <td style="text-align: center; vertical-align: top;">
@@ -541,7 +561,7 @@ ul.tabs li.current {
         </div>
         <div class="card text-center" id="info">
           <div class="card-body" style="display: inline-block;">
-            <table>
+            <table align="center">
               <tr>
                 <th>이메일</th>
               </tr>
@@ -593,14 +613,14 @@ ul.tabs li.current {
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
+            <p class="modal-title" id="myModalLabel"></p>
             <button type="button" class="close" data-dismiss="modal">
               <span aria-hidden="true">×</span><span class="sr-only"></span>
             </button>
-            <h4 class="modal-title" id="myModalLabel"></h4>
           </div>
           <div class="modal-body" id="listmodal"></div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
           </div>
         </div>
       </div>
@@ -612,7 +632,7 @@ ul.tabs li.current {
           <div class="modal-body" id="myModal2Body"></div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal" id="deleteImageBtn" data-toggle="modal" data-target="#confirmModal">Delete</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
           </div>
         </div>
       </div>
@@ -623,10 +643,10 @@ ul.tabs li.current {
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">다이어리쓰기</h4>
             <button type="button" class="close" data-dismiss="modal">
               <span aria-hidden="true">×</span><span class="sr-only"></span>
             </button>
-            <h4 class="modal-title" id="myModalLabel">다이어리쓰기</h4>
           </div>
           <div class="modal-body" id="myModal4Body">
             <table>
@@ -637,9 +657,10 @@ ul.tabs li.current {
                 </td>
               </tr>
               <tr>
-                <th><button data-toggle="modal" data-target="#myModal5">음식점검색</button></th>
+                <th>음식점<button id="searchResDiary" class="btn" data-toggle="modal" data-target="#myModal5">음식점검색</button></th>
                 <td colspan="5">
-                  <input id="res_search" type="text" readonly="readonly" style="border: none;">
+                  <input id="res_search" type="text" readonly="readonly" style="border: 1px solid #ddd; height: 50px;">
+                
                 </td>
               </tr>
               <tr>
@@ -684,16 +705,16 @@ ul.tabs li.current {
                 </td>
               </tr>
               <tr>
-                <th><button id="fri_searchBtn" data-toggle="modal" data-target="#myModal8">친구검색</button></th>
+                <th><button id="fri_searchBtn" class="btn" data-toggle="modal" data-target="#myModal8">친구검색</button></th>
                 <td colspan="5">
-                  <input id="fri_search" type="text" readonly="readonly" style="border: none;">
+                  <input id="fri_search" type="text" readonly="readonly" style="border: 1px solid #ddd; height: 50px;">
                 </td>
               </tr>
             </table>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="writeDiaryBtn" data-dismiss="modal">Save</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            <button type="button" class="btn btn-primary" id="writeDiaryBtn" data-dismiss="modal">저장</button>
           </div>
         </div>
       </div>
@@ -703,10 +724,10 @@ ul.tabs li.current {
       <div class="modal-dialog" style="width: 500px; height: 500px;">
         <div class="modal-content">
           <input type="text" id="res_searchText" style="width: 250px;">
-          <button id="res_searchBtn">검색</button>
+          <button id="res_searchBtn" class="btn">검색</button>
           <div class="modal-body" id="myModal5Body" style="width: 495px; height: 300px;"></div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
           </div>
         </div>
       </div>
@@ -718,8 +739,8 @@ ul.tabs li.current {
         <div class="modal-content">
           <div class="modal-body" id="myModal8Body"></div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="checkFriends" data-dismiss="modal">Save</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            <button type="button" class="btn btn-primary" id="checkFriends" data-dismiss="modal">저장</button>
           </div>
         </div>
       </div>
@@ -751,8 +772,8 @@ ul.tabs li.current {
             </table>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="PicAndIntSave">Save</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            <button type="button" class="btn btn-primary" id="PicAndIntSave">저장</button>
           </div>
         </div>
       </div>
@@ -767,8 +788,8 @@ ul.tabs li.current {
               <input type="file" id="diary_pic" name="diary_pic" accept=".jpg, .jpeg, .png">
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" data-dismiss="modal" id="diaryImageSave1">Save</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal" id="diaryImageSave1">저장</button>
             </div>
           </form>
         </div>
@@ -782,8 +803,8 @@ ul.tabs li.current {
               <input type="file" id="profile_pic" name="profile_pic" accept=".jpg, .jpeg, .png">
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary" data-dismiss="modal" id="diaryImageSave2">Save</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal" id="diaryImageSave2">저장</button>
             </div>
           </form>
         </div>
@@ -839,8 +860,8 @@ ul.tabs li.current {
             </table>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="tagSaveBtn" data-dismiss="modal">Save</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+            <button type="button" class="btn btn-primary" id="tagSaveBtn" data-dismiss="modal">저장</button>
           </div>
         </div>
       </div>
@@ -879,7 +900,7 @@ ul.tabs li.current {
             </table>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
           </div>
         </div>
       </div>
@@ -891,7 +912,7 @@ ul.tabs li.current {
             <img src="" id="largeViewBody">
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
           </div>
         </div>
       </div>
@@ -905,7 +926,7 @@ ul.tabs li.current {
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
           </div>
         </div>
       </div>
@@ -1280,7 +1301,7 @@ ul.tabs li.current {
 					}
 					for(var i =startPage;i<=endPage;i++){
 						if(i<=lastPage)
-							result += '<td><button class ="btn btn-info tab3ListBtn" id="'+i+'">'+i+'</button></td>'
+							result += '<td><button class ="btn btn-warning tab3ListBtn" id="'+i+'">'+i+'</button></td>'
 					}
 					if(endPage<lastPage){
 						result += '<td><button id="tab3ListAfPage">></button></td>'
@@ -1508,27 +1529,25 @@ ul.tabs li.current {
 		function fourthMenu(FpageNum,ReqFpageNum){
 			$.get("getFriendList",function(data){
 				if(FpageNum>0){
-					Fnum = FpageNum
-				}
-				var result = '<table style ="align : center;">'
-				var forlast = data.length>Fnum*5?Fnum*5:data.length
-				for(var i=(Fnum-1)*5;i<forlast;i++){
-					result += '<tr class="'+data[i].email_num+'">'
-					if(data[i].m_photo!=undefined&&data[i].m_photo!=null){
-						result += '<td rowspan="2" style="width : 50px;" class="'+data[i].email_num+'"><img class="detailView" src="'+data[i].m_photo+'" style="width : 40px;"/></td>';
-					}else{
-						result += '<td rowspan="2" style="width : 50px;" class="'+data[i].email_num+'"><img src="/icons/friend'+(i%6+1)+'.png" /></td>';
-					}
-					result += '<td style="width: 220px;" class="detailView"><h3> '+data[i].m_nick+'</h3></td><td rowspan="2"><button class="btn btn-warning deleteFriend1" id="'+data[i].email_num+'">삭제</button></td>';
-					result += '</tr>'
-					result += '<tr class="'+data[i].email_num+'">'
-					result += '<td  class="detailView"><h4> '+data[i].m_intro+'</h4></td>';
-					result += '</tr>'
-				}
+		               Fnum = FpageNum
+		            }
+		            var result = '<table style ="align : center;">'
+		            var forlast = data.length>Fnum*5?Fnum*5:data.length
+		            for(var i=(Fnum-1)*5;i<forlast;i++){
+		               result += '<tr class="'+data[i].email_num+'">'
+		              
+		               result += '<td rowspan="2" style="width : 50px;" class="'+data[i].email_num+'"><img class="detailView" src="'+data[i].m_photo+'" style="width : 40px;"/></td>';
+		               
+		               result += '<td style="width: 220px;" class="detailView"><h3> '+data[i].m_nick+'</h3></td><td rowspan="2"><button class="btn btn-outline-danger deleteFriend1" id="'+data[i].email_num+'">삭제</button></td>';
+		               result += '</tr>'
+		               result += '<tr class="'+data[i].email_num+'">'
+		               result += '<td  class="detailView"> '+data[i].m_intro+'</td>';
+		               result += '</tr>'
+		            }
 				result += '</table>'
 				result += '<table><tr>'
 				for(var i =1;i<data.length/5+1;i++){
-					result += '<td><button class="btn btn-info getF" id="'+i+'">'+i+'</button></td>'
+					result += '<td><button class="btn btn-warning getF" id="'+i+'">'+i+'</button></td>'
 				}
 				result += '</tr></table>'
 				$('#myFriends').html(result);
@@ -1547,15 +1566,12 @@ ul.tabs li.current {
 				var result = '<table style ="align : center;">'
 				for(var i=(ReqFNum-1)*5;i<forlast;i++){
 					result += '<tr>'
-					if(data[i].m_photo!=undefined&&data[i].m_photo!=null){
 						result += '<td rowspan="2" style="width : 50px;"><img src="'+data[i].m_photo+'" style="width : 40px;" /></td>';
-					}else{
-						result += '<td rowspan="2" style="width : 50px;"><img src="/icons/friend'+(i%6+1)+'.png" /></td>';
-					}
+					
 					result += '<td style="width: 220px;"><h3> '+data[i].m_nick+'</h3></td><td rowspan="2"><button class="btn btn-success applyFriend" id="'+data[i].email_num+'">수락</button><button class="btn btn-danger deleteFriend2" id="'+data[i].email_num+'">거절</button></td>';
 					result += '</tr>'
 					result += '<tr>'
-					result += '<td><h4> '+data[i].m_intro+'</h4></td>';
+					result += '<td> '+data[i].m_intro+'</td>';
 					result += '</tr>'
 				}
 				result += '</table>'
@@ -1590,21 +1606,8 @@ ul.tabs li.current {
 							var forlast = findPage*5>data.length?data.length:findPage*5
 							for(var i =(findPage-1)*5;i<forlast;i++){
 								console.log(findPage);
-								$.ajax({
-									url : 'getFriendPhoto',
-									data : {
-										friendNumStr : data[i].email_num
-									},
-									type : 'post',
-									async : false,
-									success : function(TT){
-										if(TT=="0"){
-											result += '<tr><td rowspan="2"><img style="width : 100px;" src="/icons/friend'+(i%6+1)+'.png"></td>'
-										}else{
+								
 											result += '<tr><td rowspan="2"><img style="width : 100px;" src="'+data[i].m_photo+'"></td>';
-										}
-									}
-								})
 								result += '<td style="width : 200px;">'+data[i].m_nick+'</td>'
 								result += '<td rowspan="2">'
 								$.ajax({
@@ -1791,11 +1794,8 @@ ul.tabs li.current {
 				var result = '<table style ="align : center;" id="friendListTable">'
 				for(var i=0;i<data.length;i++){
 					result += '<tr>'
-					if(data[i].m_photo!=undefined&&data[i].m_photo!=null){
 						result += '<td rowspan="2" style="width : 50px;"><img src="'+data[i].m_photo+'" style="width : 40px;" /></td>';
-					}else{
-						result += '<td rowspan="2" style="width : 50px;"><img src="/icons/friend'+(i%6+1)+'.png" /></td>';
-					}
+					
 					result += '<td style="width: 220px;"><h3> '+data[i].m_nick+'</h3></td><td rowspan="2"><input type="checkbox" name = "writeFriends" value ="'+data[i].m_nick+'/'+data[i].email_num+'"></td>';
 					result += '</tr>'
 					result += '<tr>'
@@ -2045,7 +2045,7 @@ ul.tabs li.current {
 				$('#myModal .modal-dialog').attr('style','left : '+x+'px; top : '+y+'px;');
 				$('#listmodal').attr('style','');
 				$('#listmodal').html(result);
-				$('#myModalLabel').html('<h2>'+r_name+'</h2>');
+				$('#myModalLabel').html('<h5>'+r_name+'</h5>');
 			});
 			
 			$('#icon3').off().on('click',function(){
@@ -2310,8 +2310,8 @@ ul.tabs li.current {
 			
 			result+='<table>';
 			today = new Date(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
-			result += '<tr><td><button class="btn btn-info" id = "preYear"><i class="fas fa-arrow-left"></i>Y</button></td>'
-			result += '<td><button class="btn btn-outline-info" id = "preMonth"><i class="fas fa-arrow-left"></i>M</button></td>'
+			result += '<tr><td><button class="btn" id = "preYear"><i class="fas fa-arrow-left"></i>Y</button></td>'
+			result += '<td><button class="btn" id = "preMonth"><i class="fas fa-arrow-left"></i>M</button></td>'
 			if(today.getMonth()+1<10){
 				result += '<td colspan="3" id="today"><b>'+today.getFullYear()+'-0'+(today.getMonth()+1);
 			}else{
@@ -2322,9 +2322,9 @@ ul.tabs li.current {
 			}else{
 				result += '-'+today.getDate()+'</b></td>';
 			}
-			result += '<td><button class="btn btn-outline-info" id = "nextMonth">M<i class="fas fa-arrow-right"></i></button></td>'
-			result += '<td><button class="btn btn-info" id = "nextYear">Y<i class="fas fa-arrow-right"></i></button></td></tr>'
-			result += '<tr><th style=" color: red">Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th style=" color: blue">Sat</th></tr>'
+			result += '<td><button class="btn" id = "nextMonth">M<i class="fas fa-arrow-right"></i></button></td>'
+			result += '<td><button class="btn" id = "nextYear">Y<i class="fas fa-arrow-right"></i></button></td></tr>'
+			result += '<tr align="center"><th style=" color: red">Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th style=" color: blue">Sat</th></tr>'
 			var startDay = new Date(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+1);
 			var lastDay = new Date(today.getFullYear(),(today.getMonth()+1),0);
 			result += '<tr>'
@@ -2407,7 +2407,7 @@ ul.tabs li.current {
 				
 				$('.doclick').css('background-color','');
 				$('.doclick').css('font-weight','normal');
-				$('#'+thisid).css('background-color','#FF7F50');
+				$('#'+thisid).css('background-color','#ff9480');
 				$('#'+thisid).css('font-weight','bold');
 				
 				$('#today').css('font-weight','bold');
