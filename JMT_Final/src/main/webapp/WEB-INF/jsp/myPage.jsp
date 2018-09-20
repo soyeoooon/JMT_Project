@@ -1287,7 +1287,7 @@ margin: 10px;
 									if(data){
 										result += '<img src="/restaurant/'+data[i].r_num+'.jpg" style="width : 60px;"></td>';
 									}else{
-										result += '<img src="/icons/nophoto.png" style="width : 60px;"></td>';
+										result += '<img src="/icons/check.png" style="width : 30px;"></td>';
 									}
 								}
 							})
@@ -2224,7 +2224,7 @@ margin: 10px;
 														$('#diary_pic').after('<img id="uploadPreview" style="z-index: 0; width : 550px;" src="'+e.target.result+'" data-toggle="modal" data-target="#myModal3">');
 														$('#diary_pic').after('<p id="tagExp">이미지를 클릭하여 태그를 입력해주세요</p>');
 														$('#uploadPreview').on('click',function(){
-															$('#tagSaveBtn').text('Save');
+															$('#tagSaveBtn').text('저장');
 															var clix = event.clientX;
 															var cliy = event.clientY-25;
 															$('#myModal3 .modal-dialog').attr('style','left : ' + clix + 'px; top : '+ cliy + 'px;');
@@ -2565,7 +2565,7 @@ margin: 10px;
 												$('#diary_pic').after('<img id="uploadPreview" style="z-index: 0; width : 550px;" src="'+e.target.result+'" data-toggle="modal" data-target="#myModal3">');
 												$('#diary_pic').after('<p id="tagExp">이미지를 클릭하여 태그를 입력해주세요</p>');
 												$('#uploadPreview').on('click',function(){
-													$('#tagSaveBtn').text('Save');
+													$('#tagSaveBtn').text('저장');
 													var clix = event.clientX;
 													var cliy = event.clientY-25;
 													$('#myModal3 .modal-dialog').attr('style','left : ' + clix + 'px; top : '+ cliy + 'px;');

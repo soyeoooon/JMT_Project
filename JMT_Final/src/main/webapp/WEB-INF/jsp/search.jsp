@@ -110,7 +110,7 @@
 							for (var i = 0; i < data['searchList'].length; i++) {
 								txt += '<div class="card">';
 								if (data['searchList'][i].r_photo != null)
-									txt += '<img class="card-img-top savedImg" id = "'+data['searchList'][i].r_num+'" src="'+data['searchList'][i].r_photo+'" alt="Card image cap" style="height: 200px;"><img src="/icons/star.png" style="width : 32px;">';
+									txt += '<img class="card-img-top savedImg" id = "'+data['searchList'][i].r_num+'" src="'+data['searchList'][i].r_photo+'" alt="Card image cap" style="height: 200px;">';//<img src="/icons/star.png" style="width : 32px;">
 								else {
 									$.ajax({
 										data : {
@@ -335,7 +335,7 @@
 							for (var i = 0; i < data['searchList'].length; i++) {
 								txt += '<div class="card">';
 								if (data['searchList'][i].r_photo != null)
-									txt += '<img class="card-img-top savedImg" id = "'+data['searchList'][i].r_num+'" src="'+data['searchList'][i].r_photo+'" alt="Card image cap" style="height: 200px;"><img src="/icons/star.png" style="width : 32px;">';
+									txt += '<img class="card-img-top savedImg" id = "'+data['searchList'][i].r_num+'" src="'+data['searchList'][i].r_photo+'" alt="Card image cap" style="height: 200px;">';//<img src="/icons/star.png" style="width : 32px;">
 								else {
 									$.ajax({
 										data : {

@@ -367,7 +367,7 @@ input:checked+label:hover, input:checked ~ label:hover,
 										result += '<div class="col-sm-3" id="'+data[i].r_num+'">';
 										result += '<div class="card">';
 										if (data[i].r_photo != null)
-											result += '<img class="card-img-top savedImg" id = "'+data[i].r_num+'" src="'+data[i].r_photo+'" alt="Card image cap" style="height: 200px;"><img src="/icons/star.png" style="width: 32px;">';
+											result += '<img class="card-img-top savedImg" id = "'+data[i].r_num+'" src="'+data[i].r_photo+'" alt="Card image cap" style="height: 200px;">';//<img src="/icons/star.png" style="width: 32px;">
 										else {
 											$.ajax({
 												data : {

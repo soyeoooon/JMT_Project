@@ -252,7 +252,7 @@
       function makeList(data){
          if(data.length==0){
         	//$('#message1').hide();
-            $('.RestList').html('<h1>표시할 데이터가 존재하지 않습니다.</h1><br><button class="btn btn-outline-warning" onclick="location.href='+"'/selectForm'"+'">취향선택하기</button>');
+            $('.RestList').html('<br><br><br><br><br><h1>표시할 데이터가 존재하지 않습니다.</h1><br><button class="btn btn-outline-warning" onclick="location.href='+"'/selectForm'"+'">취향선택하기</button>');
          }else{
             var result = ''
             result +='<div class="container-fluid bg-3 text-center">';
