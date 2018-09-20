@@ -489,8 +489,8 @@ input:checked+label:hover, input:checked ~ label:hover,
 						search();
 
 						var result = '';
-						var text = ['삼겹살', '소고기스테이크', '짜장면', '짬뽕', '프라이드치킨', '찜닭', '족발', '닭발', '떡볶이', '순대', '김치찌개', '감자탕', '회', '생선구이', '산채비빔밥', '볶음밥', '샌드위치', '피자', '파스타', '잔치국수'
-						];
+						var text = ['삼겹살', '소고기스테이크', '짜장면', '짬뽕', '프라이드치킨', '찜닭', '족발', '닭발', '떡볶이', '순대', '김치찌개', '감자탕', '회', '생선구이', '산채비빔밥', '볶음밥', '샌드위치', '피자', '파스타', '잔치국수'];
+						var imgarr = ['resources/food/삼겹살.jpg', 'resources/food/소고기스테이크.jpg', 'resources/food/짜장면.jpg', 'resources/food/짬뽕.jpg', 'resources/food/프라이드치킨.jpg', 'resources/food/찜닭.jpg', 'resources/food/족발.jpg', 'resources/food/닭발.jpg', 'resources/food/떡볶이.jpg', 'resources/food/순대.jpg', 'resources/food/김치찌개.jpg', 'resources/food/감자탕.jpg', 'resources/food/회.jpg', 'resources/food/생선구이.jpg', 'resources/food/산채비빔밥.jpg', 'resources/food/볶음밥.JPG', 'resources/food/샌드위치.jpg', 'resources/food/피자.jpg', 'resources/food/파스타.jpg', 'resources/food/잔치국수.jpg'];
 						var imgs = [];
 						var n = 0;
 						for (var i = 0; i < 5; i++) {
@@ -505,7 +505,7 @@ input:checked+label:hover, input:checked ~ label:hover,
 								for (var k = 0; k < 2; k++) {
 									result += '<td>';
 									result += '<div align="center">';
-									result += '<img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Culinary_fruits_front_view.jpg" class="img-responsive" style="width: 100%">';
+									result += '<img src="'+imgarr[n]+'" class="img-responsive" style="width: 220px">';
 									result += '<h4>' + text[n] + '</h4>';
 									result += '<table width="100%"><tr><td></td><td width="210px"><div class="starRev2" align="center"><span class="starR1 1">별1_왼쪽</span><span class="starR2 2">별1_오른쪽</span><span class="starR1 3">별2_왼쪽</span><span class="starR2 4">별2_오른쪽</span><span class="starR1 5">별3_왼쪽</span><span class="starR2 6">별3_오른쪽</span><span class="starR1 7">별4_왼쪽</span><span class="starR2 8">별4_오른쪽</span><span class="starR1 9">별5_왼쪽</span><span class="starR2 10">별5_오른쪽</span></div></td><td></td></tr></table><div align= "center"><button class="btn btn-outline-danger x_btn">별점초기화</button></div></div>';
 									result += "</td>";
